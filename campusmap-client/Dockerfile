@@ -1,6 +1,6 @@
 #################### DEVELOPMENT STAGE ####################
 # Use an official Node.js runtime AS a parent image
-FROM node:22-alpine AS build
+FROM node:20-alpine AS build
 
 # Set the working directory
 WORKDIR /usr/src/app
@@ -19,7 +19,7 @@ RUN npm run build --prod
 
 #################### TESTING STAGE ####################
 # Use the same Node.js runtime AS a parent image
-FROM node:22-alpine AS test
+FROM node:20-alpine AS test
 
 # Set the working directory
 WORKDIR /usr/src/app
