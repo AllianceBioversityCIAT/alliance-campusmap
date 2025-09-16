@@ -35,7 +35,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the built Angular application from the build stage
-COPY --from=build /usr/src/app/dist/campusmap-client/browser /usr/share/nginx/html
+COPY --from=build /usr/src/app/dist/campusmap/browser /usr/share/nginx/html
 
 # Copy the custom Nginx configuration file
 COPY nginx.conf /etc/nginx/nginx.conf
