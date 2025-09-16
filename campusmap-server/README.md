@@ -23,7 +23,22 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+CampusMap NestJS server that relies on TypeORM with PostgreSQL as the relational database.
+
+## Database configuration
+
+The server uses TypeORM to connect to PostgreSQL. Set at least one of the following before starting the app:
+
+- `DATABASE_URL`: full PostgreSQL connection string (for example `postgres://postgres:postgres@localhost:5432/campusmap`).
+- Or provide the individual variables `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`. All have development-oriented defaults except for the password.
+
+Optional flags:
+
+- `DB_SYNCHRONIZE`: set to `true` to let TypeORM auto-sync the schema in development.
+- `DB_LOGGING`: when `true`, enables SQL query logging.
+- `DB_SSL`: enable TLS connections. Combine with `DB_SSL_REJECT_UNAUTHORIZED=true` if you must validate certificates.
+
+You can set these variables in a `.env` or `.env.local` file at the root of `campusmap-server`.
 
 ## Project setup
 
