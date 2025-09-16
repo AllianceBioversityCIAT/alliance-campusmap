@@ -1,13 +1,18 @@
+
 // main-lambda.js
-// Lambda entrypoint for NestJS using aws-serverless-express
-const awsServerlessExpress = require('aws-serverless-express');
+// Lambda entrypoint for NestJS using @vendia/serverless-express
+const serverlessExpress = require('@vendia/serverless-express');
 const { createApp } = require('./dist/main-lambda-bootstrap');
 
-let server;
+let cachedServer;
 exports.handler = async (event, context) => {
-  if (!server) {
+  if (!cachedServer) {
+    console.log('[Lambda] Creando app NestJS para serverless-express...');
     const app = await createApp();
-    server = awsServerlessExpress.createServer(app.getHttpAdapter().getInstance());
+    const expressApp = app.getHttpAdapter().getInstance();
+    cachedServer = serverlessExpress({ app: expressApp });
+    console.log('[Lambda] App NestJS lista para serverless-express.');
   }
-  return awsServerlessExpress.proxy(server, event, context, 'PROMISE').promise;
+  console.log('[Lambda] Evento recibido:', JSON.stringify(event));
+  return cachedServer(event, context);
 };
