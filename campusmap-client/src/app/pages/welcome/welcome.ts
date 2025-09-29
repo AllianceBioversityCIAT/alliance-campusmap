@@ -9,11 +9,11 @@ import { Router } from '@angular/router';
   styleUrl: './welcome.scss'
 })
 export class Welcome implements OnInit {
-  private router = inject(Router);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     setTimeout(() => {
       this.router.navigate(['/home']);
-    }, 3000); // 3 segundos
+    }, 3000); // 3 seconds
   }
 }
