@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
+P2-'add-homePage'
+
   {
     path: '',
     loadComponent: () => import('./modules/auth/pages/welcome/welcome').then(m => m.Welcome)
@@ -17,4 +19,5 @@ export const routes: Routes = [
     path: 'map',
     loadComponent: () => import('./modules/map/pages/map/map').then(m => m.Map)
   }
+
 ];
