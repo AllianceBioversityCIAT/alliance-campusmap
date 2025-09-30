@@ -1,5 +1,11 @@
 {
-  "continue": "Continuar",
-  "welcome": "Bienvenido a Alianza",
-  "campus_map": "CAMPUS MAP"
+  "HOME": {
+    "TITLE": "Bienvenido a la Alianza",
+    "SUBTITLE": "MAPA DEL CAMPUS",
+    "PROMPT_LINE1": "Conectate a la red WiFi de la Alianza",
+    "PROMPT_LINE2": "para continuar",
+    "GUEST": "Invitado",
+    "CONNECTION_STATUS": "Estado de conexion",
+    "CONTINUE": "Continuar"
+  }
 }
