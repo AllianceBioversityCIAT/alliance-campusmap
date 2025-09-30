@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,10 +10,14 @@ import { Router } from '@angular/router';
 })
 export class Welcome implements OnInit {
   private readonly router = inject(Router);
+  fadeOut = signal(false);
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.router.navigate(['/home']);
-    }, 3000); // 3 seconds
+      this.fadeOut.set(true);
+      setTimeout(() => {
+        this.router.navigate(['/home']);
+      }, 600); // Duration of the fade out
+    }, 3000); // Initial wait time
   }
 }
