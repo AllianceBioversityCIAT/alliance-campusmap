@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-P2-'add-homePage'
 
   {
     path: '',

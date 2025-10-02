@@ -1,0 +1,9 @@
+<section class="flex border border-gray-300 mt-4 rounded overflow-hidden">
+  <p-selectbutton
+    [options]="stateOptions"
+    [(ngModel)]="value"
+    optionLabel="label"
+    optionValue="value"
+    (ngModelChange)="onLanguageChange($event)"
+    [attr.aria-label]="'HOME.LANGUAGE.TOGGLE' | translate" />
+</section>

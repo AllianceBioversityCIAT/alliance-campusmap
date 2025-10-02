@@ -1,0 +1,9 @@
+::ng-deep .btn-verde.p-button {
+  background-color: #358540 !important;
+  border-color: #358540 !important;
+}
+
+::ng-deep .btn-verde.p-button:hover {
+  background-color: #2c6d35 !important; /* tono más oscuro al pasar el mouse */
+  border-color: #2c6d35 !important;
+}
