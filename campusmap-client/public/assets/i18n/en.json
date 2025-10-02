@@ -6,6 +6,17 @@
     "PROMPT_LINE2": "to continue",
     "GUEST": "Guest",
     "CONNECTION_STATUS": "Connection Status",
-    "CONTINUE": "Continue"
+    "CONTINUE": "Continue",
+    "MESSAGE": {
+      "TITLE": "Information",
+      "BODY": "To explore our campus facilities, please connect to the Alliance visitor network.",
+      "READY_PROMPT": "Are you ready to continue?"
+    },
+    "BUTTON": {
+      "READY": "I'm ready"
+    },
+    "LANGUAGE": {
+      "TOGGLE": "Language selection"
+    }
   }
 }

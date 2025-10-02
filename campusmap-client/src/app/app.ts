@@ -1,28 +1,28 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
+type SupportedLang = 'en' | 'es';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ButtonModule],
+  imports: [RouterOutlet, ButtonModule, TranslateModule],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss']
 })
 export class App {
-  protected readonly title = signal('campusmap');
-  private translate = inject(TranslateService);
-  language = (localStorage.getItem('lang') as 'en' | 'es') ?? 'en';
+  private readonly translate = inject(TranslateService);
 
   constructor() {
-    // fallbackLang fue configurado en app.config.ts; aquí ponemos el idioma en uso
-    this.translate.use(this.language);
-  }
+    const storedLang = localStorage.getItem('lang') as SupportedLang | null;
+    const langToUse = storedLang
+      ?? (this.translate.currentLang as SupportedLang | undefined)
+      ?? (this.translate.defaultLang as SupportedLang | undefined)
+      ?? 'en';
 
-  setLanguage(lang: 'en' | 'es') {
-    this.language = lang;
-    this.translate.use(lang);
-    localStorage.setItem('lang', lang);
+    this.translate.setDefaultLang('en');
+    this.translate.use(langToUse);
   }
 }

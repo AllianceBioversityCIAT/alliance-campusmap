@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
 
-    // ✅ Importante: habilitamos HttpClient
+    // Importante: habilitamos HttpClient
     provideHttpClient(withInterceptorsFromDi()),
 
     // Proveedor de i18n (v17): configuramos loader y fallbackLang
