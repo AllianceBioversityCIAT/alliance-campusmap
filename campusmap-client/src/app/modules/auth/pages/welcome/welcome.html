@@ -1,28 +1,7 @@
 <section
-  class="flex flex-col items-center justify-center bg-[#358540] h-screen w-full p-4 lg:p-8"
-  [class.fade-out]="fadeOut()">
-  <!-- Logo Campus -->
-  <div class="flex flex-col gap-8 justify-center items-center text-center">
-    <div class="flex flex-col lg:flex-row gap-4 lg:gap-8 justify-center items-center">
-      <figure class="mapa_logo">
-        <img
-          src="/assets/images/logo_campus_map.svg"
-          alt="logo_campus_map"
-          class="w-32 lg:w-48 h-auto mx-auto" />
-      </figure>
-
-      <!-- CAMPUS MAP Name -->
-      <div class="flex flex-col font-bold text-white text-4xl lg:text-6xl">
-        <p>CAMPUS</p>
-        <p>MAP</p>
-      </div>
-    </div>
-    <!-- Logo Alliance -->
-    <figure class="text-center">
-      <img
-        src="/assets/images/Alliance Logo + CGIAR_EN white.png"
-        alt="Alliance logo"
-        class="w-120 h-auto mx-auto" />
-    </figure>
-  </div>
+  class="flex flex-col bg-[#358540] h-screen w-full p-4"
+  [class.opacity-0]="fadeOut()"
+  aria-label="Welcome section">
+  <app-logo-section class="flex-1 content-end pb-8"></app-logo-section>
+  <app-welcome-message class="flex-1 text-center"></app-welcome-message>
 </section>

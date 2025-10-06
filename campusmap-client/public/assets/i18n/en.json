@@ -1,11 +1,22 @@
 {
-  "Home": {
-    "title": "Welcome to the Alliance",
-    "subtitle": "CAMPUS MAP",
-    "promptLine1": "Please connect to the Alliance WiFi network",
-    "promptLine2": "to continue",
-    "guest": "Guest",
-    "connectionStatus": "Connection Status",
-    "continueButton": "Continue"
+  "HOME": {
+    "TITLE": "Welcome to the Alliance",
+    "SUBTITLE": "CAMPUS MAP",
+    "PROMPT_LINE1": "Please connect to the Alliance WiFi network",
+    "PROMPT_LINE2": "to continue",
+    "GUEST": "Guest",
+    "CONNECTION_STATUS": "Connection Status",
+    "CONTINUE": "Continue",
+    "MESSAGE": {
+      "TITLE": "Information",
+      "BODY": "To explore our campus facilities, please connect to the Alliance visitor network.",
+      "READY_PROMPT": "Are you ready to continue?"
+    },
+    "BUTTON": {
+      "READY": "I'm ready"
+    },
+    "LANGUAGE": {
+      "TOGGLE": "Language selection"
+    }
   }
 }

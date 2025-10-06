@@ -1,12 +1,6 @@
-@use 'tailwindcss';
-
-.fade-out {
-  animation: fadeOut 0.5s forwards;
+section {
+  transition: opacity 0.6s ease-in-out;
 }
-
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-    pointer-events: none;
-  }
+.opacity-0 {
+  opacity: 0;
 }
