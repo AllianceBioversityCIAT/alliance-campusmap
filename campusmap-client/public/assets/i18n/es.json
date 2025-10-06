@@ -1,11 +1,11 @@
 {
-  "HOME": {
-    "TITLE": "Bienvenido a la Alianza",
-    "SUBTITLE": "MAPA DEL CAMPUS",
-    "PROMPT_LINE1": "Conectate a la red WiFi de la Alianza",
-    "PROMPT_LINE2": "para continuar",
-    "GUEST": "Invitado",
-    "CONNECTION_STATUS": "Estado de conexion",
-    "CONTINUE": "Continuar"
+  "Home": {
+    "title": "Bienvenido a la Alianza",
+    "subtitle": "MAPA DEL CAMPUS",
+    "promptLine1": "Conectate a la red WiFi de la Alianza",
+    "promptLine2": "para continuar",
+    "guest": "Invitado",
+    "connectionStatus": "Estado de conexion",
+    "continueButton": "Continuar"
   }
 }
