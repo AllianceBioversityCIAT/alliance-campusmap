@@ -18,5 +18,4 @@ export const routes: Routes = [
     path: 'map',
     loadComponent: () => import('./modules/map/pages/map/map').then(m => m.Map)
   }
-
 ];

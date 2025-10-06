@@ -8,7 +8,22 @@ import { HomeButtonLanguage } from './components/home-button-language/home-butto
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ButtonModule, HomeMessage, HomeButtonReady, HomeButtonLanguage],
+  imports: [CommonModule, RouterLink, ButtonModule, TranslateModule],
   templateUrl: './home.html'
 })
-export class Home {}
+export class Home {
+  language: 'en' | 'es' = 'en';
+
+  constructor(private readonly translate: TranslateService) {
+    const savedLang = (localStorage.getItem('lang') as 'en' | 'es') || 'en';
+    this.language = savedLang;
+    this.translate.addLangs(['en', 'es']);
+    this.translate.use(savedLang);
+  }
+
+  setLanguage(lang: 'en' | 'es') {
+    this.language = lang;
+    this.translate.use(lang);
+    localStorage.setItem('lang', lang);
+  }
+}
