@@ -1,22 +1,22 @@
 {
-  "HOME": {
-    "TITLE": "Bienvenido a la Alianza",
-    "SUBTITLE": "MAPA DEL CAMPUS",
-    "PROMPT_LINE1": "Conéctate a la red WiFi de la Alianza",
-    "PROMPT_LINE2": "para continuar",
-    "GUEST": "Invitado",
-    "CONNECTION_STATUS": "Estado de conexión",
-    "CONTINUE": "Continuar",
-    "MESSAGE": {
-      "TITLE": "Información",
-      "BODY": "Para explorar las instalaciones del campus, conéctate a la red de visitantes de la Alianza.",
-      "READY_PROMPT": "¿Listo para continuar?"
+  "Home": {
+    "title": "Bienvenido a la Alianza",
+    "subtitle": "MAPA DEL CAMPUS",
+    "promptLine1": "Conéctate a la red WiFi de la Alianza",
+    "promptLine2": "para continuar",
+    "guest": "Invitado",
+    "connectionStatus": "Estado de conexión",
+    "continue": "Continuar",
+    "message": {
+      "title": "Información",
+      "body": "Para explorar las instalaciones del campus, conéctate a la red de visitantes de la Alianza.",
+      "readyPrompt": "¿Listo para continuar?"
     },
-    "BUTTON": {
-      "READY": "Estoy listo"
+    "button": {
+      "ready": "Estoy listo"
     },
-    "LANGUAGE": {
-      "TOGGLE": "Selección de idioma"
+    "language": {
+      "toggle": "Selección de idioma"
     }
   }
 }
