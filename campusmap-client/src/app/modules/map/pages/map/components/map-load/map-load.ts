@@ -12,17 +12,17 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.map = new maplibregl.Map({
-      container: 'map', // id del contenedor
-      style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=ysbhdSG63XiCe6Sgq0TG', // estilo del mapa ysbhdSG63XiCe6Sgq0TG
-      center: [-76.35689183576403, 3.5053660738551082], // [longitud, latitud]
+      container: 'map', // id container
+      style: 'https://api.maptiler.com/maps/streets-v2/style.json?key=ysbhdSG63XiCe6Sgq0TG', // map style
+      center: [-76.35689183576403, 3.5053660738551082], // [longitude, latitude]
       zoom: 18,
       minZoom: 15,
       maxZoom: 20,
-      bearing: 165, // rotación
-      pitch: 60 // inclinación
+      bearing: 165, // rotation
+      pitch: 60 // inclination
     });
 
-    //Control de navegación (zoom + rotacion)
+    // Navigation control (zoom + rotation)
     this.map.addControl(new maplibregl.NavigationControl({}), 'top-right');
   }
 
