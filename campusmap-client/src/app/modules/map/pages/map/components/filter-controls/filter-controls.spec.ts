@@ -1,17 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Home } from './home';
+import { FilterControls } from './filter-controls';
 
-describe('Map', () => {
-  let component: Home;
-  let fixture: ComponentFixture<Home>;
+describe('FilterControls', () => {
+  let component: FilterControls;
+  let fixture: ComponentFixture<FilterControls>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Map]
-    }).compileComponents();
+      imports: [FilterControls]
+    })
+    .compileComponents();
 
-    fixture = TestBed.createComponent(Home);
+    fixture = TestBed.createComponent(FilterControls);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

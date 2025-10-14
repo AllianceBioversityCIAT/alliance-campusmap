@@ -13,7 +13,7 @@
       "readyPrompt": "Are you ready to continue?"
     },
     "button": {
-      "readyMessage": "I'm ready"
+      "ready": "I'm ready"
     },
     "language": {
       "toggle": "Language selection"

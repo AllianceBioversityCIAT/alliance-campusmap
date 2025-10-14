@@ -17,10 +17,11 @@ export class App {
 
   constructor() {
     const storedLang = localStorage.getItem('lang') as SupportedLang | null;
-    const langToUse = storedLang
-      ?? (this.translate.currentLang as SupportedLang | undefined)
-      ?? (this.translate.defaultLang as SupportedLang | undefined)
-      ?? 'en';
+    const langToUse =
+      storedLang ??
+      (this.translate.currentLang as SupportedLang | undefined) ??
+      (this.translate.defaultLang as SupportedLang | undefined) ??
+      'en';
 
     this.translate.setDefaultLang('en');
     this.translate.use(langToUse);
