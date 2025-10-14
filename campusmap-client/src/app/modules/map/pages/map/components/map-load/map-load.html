@@ -1,3 +1,13 @@
 <section class="w-full h-screen">
+  <!-- Mapa -->
   <div id="map" class="w-full h-full"></div>
+
+  <!-- GEOJSON -->
+  <!-- Input de carga flotante -->
+  <div class="absolute bottom-4 left-4 bg-white rounded-lg shadow-md p-2 z-50">
+    <label for="geojson-upload" class="cursor-pointer text-sm font-semibold hover:text-green-900">
+      Cargar GeoJSON
+    </label>
+    <input id="geojson-upload" type="file" accept=".geojson,.json" class="hidden" />
+  </div>
 </section>

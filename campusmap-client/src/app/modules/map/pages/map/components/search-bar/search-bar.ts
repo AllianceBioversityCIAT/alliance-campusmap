@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
   selector: 'app-search-bar',
-  imports: [CommonModule, FormsModule, AutoCompleteModule],
+  imports: [CommonModule],
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.scss'
 })
 export class SearchBar {
-  query = '';
-  results: string[] = [];
+  isOpen = false;
+
+  toggleList() {
+    this.isOpen = !this.isOpen;
+  }
 }

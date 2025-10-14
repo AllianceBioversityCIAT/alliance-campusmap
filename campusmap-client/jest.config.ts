@@ -3,10 +3,7 @@ import type { Config } from 'jest';
 const config: Config = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
-  testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.(js|ts)',
-    '<rootDir>/src/**/?(*.)(spec|test).(js|ts)'
-  ],
+  testMatch: ['<rootDir>/src/**/*.spec.ts', '<rootDir>/src/**/*.test.ts'],
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/*.d.ts',

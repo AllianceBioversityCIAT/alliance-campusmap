@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 358.44 355.31">
+  <!-- Generator: Adobe Illustrator 29.8.2, SVG Export Plug-In . SVG Version: 2.1.1 Build 3)  -->
+  <defs>
+    <style>
+      .st0, .st1 {
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-width: 15px;
+      }
+
+      .st1 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <circle class="st1" cx="178.8" cy="177.66" r="144.58"/>
+  <g>
+    <line class="st1" x1="323.38" y1="177.66" x2="347.04" y2="177.66"/>
+    <line class="st1" x1="323.38" y1="177.66" x2="347.04" y2="177.66"/>
+  </g>
+  <line class="st1" x1="10.9" y1="177.66" x2="34.22" y2="177.66"/>
+  <line class="st1" x1="178.97" y1="322.23" x2="178.97" y2="345.73"/>
+  <line class="st1" x1="178.97" y1="9.58" x2="178.97" y2="33.08"/>
+  <circle class="st0" cx="178.8" cy="177.66" r="89.27"/>
+</svg>

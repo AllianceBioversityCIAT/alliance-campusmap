@@ -1,2 +1,49 @@
 @import 'tailwindcss';
 @import 'maplibre-gl/dist/maplibre-gl.css';
+@import 'primeicons/primeicons.css';
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon,
+.maplibregl-ctrl button.maplibregl-ctrl-compass .maplibregl-ctrl-icon {
+  background-image: url('/assets/icons/north.svg');
+  height: 20px;
+}
+
+.mapboxgl-ctrl-group button,
+.maplibregl-ctrl-group button {
+  height: 48px;
+  width: 48px;
+}
+
+.mapboxgl-ctrl-top-right .mapboxgl-ctrl,
+.maplibregl-ctrl-top-right .maplibregl-ctrl {
+  margin-right: 15px;
+  margin-top: 230px;
+  border-radius: calc(infinity * 1px);
+}
+
+//Geolocation
+.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl,
+.maplibregl-ctrl-bottom-right {
+  margin-right: 7px;
+  border-radius: calc(infinity * 1px);
+}
+
+@media (min-width: 48rem) {
+  .mapboxgl-ctrl-top-right .mapboxgl-ctrl,
+  .maplibregl-ctrl-top-right .maplibregl-ctrl {
+    margin-right: 35px;
+    margin-top: 240px;
+    border-radius: calc(infinity * 1px);
+  }
+
+  .mapboxgl-ctrl-group button,
+  .maplibregl-ctrl-group button {
+    height: 60px;
+    width: 60px;
+  }
+
+  .mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon,
+  .maplibregl-ctrl button.maplibregl-ctrl-compass .maplibregl-ctrl-icon {
+    height: 35px;
+  }
+}
