@@ -28,6 +28,12 @@ export class FilterControls {
       label: 'Cafeterías',
       src: 'assets/icons/cafeteria.svg',
       name: 'Cafeterias'
+    },
+    {
+      key: 'assembly-point',
+      label: 'Assembly Point',
+      src: 'assets/icons/assembly_point.svg',
+      name: 'Assembly Point'
     }
   ];
 }
