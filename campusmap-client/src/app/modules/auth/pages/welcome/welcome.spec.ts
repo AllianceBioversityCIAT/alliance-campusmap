@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Welcome } from './welcome';
 
+import { Map } from '../../../map/pages/map/map';
+
 describe('Map', () => {
   let component: Welcome;
   let fixture: ComponentFixture<Welcome>;

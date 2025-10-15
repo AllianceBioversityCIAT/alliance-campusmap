@@ -18,10 +18,31 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       { coords: [-76.3572, 3.5056], name: 'Baño Prueba 2' }
     ],
     parking: [
-      { coords: [-76.355, 3.5032], name: 'Parqueadero 1' },
-      { coords: [-76.3565, 3.5027], name: 'Parqueadero 3' },
-      { coords: [-76.35725, 3.5023], name: 'Parqueadero 4' },
-      { coords: [-76.3549, 3.5038], name: 'Parqueadero 5' }
+      { coords: [-76.355, 3.5032], name: 'Parking 1' },
+      { coords: [-76.3551, 3.5028], name: 'Parking 2' },
+      { coords: [-76.3565, 3.5027], name: 'Parking 3' },
+      { coords: [-76.35725, 3.5023], name: 'Parking 4' },
+      { coords: [-76.3546, 3.5039], name: 'Parking 5' },
+      { coords: [-76.3541, 3.5025], name: 'Parking 6' },
+      { coords: [-76.3543, 3.502], name: 'Parking 7' },
+      { coords: [-76.3549, 3.5022], name: 'Parking 8' },
+      { coords: [-76.3565, 3.5016], name: 'Parking 9' },
+      { coords: [-76.357, 3.5011], name: 'Parking 10' },
+      { coords: [-76.3544, 3.5008], name: 'Parking 11' },
+      { coords: [-76.3555, 3.5011], name: 'Parking 12' },
+      { coords: [-76.3554, 3.5007], name: 'Parking 13' },
+      { coords: [-76.3552, 3.5002], name: 'Parking 14' },
+      { coords: [-76.3569, 3.4996], name: 'Parking 15' },
+      { coords: [-76.3548, 3.4993], name: 'Parking 16' },
+      { coords: [-76.3561, 3.4989], name: 'Parking 17' }
+    ],
+    assembly_point: [
+      { coords: [-76.35696437822699, 3.50531705059618], name: 'Assembly Point 1' },
+      { coords: [-76.35611732103561, 3.502973974770825], name: 'Assembly Point 2A' },
+      { coords: [-76.35522101629275, 3.5033672186704283], name: 'Assembly Point 2B' },
+      { coords: [-76.35449927172499, 3.501800796142725], name: 'Assembly Point 3' },
+      { coords: [-76.3558918684754, 3.500302536237089], name: 'Assembly Point 4' },
+      { coords: [-76.35871822851637, 3.500899406263856], name: 'Assembly Point 5' }
     ]
   };
 
@@ -39,6 +60,9 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       case 'parking':
         el.style.backgroundImage = 'url(assets/icons/parking.svg)';
         break;
+      case 'assembly_point':
+        el.style.backgroundImage = 'url(assets/icons/assembly_point.svg)';
+        break;
     }
 
     el.style.width = '32px';
@@ -46,6 +70,8 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     el.style.backgroundSize = 'contain';
     el.style.backgroundRepeat = 'no-repeat';
     el.style.cursor = 'pointer';
+    el.style.filter = 'drop-shadow(1px 2px 3px rgba(0,0,0,0.3))';
+    el.style.borderRadius = '8px';
 
     return el;
   }

@@ -4,11 +4,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HomeMessage } from './components/home-message/home-message';
 import { HomeButtonLanguage } from './components/home-button-language/home-button-language';
 import { HomeButtonReady } from './components/home-button-ready/home-button-ready';
+import { Map } from '../../../map/pages/map/map';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, TranslateModule, HomeMessage, HomeButtonLanguage, HomeButtonReady],
+  imports: [CommonModule, TranslateModule, HomeMessage, HomeButtonLanguage, HomeButtonReady, Map],
   templateUrl: './home.html'
 })
 export class Home {
