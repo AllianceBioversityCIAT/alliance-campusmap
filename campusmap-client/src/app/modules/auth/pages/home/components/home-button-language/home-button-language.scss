@@ -2,3 +2,21 @@
   display: flex;
   justify-content: center;
 }
+:host ::ng-deep .p-selectbutton .p-togglebutton {
+  width: 150px;
+  height: 55px;
+  font-size: 30px;
+  font-weight: 500;
+  border-color: #cccccc;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+  background-color: #e5e5e5;
+  border: none;
+  color: #cccccc;
+}
+
+:host ::ng-deep .p-togglebutton.p-togglebutton-checked {
+  flex: 50%;
+  background: #e5e5e5;
+  border: none;
+  color: black;
+}

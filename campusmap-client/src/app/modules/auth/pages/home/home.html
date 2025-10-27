@@ -1,7 +1,9 @@
 <section
-  class="flex flex-col bg-[url(/assets/images/map.webp)] bg-cover bg-[position:45%_center] h-screen w-full p-4"
+  class="flex flex-col bg-[url('/assets/images/background_homepage.webp')] bg-cover bg-[position:45%_center] h-screen w-full px-4"
   aria-label="Home section">
-  <app-home-message class="flex-1 content-end"></app-home-message>
-  <app-home-button-language class="flex-none"></app-home-button-language>
-  <app-home-button-ready class="flex-1 justify-center content-center"></app-home-button-ready>
+  <app-home-message class="flex-1 content-center"></app-home-message>
+  <div class="flex flex-col flex-1 content-center justify-center gap-30 md:gap-20">
+    <app-home-button-language></app-home-button-language>
+    <app-home-button-ready></app-home-button-ready>
+  </div>
 </section>

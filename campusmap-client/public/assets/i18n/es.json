@@ -1,22 +1,11 @@
 {
   "Home": {
-    "title": "Bienvenido a la Alianza",
-    "subtitle": "MAPA DEL CAMPUS",
-    "promptLine1": "Conéctate a la red WiFi de la Alianza",
-    "promptLine2": "para continuar",
-    "guest": "Invitado",
-    "connectionStatus": "Estado de conexión",
-    "continue": "Continuar",
-    "message": {
-      "title": "Información",
-      "body": "Para explorar las instalaciones del campus, conéctate a la red de visitantes de la Alianza.",
-      "readyPrompt": "¿Listo para continuar?"
-    },
+    "title": "Para explorar",
+    "promptLine1": "las instalaciones del campus,",
+    "promptLine2": "conéctate a la red:",
+    "guest": "VISITANTES",
     "button": {
-      "ready": "Estoy listo"
-    },
-    "language": {
-      "toggle": "Selección de idioma"
+      "ready": "¡Estoy listo!"
     }
   }
 }
