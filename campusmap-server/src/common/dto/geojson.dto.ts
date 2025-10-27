@@ -1,36 +1,46 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export type GeoJsonGeometryType = 
-  | 'Point' 
-  | 'LineString' 
-  | 'Polygon' 
-  | 'MultiPoint' 
-  | 'MultiLineString' 
+export type GeoJsonGeometryType =
+  | 'Point'
+  | 'LineString'
+  | 'Polygon'
+  | 'MultiPoint'
+  | 'MultiLineString'
   | 'MultiPolygon';
 
-export type GeoJsonCoordinates = 
-  | number[]                    // Point: [lng, lat]
-  | number[][]                  // LineString o MultiPoint
-  | number[][][]                // Polygon o MultiLineString
-  | number[][][][];             // MultiPolygon
+export type GeoJsonCoordinates =
+  | number[] // Point: [lng, lat]
+  | number[][] // LineString o MultiPoint
+  | number[][][] // Polygon o MultiLineString
+  | number[][][][]; // MultiPolygon
 
 export class GeometryDto {
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'Point',
-    enum: ['Point', 'Polygon', 'LineString', 'MultiPoint', 'MultiPolygon', 'MultiLineString']
+    enum: [
+      'Point',
+      'Polygon',
+      'LineString',
+      'MultiPoint',
+      'MultiPolygon',
+      'MultiLineString',
+    ],
   })
   type: GeoJsonGeometryType;
 
-  @ApiProperty({ 
-    example: [[-75.5812, 6.2476], [-75.5815, 6.2478]],
-    description: 'Coordenadas en formato [longitude, latitude]'
+  @ApiProperty({
+    example: [
+      [-75.5812, 6.2476],
+      [-75.5815, 6.2478],
+    ],
+    description: 'Coordenadas en formato [longitude, latitude]',
   })
   coordinates: GeoJsonCoordinates;
 }
 
 export class FeatureDto<T = any> {
   @ApiProperty({ example: 'Feature' })
-  type: 'Feature' = 'Feature';
+  type = 'Feature' as const;
 
   @ApiProperty({ type: () => GeometryDto })
   geometry: GeometryDto;
@@ -44,7 +54,7 @@ export class FeatureDto<T = any> {
 
 export class FeatureCollectionDto<T = any> {
   @ApiProperty({ example: 'FeatureCollection' })
-  type: 'FeatureCollection' = 'FeatureCollection';
+  type = 'FeatureCollection' as const;
   @ApiProperty({ example: 'Places' })
   name: string;
   @ApiProperty({ type: [FeatureDto], isArray: true })

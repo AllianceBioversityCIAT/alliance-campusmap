@@ -1,5 +1,10 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PlacesService } from './places.service';
 import { FeatureCollectionDto } from '../../common/dto/geojson.dto';
 import { PlacePropertiesDto } from './dtos/places.dto';
@@ -11,9 +16,9 @@ export class PlacesController {
 
   @Get()
   @ApiOperation({ summary: 'Obtener todos los lugares' })
-  @ApiOkResponse({ 
+  @ApiOkResponse({
     type: FeatureCollectionDto,
-    description: 'Lista de lugares en formato GeoJSON'
+    description: 'Lista de lugares en formato GeoJSON',
   })
   getAllPlaces(): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
     return this.placesService.getAllPlaces();
@@ -24,14 +29,17 @@ export class PlacesController {
   @ApiParam({
     name: 'code',
     type: String,
-    description: 'Código del tipo de lugar (por ejemplo: "building", "parking")',
-    example: 'building'
+    description:
+      'Código del tipo de lugar (por ejemplo: "building", "parking")',
+    example: 'building',
   })
-  @ApiOkResponse({ 
+  @ApiOkResponse({
     type: FeatureCollectionDto,
-    description: 'Lugares filtrados por tipo en formato GeoJSON'
+    description: 'Lugares filtrados por tipo en formato GeoJSON',
   })
-  getPlacesByType(@Param('code') code: string): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
+  getPlacesByType(
+    @Param('code') code: string,
+  ): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
     return this.placesService.getPlacesByTypeCode(code);
   }
 }

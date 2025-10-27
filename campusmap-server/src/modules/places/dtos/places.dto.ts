@@ -23,12 +23,15 @@ export class PlacePropertiesDto {
 
 export class PlaceFeatureDto {
   @ApiProperty({ example: 'Feature' })
-  type: 'Feature' = 'Feature';
+  type = 'Feature' as const;
 
   @ApiProperty({ example: 1 })
   id: number;
 
-  @ApiProperty({ type: () => GeometryDto, description: 'Área del lugar (Polygon)' })
+  @ApiProperty({
+    type: () => GeometryDto,
+    description: 'Área del lugar (Polygon)',
+  })
   geometry: GeometryDto;
 
   @ApiProperty({ type: () => PlacePropertiesDto })

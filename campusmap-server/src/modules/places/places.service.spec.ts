@@ -17,7 +17,7 @@ describe('PlacesService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         PlacesService,
-        { provide: getRepositoryToken(Place), useValue: repo }, // 👈 Mock del repositorio
+        { provide: getRepositoryToken(Place), useValue: repo },
       ],
     }).compile();
 
@@ -56,7 +56,9 @@ describe('PlacesService', () => {
 
     await service.getPlacesByTypeCode('BLDG');
 
-    expect(repo.find).toHaveBeenCalledWith({ where: { type: { code: 'BLDG' } } });
+    expect(repo.find).toHaveBeenCalledWith({
+      where: { type: { code: 'BLDG' } },
+    });
     expect(mapperSpy).toHaveBeenCalledWith(filas, 'Places of type BLDG');
   });
 });

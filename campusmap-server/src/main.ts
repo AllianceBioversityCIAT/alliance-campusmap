@@ -12,28 +12,34 @@ async function bootstrap() {
   const adapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(adapterHost, appLogger));
   app.setGlobalPrefix('api/v1');
-  
+
   if (!process.env.CORS_ALLOW) {
-    appLogger.error('Error: La variable de entorno CORS_ALLOW no está definida');
+    appLogger.error(
+      'Error: La variable de entorno CORS_ALLOW no está definida',
+    );
     process.exit(1);
   }
-  
-  const corsOrigins = process.env.CORS_ALLOW.split(',').map(origin => origin.trim()).filter(origin => origin.length > 0);
-  
+
+  const corsOrigins = process.env.CORS_ALLOW.split(',')
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0);
+
   if (corsOrigins.length === 0) {
-    appLogger.error('Error: La variable CORS_ALLOW está vacía o no contiene orígenes válidos');
+    appLogger.error(
+      'Error: La variable CORS_ALLOW está vacía o no contiene orígenes válidos',
+    );
     process.exit(1);
   }
-  
+
   app.enableCors({
     origin: corsOrigins,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
-  
+
   appLogger.log(`CORS habilitado para los orígenes: ${corsOrigins.join(', ')}`);
-  
+
   const config = new DocumentBuilder()
     .setTitle('CampusMap Server')
     .setDescription('API de CampusMap')
