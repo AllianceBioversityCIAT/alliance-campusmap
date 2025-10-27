@@ -13,8 +13,8 @@ async function bootstrap() {
   const adapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(adapterHost, appLogger));
 
-   app.setGlobalPrefix('api/v1');
-   
+  app.setGlobalPrefix('api/v1');
+  app.enableCors();
   const config = new DocumentBuilder()
     .setTitle('CampusMap Server')
     .setDescription('API de CampusMap')
