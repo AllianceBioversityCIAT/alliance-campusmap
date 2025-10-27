@@ -1,6 +1,39 @@
-@import 'tailwindcss';
-@import 'maplibre-gl/dist/maplibre-gl.css';
-@import 'primeicons/primeicons.css';
+@use 'tailwindcss';
+@use 'maplibre-gl/dist/maplibre-gl.css';
+@use 'primeicons/primeicons.css';
+
+@font-face {
+  font-family: 'Barlow';
+  src: url('/assets/fonts/Barlow-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: url('/assets/fonts/Barlow-Italic.ttf');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: url('/assets/fonts/Barlow-Medium.ttf');
+  font-weight: 500;
+  font-style: medium;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: url('/assets/fonts/Barlow-Bold.ttf');
+  font-weight: 700;
+  font-style: bold;
+}
+
+:root {
+  font-family: 'Barlow', sans-serif;
+  font-style: normal;
+}
 
 .mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon,
 .maplibregl-ctrl button.maplibregl-ctrl-compass .maplibregl-ctrl-icon {
