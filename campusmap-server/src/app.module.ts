@@ -9,6 +9,7 @@ import { routes } from './main.routes';
 import { RequestLoggerMiddleware } from './common/middleware/request-logger.middleware';
 import { AppLoggerService } from './common/logger/app-logger.service';
 import { buildTypeOrmOptions } from './database/typeorm.config';
+import { PlacesModule } from './modules/places/places.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { buildTypeOrmOptions } from './database/typeorm.config';
     }),
     ApiModule,
     RouterModule.register(routes),
+    PlacesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppLoggerService],
