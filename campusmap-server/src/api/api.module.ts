@@ -3,7 +3,7 @@ import { ApiController } from './api.controller';
 import { PlacesModule } from 'src/modules/places/places.module';
 
 @Module({
-  imports: [PlacesModule], 
+  imports: [PlacesModule],
   controllers: [ApiController],
 })
 export class ApiModule {}
