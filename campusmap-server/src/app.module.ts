@@ -17,9 +17,9 @@ import { PlacesModule } from './modules/places/places.module';
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
     }),
-    TypeOrmModule.forRootAsync({
-      useFactory: () => buildTypeOrmOptions(),
-    }),
+     TypeOrmModule.forRootAsync({
+       useFactory: () => buildTypeOrmOptions(),
+     }),
     ApiModule,
     RouterModule.register(routes),
     PlacesModule,

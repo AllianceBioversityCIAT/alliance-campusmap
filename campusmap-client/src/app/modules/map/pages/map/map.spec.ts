@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Map } from './map';
+import { Api } from '../../../../core/service/api';
+import { MapLoad } from './components/map-load/map-load';
 
 describe('Map', () => {
   let component: Map;
@@ -8,9 +10,9 @@ describe('Map', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Map]
-    })
-    .compileComponents();
+      imports: [HttpClientTestingModule, Map, MapLoad], // ← agregado
+      providers: [Api]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Map);
     component = fixture.componentInstance;
