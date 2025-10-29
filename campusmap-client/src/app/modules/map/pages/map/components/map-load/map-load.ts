@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, inject } from '@angular/core';
 import maplibregl from 'maplibre-gl';
 import { Api } from '../../../../../../core/service/api';
+import { PlaceFeatureCollection, PlaceFeature } from '../../../../../../core/models/place.model';
 
 @Component({
   selector: 'app-map-load',
@@ -46,7 +47,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private loadCentroids() {
     // Load buildings
     this.api.getPlacesByType('building').subscribe({
-      next: (res: any) => {
+      next: (res: PlaceFeatureCollection) => {
         if (res?.features) this.addBuildings(res);
       },
       error: err => console.error('Error al obtener edificios:', err)
@@ -54,7 +55,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
     // Load parkings
     this.api.getPlacesByType('parking').subscribe({
-      next: (res: any) => {
+      next: (res: PlaceFeatureCollection) => {
         if (res?.features) this.addParkings(res);
       },
       error: err => console.error('Error al obtener parqueaderos:', err)
@@ -62,7 +63,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   // add Buildings
-  private addBuildings(res: any) {
+  private addBuildings(res: PlaceFeatureCollection) {
     // Eliminar capa previa si existe
     if (this.map.getSource('buildings')) {
       this.map.removeLayer('buildings-layer');
@@ -101,7 +102,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   // Add Parkings
-  private addParkings(res: any) {
+  private addParkings(res: PlaceFeatureCollection) {
     // Eliminar capa previa si existe
     if (this.map.getSource('parkings')) {
       this.map.removeLayer('parkings-layer');
@@ -109,7 +110,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     }
 
     // Asignar icono dinámico basado en "Parqueadero N" o excepciones SF/BL
-    res.features.forEach((f: any) => {
+    res.features.forEach((f: PlaceFeature) => {
       const name = f.properties.name.toUpperCase(); // "PARQUEADERO SF"
       const matchNum = name.match(/\d+/); // busca número
 

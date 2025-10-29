@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PlaceFeatureCollection } from '../models/place.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class Api {
     return this.http.get(this.baseUrl);
   }
 
-  getPlacesByType(type: string): Observable<unknown> {
-    return this.http.get(`${this.baseUrl}/type/${type}`);
+  getPlacesByType(type: string): Observable<PlaceFeatureCollection> {
+    return this.http.get<PlaceFeatureCollection>(`${this.baseUrl}/type/${type}`);
   }
 }
