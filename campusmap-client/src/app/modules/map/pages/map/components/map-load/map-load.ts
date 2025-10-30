@@ -70,7 +70,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       this.map.removeSource('buildings');
     }
 
-    // Cargar ícono único para edificios
+    // Load unique icon for buildings
     this.map.loadImage('assets/icons/mapPage/building.png', (error, image) => {
       if (error || !image) {
         console.error('Error al cargar icono de edificio:', error);
@@ -109,10 +109,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       this.map.removeSource('parkings');
     }
 
-    // Asignar icono dinámico basado en "Parqueadero N" o excepciones SF/BL
+    // Assign dynamic icon based on "Parking N" or SF/BL exceptions
     res.features.forEach((f: PlaceFeature) => {
       const name = f.properties.name.toUpperCase(); // "PARQUEADERO SF"
-      const matchNum = name.match(/\d+/); // busca número
+      const matchNum = /\d+/.exec(name); // search number
 
       if (name.includes('SF')) f.properties.icon = 'parking_SF-icon';
       else if (name.includes('BL')) f.properties.icon = 'parking_BL-icon';
@@ -120,7 +120,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       else f.properties.icon = 'parking_0-icon'; // fallback
     });
 
-    // Cargar iconos del parqueadero
+    // Load icons of the parking
     const iconNames = [
       ...Array.from({ length: 17 }, (_, i) => `parking_${i + 1}-icon`),
       'parking_SF-icon',
