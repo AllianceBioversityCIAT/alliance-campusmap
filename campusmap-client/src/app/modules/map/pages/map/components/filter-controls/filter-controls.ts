@@ -18,7 +18,7 @@ export class FilterControls {
     {
       key: 'iconic',
       label: 'Edificios',
-      src: 'assets/icons/mapPage/iconic.svg',
+      src: 'assets/icons/mapPage/building.svg',
       name: 'Edificios'
     },
     {
