@@ -11,6 +11,8 @@ import { PlaceFeatureCollection, PlaceFeature } from '../../../../../../core/mod
 })
 export class MapLoad implements AfterViewInit, OnDestroy {
   private map!: maplibregl.Map;
+  private geolocate!: maplibregl.GeolocateControl;
+  private userMarker!: maplibregl.Marker;
   private readonly api = inject(Api);
 
   ngAfterViewInit(): void {
@@ -29,18 +31,105 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     // Navigation control (zoom and rotation)
     this.map.addControl(new maplibregl.NavigationControl({ showZoom: false }), 'top-right');
 
-    // Add geolocate control to the map.
-    this.map.addControl(
-      new maplibregl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      }),
-      'bottom-right'
+    this.map.on('load', () => {
+      this.trackUser();
+      this.loadCentroids();
+    });
+  }
+
+  // Track user location
+  private trackUser() {
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.watchPosition(
+      pos => {
+        const lng = pos.coords.longitude;
+        const lat = pos.coords.latitude;
+
+        if (!this.userMarker) {
+          // Create user marker
+          const elContainer = document.createElement('div');
+          elContainer.style.position = 'relative';
+          elContainer.style.width = '40px';
+          elContainer.style.height = '40px';
+
+          // Accuracy circle
+          const circle = document.createElement('div');
+          circle.style.position = 'absolute';
+          circle.style.top = '50%';
+          circle.style.left = '50%';
+          circle.style.transform = 'translate(-50%, -50%)';
+          circle.style.width = '40px';
+          circle.style.height = '40px';
+          circle.style.background = 'rgba(0, 122, 255, 0.3)';
+          circle.style.borderRadius = '50%';
+          circle.style.zIndex = '0';
+
+          const arrow = document.createElement('div');
+          arrow.className = 'user-arrow';
+          arrow.style.position = 'absolute';
+          arrow.style.top = '50%';
+          arrow.style.left = '50%';
+          arrow.style.transform = 'translate(-50%, -50%)';
+          arrow.style.width = '20px';
+          arrow.style.height = '20px';
+          arrow.style.backgroundImage = 'url(assets/icons/mapPage/userLocation.svg)';
+          arrow.style.backgroundSize = 'contain';
+          arrow.style.zIndex = '1';
+
+          elContainer.appendChild(circle);
+          elContainer.appendChild(arrow);
+
+          this.userMarker = new maplibregl.Marker({ element: elContainer })
+          .setLngLat([lng, lat])
+          .addTo(this.map);
+
+          this.requestOrientationPermission();
+        } else {
+          this.userMarker.setLngLat([lng, lat]);
+          this.map.flyTo({ center: [lng, lat], speed: 0.8 });
+        }
+      },
+      err => console.error(err),
+      { enableHighAccuracy: true}
     );
 
-    this.map.on('load', () => this.loadCentroids());
+    // Orbit control to follow user
+    window.addEventListener('deviceorientation', e => {
+      if (!this.userMarker) return;
+      const heading = e.alpha ?? 0;
+      const el = this.userMarker.getElement();
+      el.style.transform = `rotate(${heading}deg)`;
+    });
+  }
+
+  // Request permission for device orientation
+  private requestOrientationPermission() {
+  type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
+    requestPermission?: () => Promise<'granted' | 'denied'>;
+  };
+
+  const DeviceOrientation = DeviceOrientationEvent as DeviceOrientationWithPermission;
+  const requestPermission = DeviceOrientation.requestPermission;
+
+  if (typeof requestPermission === 'function') {
+    requestPermission()
+      .then(response => {
+        if (response === 'granted') this.enableDeviceOrientation();
+      })
+      .catch(console.error);
+  } else {
+    this.enableDeviceOrientation();
+  }
+}
+
+  private enableDeviceOrientation() {
+    window.addEventListener('deviceorientation', e => {
+      if (!this.userMarker) return;
+      const heading = e.alpha ?? 0;
+      const el = this.userMarker.getElement();
+      el.style.transform = `rotate(${heading}deg)`;
+    });
   }
 
   // Load centroids of the buildings API
