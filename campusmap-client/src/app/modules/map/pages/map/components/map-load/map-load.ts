@@ -11,7 +11,9 @@ import { PlaceFeatureCollection, PlaceFeature } from '../../../../../../core/mod
 })
 export class MapLoad implements AfterViewInit, OnDestroy {
   private map!: maplibregl.Map;
+
   private readonly api = inject(Api);
+
 
   ngAfterViewInit(): void {
     this.map = new maplibregl.Map({
@@ -39,6 +41,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       }),
       'bottom-right'
     );
+
 
     this.map.on('load', () => this.loadCentroids());
   }
@@ -165,7 +168,6 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       });
     }
   }
-
   ngOnDestroy(): void {
     if (this.map) {
       this.map.remove();
