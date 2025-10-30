@@ -38,8 +38,13 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   // Track user location
+  // Geolocation used only to display user's position locally.
+  // Data is not stored or sent to any external service.
   private trackUser() {
     if (!navigator.geolocation) return;
+
+    const allowTracking = confirm('¿Desea compartir su ubicación para mostrarla en el mapa?');
+    if (!allowTracking) return;
 
     navigator.geolocation.watchPosition(
       pos => {
