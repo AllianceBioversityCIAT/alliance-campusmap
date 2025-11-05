@@ -1,13 +1,12 @@
 import { AfterViewInit, Component, OnDestroy, inject } from '@angular/core';
 import maplibregl from 'maplibre-gl';
 import { Api } from '../../../../../../core/service/api';
-import { PlaceFeatureCollection, PlaceFeature } from '../../../../../../core/models/place.model';
 
 @Component({
   selector: 'app-map-load',
   imports: [],
   templateUrl: './map-load.html',
-  styleUrl: './map-load.scss'
+  styleUrls: ['./map-load.scss']
 })
 export class MapLoad implements AfterViewInit, OnDestroy {
   private map!: maplibregl.Map;
@@ -15,7 +14,6 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private userMarker!: maplibregl.Marker;
 
   private readonly api = inject(Api);
-
 
   ngAfterViewInit(): void {
     this.map = new maplibregl.Map({
@@ -35,7 +33,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
     this.map.on('load', () => {
       this.trackUser();
-      this.loadCentroids();
+      /*this.loadCentroids();*/
     });
   }
 
@@ -44,9 +42,6 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   // Data is not stored or sent to any external service.
   private trackUser() {
     if (!navigator.geolocation) return;
-
-    const allowTracking = confirm('¿Desea compartir su ubicación para mostrarla en el mapa?');
-    if (!allowTracking) return;
 
     navigator.geolocation.watchPosition(
       pos => {
@@ -88,17 +83,17 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           elContainer.appendChild(arrow);
 
           this.userMarker = new maplibregl.Marker({ element: elContainer })
-          .setLngLat([lng, lat])
-          .addTo(this.map);
+            .setLngLat([lng, lat])
+            .addTo(this.map);
 
           this.requestOrientationPermission();
         } else {
           this.userMarker.setLngLat([lng, lat]);
-          this.map.flyTo({ center: [lng, lat], speed: 0.8 });
+          //this.map.flyTo({ center: [lng, lat], speed: 0.8 });
         }
       },
       err => console.error(err),
-      { enableHighAccuracy: true}
+      { enableHighAccuracy: true }
     );
 
     // Orbit control to follow user
@@ -112,23 +107,23 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   // Request permission for device orientation
   private requestOrientationPermission() {
-  type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
-    requestPermission?: () => Promise<'granted' | 'denied'>;
-  };
+    type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
+      requestPermission?: () => Promise<'granted' | 'denied'>;
+    };
 
-  const DeviceOrientation = DeviceOrientationEvent as DeviceOrientationWithPermission;
-  const requestPermission = DeviceOrientation.requestPermission;
+    const DeviceOrientation = DeviceOrientationEvent as DeviceOrientationWithPermission;
+    const requestPermission = DeviceOrientation.requestPermission;
 
-  if (typeof requestPermission === 'function') {
-    requestPermission()
-      .then(response => {
-        if (response === 'granted') this.enableDeviceOrientation();
-      })
-      .catch(console.error);
-  } else {
-    this.enableDeviceOrientation();
+    if (typeof requestPermission === 'function') {
+      requestPermission()
+        .then(response => {
+          if (response === 'granted') this.enableDeviceOrientation();
+        })
+        .catch(console.error);
+    } else {
+      this.enableDeviceOrientation();
+    }
   }
-}
 
   private enableDeviceOrientation() {
     window.addEventListener('deviceorientation', e => {
@@ -140,7 +135,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   // Load centroids of the buildings API
-  private loadCentroids() {
+  /*private loadCentroids() {
     // Load buildings
     this.api.getPlacesByType('building').subscribe({
       next: (res: PlaceFeatureCollection) => {
@@ -156,10 +151,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       },
       error: err => console.error('Error al obtener parqueaderos:', err)
     });
-  }
+  }*/
 
   // add Buildings
-  private addBuildings(res: PlaceFeatureCollection) {
+  /*private addBuildings(res: PlaceFeatureCollection) {
     // Eliminar capa previa si existe
     if (this.map.getSource('buildings')) {
       this.map.removeLayer('buildings-layer');
@@ -195,18 +190,18 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         maxzoom: 20
       });
     });
-  }
+  }*/
 
   // Add Parkings
-  private addParkings(res: PlaceFeatureCollection) {
+  /*private addParkings(res: PlaceFeatureCollection) {
     // Eliminar capa previa si existe
     if (this.map.getSource('parkings')) {
       this.map.removeLayer('parkings-layer');
       this.map.removeSource('parkings');
-    }
+    }*/
 
-    // Assign dynamic icon based on "Parking N" or SF/BL exceptions
-    res.features.forEach((f: PlaceFeature) => {
+  // Assign dynamic icon based on "Parking N" or SF/BL exceptions
+  /*res.features.forEach((f: PlaceFeature) => {
       const name = f.properties.name.toUpperCase(); // "PARQUEADERO SF"
       const matchNum = /\d+/.exec(name); // search number
 
@@ -214,10 +209,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       else if (name.includes('BL')) f.properties.icon = 'parking_BL-icon';
       else if (matchNum) f.properties.icon = `parking_${matchNum[0]}-icon`;
       else f.properties.icon = 'parking_0-icon'; // fallback
-    });
+    });*/
 
-    // Load icons of the parking
-    const iconNames = [
+  // Load icons of the parking
+  /*const iconNames = [
       ...Array.from({ length: 17 }, (_, i) => `parking_${i + 1}-icon`),
       'parking_SF-icon',
       'parking_BL-icon'
@@ -260,7 +255,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         }
       });
     }
-  }
+  }*/
   ngOnDestroy(): void {
     if (this.map) {
       this.map.remove();

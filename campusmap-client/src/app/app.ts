@@ -2,13 +2,14 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { HttpClientModule } from '@angular/common/http';
 
 type SupportedLang = 'en' | 'es';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ButtonModule, TranslateModule],
+  imports: [RouterOutlet, ButtonModule, TranslateModule, HttpClientModule],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
