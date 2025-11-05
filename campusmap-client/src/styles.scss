@@ -61,6 +61,23 @@
   border-radius: calc(infinity * 1px);
 }
 
+// Animation Circle User Location
+@keyframes pulse-circle {
+  0% {
+    box-shadow: 0 0 0 0 #007aff4d;
+  }
+  70% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.animate-pulse-circle {
+  animation: pulse-circle 2s infinite ease-in-out;
+}
+
 @media (min-width: 48rem) {
   .mapboxgl-ctrl-top-right .mapboxgl-ctrl,
   .maplibregl-ctrl-top-right .maplibregl-ctrl {

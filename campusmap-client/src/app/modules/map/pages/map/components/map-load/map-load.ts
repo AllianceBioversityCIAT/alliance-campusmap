@@ -51,7 +51,6 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         if (!this.userMarker) {
           // Create user marker
           const elContainer = document.createElement('div');
-          elContainer.style.position = 'relative';
           elContainer.style.width = '40px';
           elContainer.style.height = '40px';
 
@@ -61,11 +60,12 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           circle.style.top = '50%';
           circle.style.left = '50%';
           circle.style.transform = 'translate(-50%, -50%)';
-          circle.style.width = '40px';
-          circle.style.height = '40px';
-          circle.style.background = 'rgba(0, 122, 255, 0.3)';
+          circle.style.width = '35px';
+          circle.style.height = '35px';
+          circle.style.background = '#007aff4d';
           circle.style.borderRadius = '50%';
           circle.style.zIndex = '0';
+          circle.className = 'absolute w-10 h-10 bg-blue-500 rounded-full animate-pulse-circle';
 
           const arrow = document.createElement('div');
           arrow.className = 'user-arrow';
@@ -76,7 +76,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           arrow.style.width = '20px';
           arrow.style.height = '20px';
           arrow.style.backgroundImage = 'url(assets/icons/mapPage/userLocation.svg)';
-          arrow.style.backgroundSize = 'contain';
+          arrow.style.backgroundSize = 'cover';
           arrow.style.zIndex = '1';
 
           elContainer.appendChild(circle);
