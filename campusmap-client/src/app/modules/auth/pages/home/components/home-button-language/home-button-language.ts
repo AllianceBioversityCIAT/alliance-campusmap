@@ -28,8 +28,8 @@ export class HomeButtonLanguage {
   constructor() {
     const storedLang = (localStorage.getItem('lang') as SupportedLang | null) ?? undefined;
     const defaultLang =
-      (this.translate.currentLang as SupportedLang | undefined) ??
-      (this.translate.defaultLang as SupportedLang | undefined) ??
+      (this.translate.getCurrentLang() as SupportedLang | undefined) ??
+      (this.translate.getFallbackLang() as SupportedLang | undefined) ??
       'en';
 
     this.value = storedLang ?? defaultLang;
@@ -40,7 +40,7 @@ export class HomeButtonLanguage {
   }
 
   onLanguageChange(lang: SupportedLang) {
-    if (!lang || lang === this.translate.currentLang) {
+    if (!lang || lang === this.translate.getCurrentLang()) {
       return;
     }
 
