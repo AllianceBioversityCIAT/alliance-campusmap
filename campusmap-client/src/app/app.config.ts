@@ -1,6 +1,10 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
@@ -15,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideAnimationsAsync(),
+    provideAnimations(),
 
     // Importante: habilitamos HttpClient
     provideHttpClient(withInterceptorsFromDi()),
@@ -29,19 +33,19 @@ export const appConfig: ApplicationConfig = {
       // configurar el http loader (prefijo/sufijo, caché, bypass interceptors, etc.)
       loader: provideTranslateHttpLoader({
         prefix: './assets/i18n/',
-        suffix: '.json',
+        suffix: '.json'
         // opcionales:
         // enforceLoading: true,
         // useHttpBackend: true
       })
     }),
-        providePrimeNG({
-            theme: {
-                preset: Aura,
-                options: {
-                  darkModeSelector: ''
-                }
-            }
-        })
+    providePrimeNG({
+      theme: {
+        preset: Aura,
+        options: {
+          darkModeSelector: ''
+        }
+      }
+    })
   ]
 };
