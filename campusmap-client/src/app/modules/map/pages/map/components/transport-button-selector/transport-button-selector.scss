@@ -1,0 +1,20 @@
+:root {
+  color: #ffffff;
+}
+:host ::ng-deep .p-button,
+.p-button:not(:disabled):hover,
+.p-togglebutton {
+  border: none;
+  background: linear-gradient(#1689ca, #004cc6);
+  font-size: 25px;
+}
+
+:host ::ng-deep .p-togglebutton-checked .p-togglebutton-content {
+  background: linear-gradient(#1689ca, #004cc6);
+  color: white;
+}
+
+:host ::ng-deep .p-togglebutton {
+  font-size: 25px;
+  width: 100%;
+}
