@@ -5,12 +5,13 @@
 .p-button:not(:disabled):hover,
 .p-togglebutton {
   border: none;
-  background: linear-gradient(#1689ca, #004cc6);
+  /* Darken the lighter stop so white text meets WCAG contrast requirements */
+  background: linear-gradient(#0e6fae, #004cc6);
   font-size: 25px;
 }
 
 :host ::ng-deep .p-togglebutton-checked .p-togglebutton-content {
-  background: linear-gradient(#1689ca, #004cc6);
+  background: linear-gradient(#0e6fae, #004cc6);
   color: white;
 }
 
