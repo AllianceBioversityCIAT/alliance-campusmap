@@ -8,7 +8,7 @@ import { LogoSection } from './components/logo-section/logo-section';
   standalone: true,
   imports: [CommonModule, LogoSection],
   templateUrl: './welcome.html',
-  styleUrl: './welcome.scss'
+  styleUrls: ['./welcome.scss']
 })
 export class Welcome implements OnInit {
   private readonly router = inject(Router);

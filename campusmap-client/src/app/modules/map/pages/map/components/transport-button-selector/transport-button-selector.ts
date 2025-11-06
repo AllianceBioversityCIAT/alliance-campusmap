@@ -19,9 +19,9 @@ export class TransportButtonSelector {
 
   value: string | null = null;
 
-  stateOptions: { label: string; value: string }[] = [
-    { label: 'En carro', value: 'carro' },
-    { label: 'Caminando', value: 'caminando' }
+  stateOptions: { label: string; value: string; icon?: string }[] = [
+    { label: 'En carro', value: 'carro', icon: 'assets/icons/car.svg' },
+    { label: 'A pie', value: 'caminar', icon: 'assets/icons/walk.svg' }
   ];
 
   onSubmit(form: NgForm) {

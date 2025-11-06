@@ -12,7 +12,7 @@ type SupportedLang = 'en' | 'es';
   standalone: true,
   imports: [CommonModule, FormsModule, SelectButtonModule, TranslateModule],
   templateUrl: './home-button-language.html',
-  styleUrl: './home-button-language.scss'
+  styleUrls: ['./home-button-language.scss']
 })
 export class HomeButtonLanguage {
   readonly stateOptions = [

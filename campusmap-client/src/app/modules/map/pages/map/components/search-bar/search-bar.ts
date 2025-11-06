@@ -3,9 +3,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-search-bar',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './search-bar.html',
-  styleUrl: './search-bar.scss'
+  styleUrls: ['./search-bar.scss']
 })
 export class SearchBar {
   isOpen = false;
