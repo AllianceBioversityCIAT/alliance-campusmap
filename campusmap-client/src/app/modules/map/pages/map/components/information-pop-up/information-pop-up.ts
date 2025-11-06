@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-information-pop-up',
-  imports: [Button],
+  imports: [],
   templateUrl: './information-pop-up.html',
   styleUrl: './information-pop-up.scss'
 })
