@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, inject } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ElementRef, ViewChild, inject } from '@angular/core';
 import maplibregl from 'maplibre-gl';
 import { Api } from '../../../../../../core/service/api';
 
 @Component({
   selector: 'app-map-load',
+  standalone: true,
   imports: [],
   templateUrl: './map-load.html',
   styleUrls: ['./map-load.scss']
@@ -13,11 +14,15 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private geolocate!: maplibregl.GeolocateControl;
   private userMarker!: maplibregl.Marker;
 
+  @ViewChild('mapContainer', { static: true })
+  private mapContainer!: ElementRef<HTMLDivElement>;
+
   private readonly api = inject(Api);
 
   ngAfterViewInit(): void {
     this.map = new maplibregl.Map({
-      container: 'map', // id container
+      // Use the element reference instead of the global id to avoid "Container 'map' not found" errors
+      container: this.mapContainer?.nativeElement ?? 'map',
       style:
         'https://api.maptiler.com/maps/019a0d96-0c62-770e-82b8-be41643f8563/style.json?key=ysbhdSG63XiCe6Sgq0TG', // map style
       center: [-76.35655, 3.50442], // [longitude, latitude]

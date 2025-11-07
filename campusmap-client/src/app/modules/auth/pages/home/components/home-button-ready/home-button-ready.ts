@@ -8,6 +8,6 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [RouterModule, ButtonModule, ButtonDirective, TranslateModule],
   templateUrl: './home-button-ready.html',
-  styleUrl: './home-button-ready.scss'
+  styleUrls: ['./home-button-ready.scss']
 })
 export class HomeButtonReady {}

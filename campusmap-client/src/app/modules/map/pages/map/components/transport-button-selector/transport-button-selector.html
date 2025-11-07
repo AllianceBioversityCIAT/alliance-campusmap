@@ -1,0 +1,67 @@
+<div class="absolute bottom-0 flex-auto bg-white w-full z-2 p-4">
+  <p-toast />
+  <div class="flex flex-auto justify-center">
+    <form
+      #exampleForm="ngForm"
+      (ngSubmit)="onSubmit(exampleForm)"
+      class="flex justify-center flex-col gap-4">
+      <div class="flex flex-col gap-4">
+        <p-selectbutton
+          class="flex flex-auto h-10 justify-center items-center shadow-[4px_4px_5px_rgba(0,0,0,0.3)]"
+          #model="ngModel"
+          [(ngModel)]="value"
+          [options]="stateOptions"
+          optionLabel="label"
+          optionValue="value"
+          [invalid]="model.invalid && (model.touched || exampleForm.submitted)"
+          required
+          name="value">
+          <ng-template let-item pTemplate="item">
+            <div class="flex items-center gap-2">
+              @if (item.value === 'carro') {
+                <!-- inline car svg, uses currentColor for easy recoloring -->
+                <svg
+                  class="w-7 h-7"
+                  viewBox="0 0 30 23"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true">
+                  <path
+                    d="M28.7612 5.38969C28.631 5.38969 28.4968 5.40965 28.3666 5.44558C28.0865 5.52144 27.8143 5.59729 27.5421 5.67315L26.8438 5.86877L25.2735 1.99219C24.8277 0.894289 23.51 0 22.3382 0H7.63019C6.45844 0 5.14072 0.894289 4.69884 1.99219L3.12862 5.86079L1.63335 5.44558C1.49921 5.40566 1.36507 5.38969 1.23488 5.38969C0.520779 5.38969 0 5.94463 0 6.70318V7.60545C0 8.26419 0.390584 8.85107 0.990268 9.09859L1.6728 9.37806L1.42031 10.0767C1.0455 11.1227 0.761441 12.6757 0.761441 13.6898V21.3871C0.761441 22.2774 1.47554 23 2.35534 23H4.43845C5.31825 23 6.03235 22.2774 6.03235 21.3871V19.4668H23.944V21.3871C23.944 22.2774 24.6581 23 25.5379 23H27.621C28.5008 23 29.2149 22.2774 29.2149 21.3871V13.6898C29.2149 12.6678 28.9269 11.1068 28.5481 10.0568L28.2917 9.35011L28.9821 9.07065C29.6094 8.81913 30 8.25621 30 7.60146V6.69918C30 5.93664 29.4792 5.3857 28.7651 5.3857L28.7612 5.38969ZM4.26881 8.34803L6.64782 2.48724C6.91215 1.83249 7.70515 1.29353 8.40742 1.29353H21.565C22.2633 1.29353 23.0563 1.8285 23.3246 2.48724L25.7036 8.34803C25.9679 9.00278 25.6128 9.54175 24.9106 9.54175H5.06181C4.35955 9.54175 4.00447 9.00278 4.26881 8.34803ZM9.57917 15.7579C9.57917 16.1132 9.29116 16.4046 8.94003 16.4046H4.42267C4.07154 16.4046 3.78748 16.1132 3.78748 15.7579V13.566C3.78748 13.2107 4.07154 12.9193 4.42267 12.9193H8.94003C9.29116 12.9193 9.57917 13.2107 9.57917 13.566V15.7579ZM26.1454 15.7579C26.1454 16.1132 25.8574 16.4046 25.5063 16.4046H20.989C20.6378 16.4046 20.3498 16.1132 20.3498 15.7579V13.566C20.3498 13.2107 20.6339 12.9193 20.989 12.9193H25.5063C25.8574 12.9193 26.1454 13.2107 26.1454 13.566V15.7579Z"
+                    fill="currentColor" />
+                </svg>
+              }
+              @if (item.value === 'caminar') {
+                <!-- inline walk svg, uses currentColor for easy recoloring -->
+                <svg
+                  class="w-7 h-7"
+                  viewBox="0 0 16 25"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true">
+                  <path
+                    d="M9.22794 4.64995C10.5809 4.64995 11.6912 3.60467 11.6912 2.32324C11.6912 1.04181 10.5809 0 9.22794 0C7.875 0 6.76471 1.04528 6.76471 2.32671C6.76471 3.60814 7.87132 4.65342 9.22794 4.65342V4.64995ZM4.67279 8.48729L1.47426 23.6005C1.35294 24.2985 1.84191 24.9965 2.70588 24.9965H2.82721C3.44118 24.9965 3.93382 24.6493 4.05882 24.0658L6.02941 15.6966L8.61397 18.0233V23.8366C8.61397 24.4166 9.10662 25 9.84559 25C10.5846 25 11.0772 24.4201 11.0772 23.8366V17.3253C11.0772 16.6273 10.8309 16.0474 10.3382 15.6966L8.49265 14.0679L9.23162 10.5813C10.5846 11.9774 12.4301 13.0226 14.6471 13.3699C15.386 13.4845 16 12.9046 16 12.2066C16 11.6266 15.5074 11.1613 14.8934 11.0432C13.0478 10.6959 11.4485 9.76525 10.7096 8.36922L9.47794 6.50785C8.73897 5.46256 7.38603 4.99722 6.15441 5.57716L1.47794 7.20586C0.617647 7.6712 0 8.48382 0 9.4145V12.2031C0 12.9011 0.492647 13.3664 1.23162 13.3664C1.97059 13.3664 2.46324 12.9011 2.46324 12.2031V9.4145L4.68015 8.48382L4.67279 8.48729Z"
+                    fill="currentColor" />
+                </svg>
+              }
+              <span>{{ item.label }}</span>
+            </div>
+          </ng-template>
+        </p-selectbutton>
+        <p class="overflow-hidden text-clip font-medium">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id faucibus libero.
+        </p>
+        @if (model.invalid && (model.touched || exampleForm.submitted)) {
+          <p-message severity="error" size="small" variant="simple"
+            >Selection is required.</p-message
+          >
+        }
+      </div>
+      <button
+        pButton
+        type="submit"
+        class="flex self-center justify-self-center w-45 h-10 shadow-[4px_4px_5px_rgba(0,0,0,0.3)] rounded-lg">
+        <img src="assets/icons/arrow_start.svg" alt="" />
+        <span pButtonLabel>Iniciar</span>
+      </button>
+    </form>
+  </div>
+</div>
