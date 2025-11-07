@@ -23,7 +23,8 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.map = new maplibregl.Map({
       // Use the element reference instead of the global id to avoid "Container 'map' not found" errors
       container: this.mapContainer?.nativeElement ?? 'map',
-      style: 'https://api.maptiler.com/maps/streets/style.json?key=FZvbkS3DkmF7kMOIUmLZ', // map style
+      style:
+        'https://api.maptiler.com/maps/019a0d96-0c62-770e-82b8-be41643f8563/style.json?key=FZvbkS3DkmF7kMOIUmLZ', // map style
       center: [-76.35655, 3.50442], // [longitude, latitude]
       zoom: 17,
       minZoom: 15,
