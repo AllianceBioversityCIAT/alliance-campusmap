@@ -20,7 +20,7 @@ export class App {
     const browserLang = this.translate.getBrowserLang() as SupportedLang | undefined;
     const lang: SupportedLang = storedLang ?? browserLang ?? 'en';
 
-    this.translate.setDefaultLang('en');
+    this.translate.setFallbackLang('en');
     this.translate.use(lang);
   }
 }

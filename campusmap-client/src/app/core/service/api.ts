@@ -1,20 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PlaceFeatureCollection } from '../models/place.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Api {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:3000/api/v1/places';
+  private apiUrl =
+    'https://api.maptiler.com/data/019a17ce-d24d-7595-91de-c9e012d10b2d/features.json?key=ysbhdSG63XiCe6Sgq0TG';
 
-  getAllPlaces(): Observable<unknown> {
-    return this.http.get(this.baseUrl);
-  }
+  private http = inject(HttpClient);
 
-  getPlacesByType(type: string): Observable<PlaceFeatureCollection> {
-    return this.http.get<PlaceFeatureCollection>(`${this.baseUrl}/type/${type}`);
+  getBuildings(): Observable<unknown> {
+    return this.http.get<unknown>(this.apiUrl);
   }
 }
