@@ -23,8 +23,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.map = new maplibregl.Map({
       // Use the element reference instead of the global id to avoid "Container 'map' not found" errors
       container: this.mapContainer?.nativeElement ?? 'map',
-      style:
-        'https://api.maptiler.com/maps/019a0d96-0c62-770e-82b8-be41643f8563/style.json?key=ysbhdSG63XiCe6Sgq0TG', // map style
+      style: 'https://api.maptiler.com/maps/streets/style.json?key=FZvbkS3DkmF7kMOIUmLZ', // map style
       center: [-76.35655, 3.50442], // [longitude, latitude]
       zoom: 17,
       minZoom: 15,
@@ -55,6 +54,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         if (!this.userMarker) {
           // Create user marker
           const elContainer = document.createElement('div');
+          elContainer.style.position = 'absolute';
           elContainer.style.width = '40px';
           elContainer.style.height = '40px';
 
@@ -72,7 +72,6 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           circle.className = 'absolute w-10 h-10 bg-blue-500 rounded-full animate-pulse-circle';
 
           const arrow = document.createElement('div');
-          arrow.className = 'user-arrow';
           arrow.style.position = 'absolute';
           arrow.style.top = '50%';
           arrow.style.left = '50%';
