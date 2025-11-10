@@ -1,10 +1,18 @@
 {
+  "Welcome": {
+    "welcomeTo": "Welcome to the",
+    "regionalHub": "Regional Hub for the Americas",
+    "americasHub": "Americas Hub",
+    "logoAlt": "Campus Map Logo",
+    "allianceLogoAlt": "Alliance Logo"
+  },
   "Home": {
     "title": "To explore",
     "promptLine1": "campus facilities,",
     "promptLine2": "Connect to the network:",
     "guest": "VISITORS",
-    "connectionStatus": "Estado de conexión",
+    "connectionStatus": "Connection status",
+    "ariaLabel": "Home section",
     "button": {
       "ready": "I'm ready!"
     }

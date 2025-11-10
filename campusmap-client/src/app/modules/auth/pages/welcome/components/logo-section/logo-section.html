@@ -1,13 +1,20 @@
-<section class="h-screen bg-[url('/assets/images/background_welcomepage.webp')] bg-cover bg-center">
+<div
+  class="h-screen bg-[url('/assets/images/background_welcomepage.webp')] bg-cover bg-center px-4 py-8">
   <div class="flex h-1/2 justify-center items-center">
-    <img src="assets/images/campusmap_logo.svg" alt="Campus Map Logo" class="w-3/5 h-full" />
+    <img
+      src="assets/images/campusmap_logo.svg"
+      [attr.alt]="'Welcome.logoAlt' | translate"
+      class="w-70 sm:w-96 h-full" />
   </div>
   <div class="flex flex-col h-1/4 justify-end items-center text-xl text-white">
-    <p class="text-4xl font-bold">Bienvenidos a la</p>
-    <p class="font-bold">Sede Regional para las Américas</p>
-    <p class="italic text-[#00b8ec]">Welcome to the Americas Hub</p>
+    <p class="text-4xl font-bold">{{ 'Welcome.welcomeTo' | translate }}</p>
+    <p class="font-bold">{{ 'Welcome.regionalHub' | translate }}</p>
+    <p class="italic text-[#00b8ec]">{{ 'Welcome.americasHub' | translate }}</p>
   </div>
   <div class="flex h-1/4 justify-center items-center">
-    <img src="assets/images/logo_alianza.svg" alt="" class="w-3/4" />
+    <img
+      src="assets/images/logo_alianza.svg"
+      [attr.alt]="'Welcome.allianceLogoAlt' | translate"
+      class="w-70 sm:w-96" />
   </div>
-</section>
+</div>

@@ -1,9 +1,18 @@
 {
+  "Welcome": {
+    "welcomeTo": "Bienvenidos a la",
+    "regionalHub": "Sede Regional para las Américas",
+    "americasHub": "Sede de las Américas",
+    "logoAlt": "Logo Campus Map",
+    "allianceLogoAlt": "Logo Alianza"
+  },
   "Home": {
     "title": "Para explorar",
     "promptLine1": "las instalaciones del campus,",
     "promptLine2": "conéctate a la red:",
     "guest": "VISITANTES",
+    "connectionStatus": "Estado de conexión",
+    "ariaLabel": "Sección de inicio",
     "button": {
       "ready": "¡Estoy listo!"
     }
