@@ -1,0 +1,46 @@
+<div
+  class="flex flex-col h-screen justify-center items-center bg-[url(/assets/images/map.webp)] bg-center bg-no-repeat bg-cover">
+  <div class="flex flex-col gap-20 text-center mb-10">
+    <p class="font-bold text-3xl">¡Haz llegado a tu destino!</p>
+    <p class="text-2xl">Califica tu experiencia</p>
+  </div>
+  <div class="flex flex-col justify-center items-center">
+    <p-toast />
+    <div class="flex justify-center items-center">
+      <form
+        #exampleForm="ngForm"
+        (ngSubmit)="onSubmit(exampleForm)"
+        class="flex flex-col flex-auto gap-4">
+        <div class="flex flex-col items-center mb-20">
+          <p-rating
+            #ratingValue="ngModel"
+            [(ngModel)]="value"
+            required
+            name="ratingValue"
+            class="flex justify-center">
+          </p-rating>
+          <p-message
+            *ngIf="exampleForm.submitted && value === null"
+            severity="error"
+            size="large"
+            variant="simple"
+            >Value is required.</p-message
+          >
+        </div>
+        <div class="flex w-screen justify-center items-center gap-8">
+          <button
+            pButton
+            variant="outlined"
+            severity="secondary"
+            type="button"
+            class="w-30 h-13 shadow-[4px_4px_5px_rgba(0,0,0,0.3)]">
+            <span pButtonLabel class="text-xl">Cancelar</span>
+          </button>
+          <button pButton severity="primary" class="w-30 h-13 shadow-[4px_4px_5px_rgba(0,0,0,0.3)]">
+            <span pButtonLabel class="text-xl">Enviar</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

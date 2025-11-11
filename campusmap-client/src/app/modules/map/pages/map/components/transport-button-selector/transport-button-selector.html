@@ -1,11 +1,16 @@
+<!-- Fixed lower container. Keeps the form visible at the bottom -->
 <div class="absolute bottom-0 flex-auto bg-white w-full z-2 p-4">
   <p-toast />
+
+  <!-- Center the form inside the container -->
   <div class="flex flex-auto justify-center">
     <form
       #exampleForm="ngForm"
       (ngSubmit)="onSubmit(exampleForm)"
       class="flex justify-center flex-col gap-4">
+      <!-- Main group of the form -->
       <div class="flex flex-col gap-4">
+        <!-- Transport mode selector. Use ngModel to bind the value -->
         <p-selectbutton
           class="flex flex-auto h-10 justify-center items-center shadow-[4px_4px_5px_rgba(0,0,0,0.3)]"
           #model="ngModel"
@@ -16,8 +21,10 @@
           [invalid]="model.invalid && (model.touched || exampleForm.submitted)"
           required
           name="value">
+          <!-- Custom template for each option. Renders icons based on value -->
           <ng-template let-item pTemplate="item">
             <div class="flex items-center gap-2">
+              <!-- Icon for 'car'. SVG inline is used to adjust dynamic color -->
               @if (item.value === 'carro') {
                 <!-- inline car svg, uses currentColor for easy recoloring -->
                 <svg
@@ -30,6 +37,7 @@
                     fill="currentColor" />
                 </svg>
               }
+              <!-- Icon for 'walk'. SVG inline is used to adjust dynamic color -->
               @if (item.value === 'caminar') {
                 <!-- inline walk svg, uses currentColor for easy recoloring -->
                 <svg
@@ -42,19 +50,25 @@
                     fill="currentColor" />
                 </svg>
               }
+              <!-- Option label -->
               <span>{{ item.label }}</span>
             </div>
           </ng-template>
         </p-selectbutton>
+        <!-- Lower descriptive text -->
         <p class="overflow-hidden text-clip font-medium">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id faucibus libero.
         </p>
+
+        <!-- Error message. Only visible if there is interaction or sending -->
         @if (model.invalid && (model.touched || exampleForm.submitted)) {
           <p-message severity="error" size="small" variant="simple"
-            >Selection is required.</p-message
-          >
+            >Selection is required.
+          </p-message>
         }
       </div>
+
+      <!-- Send button. Use PrimeNG + image -->
       <button
         pButton
         type="submit"
