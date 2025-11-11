@@ -15,15 +15,19 @@ import { ButtonModule } from 'primeng/button';
   styleUrls: ['./transport-button-selector.scss']
 })
 export class TransportButtonSelector {
+  //Injection of the PrimeNG messaging service to display notifications
   private readonly messageService: MessageService = inject(MessageService);
 
+  //Variable linked to SelectButton. Stores the selected option
   value: string | null = null;
 
+  //Options available for the selector. Each one defines label, value and icon
   stateOptions: { label: string; value: string; icon?: string }[] = [
     { label: 'En carro', value: 'carro', icon: 'assets/icons/car.svg' },
     { label: 'A pie', value: 'caminar', icon: 'assets/icons/walk.svg' }
   ];
 
+  //Manages the submission of the form. Validate and display a message using Toast
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.messageService.add({

@@ -15,28 +15,31 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    //Global browser error handling
     provideBrowserGlobalErrorListeners(),
+    //Optimize performance by grouping DOM events
     provideZoneChangeDetection({ eventCoalescing: true }),
+    //App routing
     provideRouter(routes),
 
-    // Importante: habilitamos HttpClient
+    //HTTP client with support for interceptors
     provideHttpClient(withInterceptorsFromDi()),
 
-    // Proveedor de i18n (v17): configuramos loader y fallbackLang
+    //Main translation service
     TranslateService,
+
+    //Initial configuration of ngx-translate
     provideTranslateService({
-      // idioma fallback (se usa cuando no hay traducción o al iniciar)
+      // Default language if the requested one does not exist
       fallbackLang: 'en',
 
-      // configurar el http loader (prefijo/sufijo, caché, bypass interceptors, etc.)
+      //Loader that obtains JSON files from /assets/i18n/
       loader: provideTranslateHttpLoader({
         prefix: './assets/i18n/',
         suffix: '.json'
-        // opcionales:
-        // enforceLoading: true,
-        // useHttpBackend: true
       })
     }),
+    //PrimeNG global configuration with Aura theme
     providePrimeNG({
       theme: {
         preset: Aura,

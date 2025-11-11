@@ -1,5 +1,7 @@
+<!-- Main container. Shows estimated time information -->
 <div class="absolute bottom-0 w-screen p-4 flex-auto bg-white rounded-t-lg z-2">
   <div class="flex">
+    <!-- Left side button. Used to go back or back -->
     <div class="flex items-center justify-center">
       <p-button [outlined]="true" styleClass="flex items-center justify-center">
         <ng-template pTemplate="content">
@@ -7,16 +9,23 @@
         </ng-template>
       </p-button>
     </div>
+
+    <!-- Central section with time, distance and current time -->
     <div class="flex flex-auto flex-col justify-center items-center">
+      <!-- Row with clock icon and estimated time -->
       <div class="flex gap-2">
         <img src="assets/icons/popUpTImer/timerSmall.svg" alt="" class="object-contain" />
         <p class="font-bold text-2xl">2 minutos</p>
       </div>
+
+      <!-- Row with distance and current time-->
       <div class="flex gap-4 mt-2 text-xl">
         <p>1 km</p>
         <p>{{ currentTime }}</p>
       </div>
     </div>
+
+    <!-- Right side button. Used to close the pop-up -->
     <div class="flex items-center justify-center">
       <p-button [outlined]="true" styleClass="flex items-center justify-center">
         <ng-template pTemplate="content">
