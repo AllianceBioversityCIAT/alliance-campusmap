@@ -1,8 +1,8 @@
 <section
   class="flex flex-col bg-[url('/assets/images/background_homepage.webp')] bg-cover bg-[position:45%_center] h-screen w-full px-4"
-  aria-label="Home section">
+  [attr.aria-label]="'Home.ariaLabel' | translate">
   <app-home-message class="flex-1 content-center"></app-home-message>
-  <div class="flex flex-col flex-1 content-center justify-center gap-30 md:gap-20">
+  <div class="flex flex-col flex-1 content-center justify-center gap-8">
     <app-home-button-language></app-home-button-language>
     <app-home-button-ready></app-home-button-ready>
   </div>
