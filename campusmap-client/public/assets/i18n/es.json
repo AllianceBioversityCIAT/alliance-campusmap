@@ -49,12 +49,12 @@
   "InformationPopUp": {
     "building": "Edificio Icónico",
     "howToGet": "Cómo llegar",
-    "imageAlt": "Imagen"
+    "imageAlt": "Building"
   },
   "InformationPopUpParking": {
     "parking": "Parqueadero 3",
     "howToGet": "Cómo llegar",
-    "imageAlt": "Imagen de parqueadero"
+    "imageAlt": "Parqueadero"
   },
   "InformationPopUpTimer": {
     "minutes": "minutos",
