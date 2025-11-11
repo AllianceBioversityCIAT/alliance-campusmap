@@ -57,13 +57,13 @@
         </p-selectbutton>
         <!-- Lower descriptive text -->
         <p class="overflow-hidden text-clip font-medium">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id faucibus libero.
+          {{ 'Transport.description' | translate }}
         </p>
 
         <!-- Error message. Only visible if there is interaction or sending -->
         @if (model.invalid && (model.touched || exampleForm.submitted)) {
-          <p-message severity="error" size="small" variant="simple"
-            >Selection is required.
+          <p-message severity="error" size="small" variant="simple">
+            {{ 'Transport.selectionRequired' | translate }}
           </p-message>
         }
       </div>
@@ -73,8 +73,8 @@
         pButton
         type="submit"
         class="flex self-center justify-self-center w-45 h-10 shadow-[4px_4px_5px_rgba(0,0,0,0.3)] rounded-lg">
-        <img src="assets/icons/arrow_start.svg" alt="" />
-        <span pButtonLabel>Iniciar</span>
+        <img src="assets/icons/arrow_start.svg" [attr.alt]="'Transport.arrowAlt' | translate" />
+        <span pButtonLabel>{{ 'Transport.start' | translate }}</span>
       </button>
     </form>
   </div>

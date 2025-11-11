@@ -16,5 +16,50 @@
     "button": {
       "ready": "I'm ready!"
     }
+  },
+  "Review": {
+    "title": "You have reached your destination!",
+    "subtitle": "Rate your experience",
+    "ratingRequired": "Value is required.",
+    "cancel": "Cancel",
+    "submit": "Submit"
+  },
+  "Map": {
+    "searchPlaceholder": "Search",
+    "label": "Label",
+    "filters": {
+      "ariaLabel": "Show filters",
+      "title": "Show filters",
+      "buildings": "Buildings",
+      "parking": "Parking",
+      "bathrooms": "Bathrooms",
+      "cafeterias": "Cafeterias",
+      "assemblyPoint": "Assembly Point",
+      "warehouse": "Warehouse"
+    }
+  },
+  "Transport": {
+    "car": "Car",
+    "walk": "Walk",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id faucibus libero.",
+    "selectionRequired": "Selection is required.",
+    "start": "Start",
+    "arrowAlt": "Start arrow"
+  },
+  "InformationPopUp": {
+    "building": "Iconic Building",
+    "howToGet": "How to get there",
+    "imageAlt": "Image"
+  },
+  "InformationPopUpParking": {
+    "parking": "Parking 3",
+    "howToGet": "How to get there",
+    "imageAlt": "Parking image"
+  },
+  "InformationPopUpTimer": {
+    "minutes": "minutes",
+    "km": "km",
+    "backAlt": "Go back",
+    "closeAlt": "Close"
   }
 }

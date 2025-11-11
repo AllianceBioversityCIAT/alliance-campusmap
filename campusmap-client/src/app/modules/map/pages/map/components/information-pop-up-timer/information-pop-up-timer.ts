@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-information-pop-up-timer',
-  standalone: true,
-  imports: [ButtonModule],
+  imports: [ButtonModule, TranslateModule],
   templateUrl: './information-pop-up-timer.html',
   styleUrls: ['./information-pop-up-timer.scss']
 })

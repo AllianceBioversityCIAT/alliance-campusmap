@@ -16,5 +16,50 @@
     "button": {
       "ready": "¡Estoy listo!"
     }
+  },
+  "Review": {
+    "title": "¡Haz llegado a tu destino!",
+    "subtitle": "Califica tu experiencia",
+    "ratingRequired": "El valor es requerido.",
+    "cancel": "Cancelar",
+    "submit": "Enviar"
+  },
+  "Map": {
+    "searchPlaceholder": "Buscar",
+    "label": "Etiqueta",
+    "filters": {
+      "ariaLabel": "Mostrar filtros",
+      "title": "Mostrar filtros",
+      "buildings": "Edificios",
+      "parking": "Parqueaderos",
+      "bathrooms": "Baños",
+      "cafeterias": "Cafeterías",
+      "assemblyPoint": "Punto de Encuentro",
+      "warehouse": "Bodega"
+    }
+  },
+  "Transport": {
+    "car": "Carro",
+    "walk": "Caminar",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id faucibus libero.",
+    "selectionRequired": "La selección es requerida.",
+    "start": "Iniciar",
+    "arrowAlt": "Flecha de inicio"
+  },
+  "InformationPopUp": {
+    "building": "Edificio Icónico",
+    "howToGet": "Cómo llegar",
+    "imageAlt": "Imagen"
+  },
+  "InformationPopUpParking": {
+    "parking": "Parqueadero 3",
+    "howToGet": "Cómo llegar",
+    "imageAlt": "Imagen de parqueadero"
+  },
+  "InformationPopUpTimer": {
+    "minutes": "minutos",
+    "km": "km",
+    "backAlt": "Regresar",
+    "closeAlt": "Cerrar"
   }
 }
