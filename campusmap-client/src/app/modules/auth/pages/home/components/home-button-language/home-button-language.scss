@@ -13,9 +13,25 @@
   border: none;
 }
 
-:host ::ng-deep .p-togglebutton.p-togglebutton-checked {
+:host ::ng-deep .p-togglebutton .p-togglebutton-checked {
   flex: 50%;
   background: #e5e5e5;
   border: none;
   color: black;
+}
+
+@media screen and (min-width: 768px) {
+  :host ::ng-deep .p-selectbutton .p-togglebutton {
+    width: 200px;
+    height: 75px;
+    font-size: 38px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :host ::ng-deep .p-selectbutton .p-togglebutton {
+    width: 140px;
+    height: 65px;
+    font-size: 23px;
+  }
 }

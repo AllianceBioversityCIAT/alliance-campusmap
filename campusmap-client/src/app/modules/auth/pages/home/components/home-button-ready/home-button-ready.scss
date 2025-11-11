@@ -13,3 +13,21 @@
   border: none;
   color: var(--p-button-primary-hover-color);
 }
+
+@media screen and (min-width: 768px) {
+  :host ::ng-deep .p-button {
+    width: 250px;
+    height: 75px;
+    font-size: 38px;
+    background: linear-gradient(to top, #358540, #8ebf3f);
+    font-weight: 500;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :host ::ng-deep .p-button {
+    width: 160px;
+    height: 65px;
+    font-size: 23px;
+  }
+}
