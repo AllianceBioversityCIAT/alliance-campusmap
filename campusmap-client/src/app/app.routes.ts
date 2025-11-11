@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-
   {
     path: '',
     loadComponent: () => import('./modules/auth/pages/welcome/welcome').then(m => m.Welcome)
@@ -17,5 +16,9 @@ export const routes: Routes = [
   {
     path: 'map',
     loadComponent: () => import('./modules/map/pages/map/map').then(m => m.Map)
+  },
+  {
+    path: 'review',
+    loadComponent: () => import('./modules/auth/pages/review/review').then(m => m.Review)
   }
 ];
