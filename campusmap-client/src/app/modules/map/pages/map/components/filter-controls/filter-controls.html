@@ -4,8 +4,8 @@
   <button
     type="button"
     (click)="toggle()"
-    aria-label="Mostrar filtros"
-    title="Mostrar filtros"
+    [attr.aria-label]="'Map.filters.ariaLabel' | translate"
+    [attr.title]="'Map.filters.title' | translate"
     class="w-12 h-12 md:w-16 md:h-16 bg-white rounded-full shadow-[0_0_0_2px_rgba(0,0,0,0.1)] hover:bg-gray-100">
     <!-- Icon of the button -->
     <img src="assets/icons/filters.svg" alt="Filtros" class="w-full h-full" />

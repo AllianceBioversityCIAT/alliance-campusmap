@@ -1,8 +1,8 @@
 <div
   class="flex flex-col h-screen justify-center items-center bg-[url(/assets/images/map.webp)] bg-center bg-no-repeat bg-cover">
   <div class="flex flex-col gap-20 text-center mb-10">
-    <p class="font-bold text-3xl">¡Haz llegado a tu destino!</p>
-    <p class="text-2xl">Califica tu experiencia</p>
+    <p class="font-bold text-3xl">{{ 'Review.title' | translate }}</p>
+    <p class="text-2xl">{{ 'Review.subtitle' | translate }}</p>
   </div>
   <div class="flex flex-col justify-center items-center">
     <p-toast />
@@ -23,9 +23,9 @@
             *ngIf="exampleForm.submitted && value === null"
             severity="error"
             size="large"
-            variant="simple"
-            >Value is required.</p-message
-          >
+            variant="simple">
+            {{ 'Review.ratingRequired' | translate }}
+          </p-message>
         </div>
         <div class="flex w-screen justify-center items-center gap-8">
           <button
@@ -34,10 +34,10 @@
             severity="secondary"
             type="button"
             class="w-30 h-13 shadow-[4px_4px_5px_rgba(0,0,0,0.3)]">
-            <span pButtonLabel class="text-xl">Cancelar</span>
+            <span pButtonLabel class="text-xl">{{ 'Review.cancel' | translate }}</span>
           </button>
           <button pButton severity="primary" class="w-30 h-13 shadow-[4px_4px_5px_rgba(0,0,0,0.3)]">
-            <span pButtonLabel class="text-xl">Enviar</span>
+            <span pButtonLabel class="text-xl">{{ 'Review.submit' | translate }}</span>
           </button>
         </div>
       </form>

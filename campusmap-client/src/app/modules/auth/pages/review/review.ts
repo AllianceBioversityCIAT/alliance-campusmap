@@ -6,11 +6,19 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-review',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RatingModule, MessageModule, ToastModule, ButtonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RatingModule,
+    MessageModule,
+    ToastModule,
+    ButtonModule,
+    TranslateModule
+  ],
   templateUrl: './review.html',
   styleUrls: ['./review.scss'],
   providers: [MessageService]
