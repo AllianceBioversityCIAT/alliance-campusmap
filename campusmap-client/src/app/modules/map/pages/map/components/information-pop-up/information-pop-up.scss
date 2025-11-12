@@ -1,1 +1,25 @@
-// Intentionally left blank
+:host ::ng-deep .p-button {
+  background: var(--background-blue);
+  font-size: var(--font-size-2xl);
+  color: white;
+  border: none;
+}
+
+:host ::ng-deep .p-button:not(:disabled):active,
+.p-button:not(:disabled):hover {
+  background: var(--background-blue);
+  border: none;
+  color: var(--color-primary-white);
+}
+
+@media (width >= 48rem) {
+  :host ::ng-deep .p-button {
+    font-size: var(--font-size-4xl);
+  }
+}
+
+@media (width >= 64rem) {
+  :host ::ng-deep .p-selectbutton .p-togglebutton {
+    font-size: var(--font-size-2xl);
+  }
+}
