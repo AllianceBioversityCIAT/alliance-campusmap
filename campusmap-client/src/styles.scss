@@ -33,6 +33,28 @@
 :root {
   font-family: 'Barlow', sans-serif;
   font-style: normal;
+  --color-primary-blue: #173f6f;
+  --color-primary-green: #358540;
+  --color-primary-black: black;
+  --color-primary-white: white;
+  --background-green: linear-gradient(to top, #358540, #8ebf3f);
+  --background-blue: linear-gradient(to top, #173f6f, #1689ca);
+  --font-size-base: 1rem;
+  --line-height-base: 1.5rem;
+  --font-size-lg: 1.125rem;
+  --line-height-lg: 1.75rem;
+  --font-size-xl: 1.25rem;
+  --line-height-xl: 1.75rem;
+  --font-size-2xl: 1.5rem;
+  --line-height-2xl: 2rem;
+  --font-size-3xl: 1.875rem;
+  --line-height-3xl: 2.25rem;
+  --font-size-4xl: 2.25rem;
+  --line-height-4xl: 2.5rem;
+  --font-size-5xl: 3rem;
+  --line-height-5xl: 1;
+  --font-size-6xl: 3.75rem;
+  --line-height-6xl: 1;
 }
 
 .mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon,

@@ -1,13 +1,13 @@
 :host ::ng-deep .p-button-primary {
-  background: linear-gradient(to top, #358540, #8ebf3f);
+  background: var(--background-green);
   color: white;
   border: none;
 }
 
 :host ::ng-deep .p-button-secondary {
   background: transparent;
-  color: #173f6f;
-  border: 2px solid #173f6f;
+  color: var(--color-primary-blue);
+  border: 2px solid var(--color-primary-blue);
 }
 
 :host ::ng-deep .p-button-secondary:not(:disabled):hover {
@@ -17,7 +17,7 @@
 }
 
 :host ::ng-deep .p-button-primary:not(:disabled):hover {
-  background: linear-gradient(to top, #358540, #8ebf3f);
+  background: var(--background-green);
   border: none;
   color: none;
 }
@@ -27,7 +27,6 @@
   border: none;
 }
 
-:root,
 :host {
   --p-rating-icon-size: 3rem;
   --p-rating-icon-hover-color: #ffcf01;
