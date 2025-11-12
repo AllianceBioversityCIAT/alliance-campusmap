@@ -25,6 +25,6 @@ export class Welcome implements OnInit {
       setTimeout(() => {
         this.router.navigate(['/home']);
       }, 600); // Duration fade out
-    }, 3000); // Initial wait time
+    }, 300000); // Initial wait time
   }
 }

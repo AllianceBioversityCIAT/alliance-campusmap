@@ -49,12 +49,12 @@
   "InformationPopUp": {
     "building": "Iconic Building",
     "howToGet": "How to get there",
-    "imageAlt": "Information"
+    "Alt": "Information"
   },
   "InformationPopUpParking": {
     "parking": "Parking 3",
     "howToGet": "How to get there",
-    "imageAlt": "Parking"
+    "Alt": "Parking"
   },
   "InformationPopUpTimer": {
     "minutes": "minutes",
