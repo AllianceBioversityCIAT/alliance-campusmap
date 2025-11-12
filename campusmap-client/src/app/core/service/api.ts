@@ -1,17 +1,29 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { FeatureCollection } from '../models/place.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Api {
-  private apiUrl =
-    'https://api.maptiler.com/data/019a17ce-d24d-7595-91de-c9e012d10b2d/features.json?key=ysbhdSG63XiCe6Sgq0TG';
-
+  private apiUrl = environment.apiUrl;
+  
   private http = inject(HttpClient);
 
-  getBuildings(): Observable<unknown> {
-    return this.http.get<unknown>(this.apiUrl);
+  //Gets all buildings in GeoJSON format
+  getBuildings(): Observable<FeatureCollection> {
+    return this.http.get<FeatureCollection>(`${this.apiUrl}/api/v1/places`);
+  }
+
+  //Gets all places in GeoJSON format
+  getAllPlaces(): Observable<FeatureCollection> {
+    return this.http.get<FeatureCollection>(`${this.apiUrl}/api/v1/places`);
+  }
+
+  //Gets places filtered by type example: 'building', 'parking'
+  getPlacesByType(typeCode: string): Observable<FeatureCollection> {
+    return this.http.get<FeatureCollection>(`${this.apiUrl}/api/v1/places/type/${typeCode}`);
   }
 }

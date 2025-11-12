@@ -1,6 +1,18 @@
 <!-- Component that renders the map -->
-<app-map-load></app-map-load>
+<app-map-load (placeSelected)="onPlaceSelected($event)" (mapClicked)="onMapClicked()"></app-map-load>
 <!-- Floating search bar. Allows you to write and select results -->
 <app-search-bar></app-search-bar>
 <!-- Filter controls. They show options to adjust the view or results -->
 <app-filter-controls></app-filter-controls>
+<!-- Information popup for selected place -->
+<app-information-pop-up
+  [placeName]="selectedPlace.name"
+  [placeType]="selectedPlace.type"
+  [imageUrl]="selectedPlace.imageUrl"
+  [isVisible]="selectedPlace.isVisible"
+  (visibleChange)="selectedPlace.isVisible = $event"
+  (showTransportSelector)="onShowTransportSelector()">
+</app-information-pop-up>
+<!-- Transport button selector popup -->
+<app-transport-button-selector *ngIf="isTransportSelectorVisible">
+</app-transport-button-selector>
