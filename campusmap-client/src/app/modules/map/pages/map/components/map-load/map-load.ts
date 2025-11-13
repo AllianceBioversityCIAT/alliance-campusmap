@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnDestroy, ElementRef, ViewChild, inject, Out
 import maplibregl from 'maplibre-gl';
 import { Api } from '../../../../../../core/service/api';
 import { PlaceFeature, FeatureCollection } from '../../../../../../core/models/place.model';
+import { MapFilterService } from '../../../../../../core/services/map-filter.service';
 
 @Component({
   selector: 'app-map-load',
@@ -18,15 +19,19 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   //Map instances and controls
   private map!: maplibregl.Map;
-  private geolocate!: maplibregl.GeolocateControl;
+  private readonly geolocate!: maplibregl.GeolocateControl;
   private userMarker!: maplibregl.Marker;
 
   //Reference to the map container in the template
   @ViewChild('mapContainer', { static: true })
-  private mapContainer!: ElementRef<HTMLDivElement>;
+  private readonly mapContainer!: ElementRef<HTMLDivElement>;
 
   //Service for future requests to the backend
   private readonly api = inject(Api);
+  private readonly mapFilterService = inject(MapFilterService);
+
+  //Store current markers to remove them when filter changes
+  private currentMarkers: maplibregl.Marker[] = [];
 
   //Initialize the map using the referenced element
   ngAfterViewInit(): void {
@@ -50,6 +55,11 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.map.on('load', () => {
       this.trackUser();
       this.loadPlaces();
+      
+      // Subscribe to filter changes
+      this.mapFilterService.filter$.subscribe(filterKey => {
+        this.loadPlaces(filterKey);
+      });
     });
 
     //Emit event when map is clicked
@@ -68,7 +78,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         const lat = pos.coords.latitude;
 
         //If the marker does not exist, create it with the visual elements
-        if (!this.userMarker) {
+        if (this.userMarker) {
+          //Updates user position
+          this.userMarker.setLngLat([lng, lat]);
+        } else {
           // Create user marker
           const elContainer = document.createElement('div');
           elContainer.style.position = 'absolute';
@@ -109,9 +122,6 @@ export class MapLoad implements AfterViewInit, OnDestroy {
             .addTo(this.map);
 
           this.requestOrientationPermission();
-        } else {
-          //Updates user position
-          this.userMarker.setLngLat([lng, lat]);
         }
       },
       err => console.error(err),
@@ -119,7 +129,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     );
 
     // Orbit control to follow user
-    window.addEventListener('deviceorientation', e => {
+    globalThis.addEventListener('deviceorientation', e => {
       if (!this.userMarker) return;
       const heading = e.alpha ?? 0;
       const el = this.userMarker.getElement();
@@ -149,7 +159,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   //Enable the device targeting event
   private enableDeviceOrientation() {
-    window.addEventListener('deviceorientation', e => {
+    globalThis.addEventListener('deviceorientation', e => {
       if (!this.userMarker) return;
       const heading = e.alpha ?? 0;
       const el = this.userMarker.getElement();
@@ -158,9 +168,16 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   //Load places from API and display centroids on map
-  private loadPlaces(): void {
+  private loadPlaces(filterKey: string | null = null): void {
+    // Clear existing markers
+    this.clearMarkers();
 
-    this.api.getAllPlaces().subscribe({
+    // Choose API call based on filter
+    const apiCall = filterKey 
+      ? this.api.getPlacesByType(filterKey)
+      : this.api.getAllPlaces();
+
+    apiCall.subscribe({
       next: (data: FeatureCollection) => {
         
         if (data?.features && Array.isArray(data.features)) {
@@ -175,10 +192,18 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     });
   }
 
+  //Clear all markers from the map
+  private clearMarkers(): void {
+    for (const marker of this.currentMarkers) {
+      marker.remove();
+    }
+    this.currentMarkers = [];
+  }
+
   //Add centroid markers to the map
   private addCentroidsToMap(features: PlaceFeature[]): void {
     
-    features.forEach((feature: PlaceFeature, index: number) => {
+    for (const [index, feature] of features.entries()) {
       const properties = feature.properties;
       const centroid = properties?.centroid;
 
@@ -207,14 +232,16 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           });
         });
 
-        // Add marker to map
-        new maplibregl.Marker({ element: markerEl })
+        // Add marker to map and store reference
+        const marker = new maplibregl.Marker({ element: markerEl })
           .setLngLat([lng, lat])
           .addTo(this.map);
+        
+        this.currentMarkers.push(marker);
       } else {
         console.warn(`Feature ${index + 1} no tiene coordenadas válidas de centroid`);
       }
-    });
+    }
   }
 
   ngOnDestroy(): void {

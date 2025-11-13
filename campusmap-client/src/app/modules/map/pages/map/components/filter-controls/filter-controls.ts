@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MapFilterService } from '../../../../../../core/services/map-filter.service';
 
 @Component({
   selector: 'app-filter-controls',
@@ -10,13 +11,35 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 })
 export class FilterControls {
   private readonly translate = inject(TranslateService);
+  private readonly mapFilterService = inject(MapFilterService);
 
   //Checks if the filter panel is visible
   open = false;
 
+  //Currently active filter
+  activeFilter: string | null = null;
+
   // Changes the status of the panel when the user presses the main button
   toggle() {
     this.open = !this.open;
+  }
+
+  // Handle filter selection
+  onFilterClick(filterKey: string): void {
+    if (this.activeFilter === filterKey) {
+      // If clicking the same filter, deactivate it
+      this.activeFilter = null;
+      this.mapFilterService.clearFilter();
+    } else {
+      // Activate the new filter
+      this.activeFilter = filterKey;
+      this.mapFilterService.setFilter(filterKey);
+    }
+  }
+
+  // Check if a filter is active
+  isFilterActive(filterKey: string): boolean {
+    return this.activeFilter === filterKey;
   }
 
   // List of available filters. Each filter contains its key, tag,
@@ -24,7 +47,7 @@ export class FilterControls {
   get filters() {
     return [
       {
-        key: 'iconic',
+        key: 'building',
         label: this.translate.instant('Map.filters.buildings') as string,
         src: 'assets/icons/mapPage/building.svg',
         name: this.translate.instant('Map.filters.buildings') as string

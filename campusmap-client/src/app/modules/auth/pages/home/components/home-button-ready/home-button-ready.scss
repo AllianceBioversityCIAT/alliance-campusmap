@@ -1,7 +1,7 @@
 :host ::ng-deep .p-button {
-  width: 220px;
+  width: 160px;
   height: 55px;
-  font-size: 30px;
+  font-size: var(--font-size-2xl);
   background: var(--background-green);
   border: none;
   font-weight: 500;
@@ -16,9 +16,9 @@
 
 @media screen and (min-width: 768px) {
   :host ::ng-deep .p-button {
-    width: 250px;
-    height: 75px;
-    font-size: 38px;
+    width: 310px;
+    height: 85px;
+    font-size: var(--font-size-5xl);
     background: var(--background-green);
     font-weight: 500;
   }
@@ -26,8 +26,8 @@
 
 @media screen and (min-width: 1024px) {
   :host ::ng-deep .p-button {
-    width: 160px;
-    height: 65px;
-    font-size: 23px;
+    width: 200px;
+    height: 60px;
+    font-size: var(--font-size-3xl);
   }
 }

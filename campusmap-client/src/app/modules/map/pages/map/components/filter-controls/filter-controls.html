@@ -19,7 +19,8 @@
       <button
         *ngFor="let f of filters"
         type="button"
-        class="w-full h-full bg-white border border-[#cccccc] rounded-lg shadow-[4px_4px_5px_rgba(0,0,0,0.3)]"
+        (click)="onFilterClick(f.key)"
+        [class]="isFilterActive(f.key) ? 'w-full h-full bg-blue-100 border-2 border-blue-500 rounded-lg shadow-[4px_4px_5px_rgba(0,0,0,0.3)]' : 'w-full h-full bg-white border border-[#cccccc] rounded-lg shadow-[4px_4px_5px_rgba(0,0,0,0.3)]'"
         [attr.aria-label]="f.label"
         [attr.title]="f.label">
         <!-- Internal content of the filter button -->
