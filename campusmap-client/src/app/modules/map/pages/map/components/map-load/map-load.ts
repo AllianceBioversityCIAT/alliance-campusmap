@@ -18,12 +18,12 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   //Map instances and controls
   private map!: maplibregl.Map;
-  private geolocate!: maplibregl.GeolocateControl;
+  private readonly geolocate!: maplibregl.GeolocateControl;
   private userMarker!: maplibregl.Marker;
 
   //Reference to the map container in the template
   @ViewChild('mapContainer', { static: true })
-  private mapContainer!: ElementRef<HTMLDivElement>;
+  private readonly mapContainer!: ElementRef<HTMLDivElement>;
 
   //Service for future requests to the backend
   private readonly api = inject(Api);
@@ -68,7 +68,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         const lat = pos.coords.latitude;
 
         //If the marker does not exist, create it with the visual elements
-        if (!this.userMarker) {
+        if (this.userMarker) {
+          //Updates user position
+          this.userMarker.setLngLat([lng, lat]);
+        } else {
           // Create user marker
           const elContainer = document.createElement('div');
           elContainer.style.position = 'absolute';
@@ -109,9 +112,6 @@ export class MapLoad implements AfterViewInit, OnDestroy {
             .addTo(this.map);
 
           this.requestOrientationPermission();
-        } else {
-          //Updates user position
-          this.userMarker.setLngLat([lng, lat]);
         }
       },
       err => console.error(err),
@@ -119,7 +119,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     );
 
     // Orbit control to follow user
-    window.addEventListener('deviceorientation', e => {
+    globalThis.addEventListener('deviceorientation', e => {
       if (!this.userMarker) return;
       const heading = e.alpha ?? 0;
       const el = this.userMarker.getElement();
@@ -149,7 +149,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   //Enable the device targeting event
   private enableDeviceOrientation() {
-    window.addEventListener('deviceorientation', e => {
+    globalThis.addEventListener('deviceorientation', e => {
       if (!this.userMarker) return;
       const heading = e.alpha ?? 0;
       const el = this.userMarker.getElement();
@@ -178,7 +178,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   //Add centroid markers to the map
   private addCentroidsToMap(features: PlaceFeature[]): void {
     
-    features.forEach((feature: PlaceFeature, index: number) => {
+    for (const [index, feature] of features.entries()) {
       const properties = feature.properties;
       const centroid = properties?.centroid;
 
@@ -214,7 +214,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       } else {
         console.warn(`Feature ${index + 1} no tiene coordenadas válidas de centroid`);
       }
-    });
+    }
   }
 
   ngOnDestroy(): void {
