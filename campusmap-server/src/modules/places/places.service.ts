@@ -14,7 +14,9 @@ export class PlacesService {
   ) {}
 
   async getAllPlaces(): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
-    const places = await this.placeRepository.find();
+    const places = await this.placeRepository.find({
+      relations: ['type'],
+    });
     return PlacesMapper.toFeatureCollection(places, 'All Places');
   }
 
@@ -23,6 +25,7 @@ export class PlacesService {
   ): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
     const places = await this.placeRepository.find({
       where: { type: { code } },
+      relations: ['type'],
     });
     return PlacesMapper.toFeatureCollection(places, `Places of type ${code}`);
   }

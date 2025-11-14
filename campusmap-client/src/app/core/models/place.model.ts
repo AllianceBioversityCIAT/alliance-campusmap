@@ -10,6 +10,7 @@ export interface PlaceProperties {
   name: string;
   groupId?: number;
   typeId?: number;
+  typeCode?: string;
   imageUrl?: string;
   centroid: Geometry;
 }

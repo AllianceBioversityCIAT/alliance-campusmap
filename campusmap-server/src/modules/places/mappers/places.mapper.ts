@@ -20,6 +20,7 @@ export class PlacesMapper {
         name: place.name,
         groupId: place.groupId,
         typeId: place.typeId,
+        typeCode: place.type?.code,
         imageUrl: place.imageUrl,
         centroid: this.geometryToDto(place.centroid as SupportedGeometry),
       },

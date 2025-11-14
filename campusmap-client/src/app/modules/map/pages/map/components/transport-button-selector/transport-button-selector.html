@@ -7,12 +7,12 @@
     <form
       #exampleForm="ngForm"
       (ngSubmit)="onSubmit(exampleForm)"
-      class="flex justify-center flex-col gap-4">
+      class="flex justify-center flex-col">
       <!-- Main group of the form -->
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col">
         <!-- Transport mode selector. Use ngModel to bind the value -->
         <p-selectbutton
-          class="flex flex-auto h-10 justify-center items-center shadow-[4px_4px_5px_rgba(0,0,0,0.3)]"
+          class="flex flex-auto h-10 w-100 justify-center items-center shadow-[4px_4px_5px_rgba(0,0,0,0.3)]"
           #model="ngModel"
           [(ngModel)]="value"
           [options]="stateOptions"
@@ -28,7 +28,7 @@
               @if (item.value === 'carro') {
                 <!-- inline car svg, uses currentColor for easy recoloring -->
                 <svg
-                  class="w-7 h-7"
+                  class="w-7 md:w-9 h-7 md:h-9"
                   viewBox="0 0 30 23"
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true">
@@ -41,7 +41,7 @@
               @if (item.value === 'caminar') {
                 <!-- inline walk svg, uses currentColor for easy recoloring -->
                 <svg
-                  class="w-7 h-7"
+                  class="w-7 md:w-9 h-7 md:h-9"
                   viewBox="0 0 16 25"
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true">
@@ -62,7 +62,7 @@
 
         <!-- Error message. Only visible if there is interaction or sending -->
         @if (model.invalid && (model.touched || exampleForm.submitted)) {
-          <p-message severity="error" size="small" variant="simple">
+          <p-message severity="error" variant="simple">
             {{ 'Transport.selectionRequired' | translate }}
           </p-message>
         }
@@ -72,9 +72,9 @@
       <button
         pButton
         type="submit"
-        class="flex self-center justify-self-center w-45 h-10 shadow-[4px_4px_5px_rgba(0,0,0,0.3)] rounded-lg">
-        <img src="assets/icons/arrow_start.svg" [attr.alt]="'Transport.arrowAlt' | translate" />
-        <span pButtonLabel>{{ 'Transport.start' | translate }}</span>
+        class="flex self-center justify-self-center w-45 md:w-55 h-10 md:h-15 shadow-[4px_4px_5px_rgba(0,0,0,0.3)] rounded-lg">
+        <img src="assets/icons/arrow_start.svg" class="w-7 md:w-12 h-7 md:h-9 " [attr.alt]="'Transport.arrowAlt' | translate" />
+        <span pButtonLabel class="text-(length:--font-size-2xl) leading-(length:--line-height-2xl) md:text-(length:--font-size-3xl) md:leading-(length:--line-height-3xl) lg:text-(length:--font-size-3xl) lg:leading-(length:--line-height-3xl) ">{{ 'Transport.start' | translate }}</span>
       </button>
     </form>
   </div>

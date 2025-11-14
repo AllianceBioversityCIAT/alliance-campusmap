@@ -7,7 +7,7 @@
   border: none;
   /* Darken the lighter stop so white text meets WCAG contrast requirements */
   background: linear-gradient(#0e6fae, #004cc6);
-  font-size: 25px;
+  font-size: var(--font-size-2xl);
 }
 
 :host ::ng-deep .p-togglebutton-checked .p-togglebutton-content {
@@ -16,6 +16,11 @@
 }
 
 :host ::ng-deep .p-togglebutton {
-  font-size: 24px;
+  font-size: var(--font-size-2xl);
   width: 100%;
+}
+@media (min-width: 768px) {
+  :host ::ng-deep .p-togglebutton {
+    font-size: var(--font-size-3xl);
+  }
 }

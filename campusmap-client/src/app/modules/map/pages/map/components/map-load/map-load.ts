@@ -227,7 +227,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           e.stopPropagation(); // Prevent map click event
           this.placeSelected.emit({
             name: properties.name,
-            type: 'Building', // Puedes obtener esto de properties.typeId si lo tienes
+            type: properties.typeCode || 'building',
             imageUrl: properties.imageUrl || ''
           });
         });

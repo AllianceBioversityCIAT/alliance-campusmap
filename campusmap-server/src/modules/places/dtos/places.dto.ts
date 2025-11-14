@@ -14,6 +14,9 @@ export class PlacePropertiesDto {
   @ApiProperty({ example: 1, required: false })
   typeId?: number;
 
+  @ApiProperty({ example: 'parking', required: false })
+  typeCode?: string;
+
   @ApiProperty({ example: 'https://...', required: false })
   imageUrl?: string;
 
