@@ -26,6 +26,7 @@
   "Map": {
     "searchPlaceholder": "Buscar",
     "label": "Etiqueta",
+    "noResults": "No se encontraron resultados",
     "filters": {
       "ariaLabel": "Mostrar filtros",
       "title": "Mostrar filtros",

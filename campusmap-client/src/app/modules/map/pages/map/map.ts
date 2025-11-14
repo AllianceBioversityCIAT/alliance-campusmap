@@ -15,6 +15,7 @@ import { TransportButtonSelector } from './components/transport-button-selector/
   styleUrls: ['./map.scss']
 })
 export class Map {
+  @ViewChild(MapLoad) mapLoad!: MapLoad;
   @ViewChild(InformationPopUp) informationPopUp!: InformationPopUp;
 
   selectedPlace = {
@@ -40,5 +41,14 @@ export class Map {
   onMapClicked(): void {
     this.selectedPlace.isVisible = false;
     this.isTransportSelectorVisible = false;
+  }
+
+  onLocationSelected(place: any): void {
+    // Navigate to the centroid coordinates
+    if (place.properties?.centroid?.coordinates) {
+      const [lng, lat] = place.properties.centroid.coordinates;
+      this.mapLoad.flyToLocation(lng, lat);
+      console.log('Navigating to:', place.properties.name, [lng, lat]);
+    }
   }
 }

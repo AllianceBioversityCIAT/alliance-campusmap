@@ -244,6 +244,18 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     }
   }
 
+  //Navigate to specific coordinates
+  public flyToLocation(lng: number, lat: number, zoom: number = 19): void {
+    if (this.map) {
+      this.map.flyTo({
+        center: [lng, lat],
+        zoom: zoom,
+        duration: 1500, // Animation duration in milliseconds
+        essential: true // This animation is essential for the user
+      });
+    }
+  }
+
   ngOnDestroy(): void {
     //Deletes the map when the component is destroyed
     if (this.map) {
