@@ -14,7 +14,8 @@
   <!-- Icon bar (dropdown) -->
   <div class="w-screen h-full flex justify-end items-center mr-16">
     <!-- List of filters. Only shown when the user clicks on the icon -->
-    <div *ngIf="open" class="grid grid-cols-2 w-65 h-full gap-4">
+    @if (open) {
+    <div class="grid grid-cols-2 w-65 h-full gap-4">
       <!-- Button for each available filter -->
       <button
         *ngFor="let f of filters"
@@ -30,5 +31,6 @@
         </div>
       </button>
     </div>
+    }
   </div>
 </div>
