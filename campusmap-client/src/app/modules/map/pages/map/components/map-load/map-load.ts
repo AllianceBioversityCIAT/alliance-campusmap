@@ -21,6 +21,11 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private map!: maplibregl.Map;
   private readonly geolocate!: maplibregl.GeolocateControl;
   private userMarker!: maplibregl.Marker;
+  private accuracyCircle!: HTMLDivElement;
+  private watchId: number | null = null;
+  private readonly ACCURACY_THRESHOLD = 50; // meters - only update if accuracy is better than this
+  private lastHeading = 0;
+  private readonly HEADING_SMOOTHING_FACTOR = 0.3; // Lower = smoother but slower response
 
   //Reference to the map container in the template
   @ViewChild('mapContainer', { static: true })
@@ -70,17 +75,40 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   //Turn on user location tracking
   private trackUser() {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      console.warn('Geolocation is not supported by this browser');
+      return;
+    }
 
-    navigator.geolocation.watchPosition(
+    // Enhanced geolocation options for maximum accuracy
+    const options: PositionOptions = {
+      enableHighAccuracy: true,  // Use GPS if available
+      timeout: 10000,             // 10 seconds timeout
+      maximumAge: 0               // Always get fresh position, no cached data
+    };
+
+    this.watchId = navigator.geolocation.watchPosition(
       pos => {
         const lng = pos.coords.longitude;
         const lat = pos.coords.latitude;
+        const accuracy = pos.coords.accuracy; // Accuracy in meters
+
+        // Filter out low-accuracy positions
+        if (accuracy > this.ACCURACY_THRESHOLD) {
+          console.warn(`Position accuracy too low: ${accuracy}m (threshold: ${this.ACCURACY_THRESHOLD}m)`);
+          // Still update if we don't have a marker yet (first position)
+          if (this.userMarker) {
+            return;
+          }
+        }
 
         //If the marker does not exist, create it with the visual elements
         if (this.userMarker) {
           //Updates user position
           this.userMarker.setLngLat([lng, lat]);
+          
+          // Update accuracy circle size based on actual accuracy
+          this.updateAccuracyCircle(accuracy);
         } else {
           // Create user marker
           const elContainer = document.createElement('div');
@@ -88,18 +116,19 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           elContainer.style.width = '40px';
           elContainer.style.height = '40px';
 
-          //Accuracy circle
-          const circle = document.createElement('div');
-          circle.style.position = 'absolute';
-          circle.style.top = '50%';
-          circle.style.left = '50%';
-          circle.style.transform = 'translate(-50%, -50%)';
-          circle.style.width = '35px';
-          circle.style.height = '35px';
-          circle.style.background = '#007aff4d';
-          circle.style.borderRadius = '50%';
-          circle.style.zIndex = '0';
-          circle.className = 'absolute w-10 h-10 bg-blue-500 rounded-full animate-pulse-circle';
+          //Accuracy circle - will be dynamically sized
+          this.accuracyCircle = document.createElement('div');
+          this.accuracyCircle.style.position = 'absolute';
+          this.accuracyCircle.style.top = '50%';
+          this.accuracyCircle.style.left = '50%';
+          this.accuracyCircle.style.transform = 'translate(-50%, -50%)';
+          this.accuracyCircle.style.background = '#007aff4d';
+          this.accuracyCircle.style.borderRadius = '50%';
+          this.accuracyCircle.style.zIndex = '0';
+          this.accuracyCircle.className = 'absolute bg-blue-500 rounded-full animate-pulse-circle';
+          
+          // Set initial size based on accuracy
+          this.updateAccuracyCircle(accuracy);
 
           //Arrow indicating user orientation
           const arrow = document.createElement('div');
@@ -113,7 +142,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           arrow.style.backgroundSize = 'cover';
           arrow.style.zIndex = '1';
 
-          elContainer.appendChild(circle);
+          elContainer.appendChild(this.accuracyCircle);
           elContainer.appendChild(arrow);
 
           //Add the marker to the map
@@ -123,22 +152,56 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
           this.requestOrientationPermission();
         }
-      },
-      err => console.error(err),
-      { enableHighAccuracy: true }
-    );
 
-    // Orbit control to follow user
-    globalThis.addEventListener('deviceorientation', e => {
-      if (!this.userMarker) return;
-      const heading = e.alpha ?? 0;
-      const el = this.userMarker.getElement();
-      el.style.transform = `rotate(${heading}deg)`;
-    });
+        // Log accuracy for debugging
+        console.log(`Position updated - Accuracy: ${accuracy.toFixed(1)}m, Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`);
+      },
+      err => {
+        // Enhanced error handling
+        let errorMessage = 'Error getting location: ';
+        switch (err.code) {
+          case err.PERMISSION_DENIED:
+            errorMessage += 'User denied geolocation permission';
+            break;
+          case err.POSITION_UNAVAILABLE:
+            errorMessage += 'Location information unavailable';
+            break;
+          case err.TIMEOUT:
+            errorMessage += 'Location request timed out';
+            break;
+          default:
+            errorMessage += err.message;
+        }
+        console.error(errorMessage);
+      },
+      options
+    );
+  }
+
+  // Update the accuracy circle size based on GPS accuracy
+  private updateAccuracyCircle(accuracyMeters: number): void {
+    if (!this.accuracyCircle || !this.map) return;
+
+    // Convert accuracy from meters to pixels at current zoom level
+    // At zoom 17 (default), roughly 1 meter = 0.3 pixels
+    // This is an approximation and varies by latitude
+    const metersPerPixel = 156543.03392 * Math.cos(this.map.getCenter().lat * Math.PI / 180) / Math.pow(2, this.map.getZoom());
+    const accuracyPixels = accuracyMeters / metersPerPixel;
+    
+    // Clamp size between 35px (minimum) and 100px (maximum) for visual consistency
+    const size = Math.max(35, Math.min(100, accuracyPixels));
+    
+    this.accuracyCircle.style.width = `${size}px`;
+    this.accuracyCircle.style.height = `${size}px`;
   }
 
   // Request permission for device orientation
   private requestOrientationPermission() {
+    // Check if DeviceOrientationEvent is available
+    if (typeof DeviceOrientationEvent === 'undefined') {
+      return;
+    }
+
     type DeviceOrientationWithPermission = typeof DeviceOrientationEvent & {
       requestPermission?: () => Promise<'granted' | 'denied'>;
     };
@@ -161,9 +224,29 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private enableDeviceOrientation() {
     globalThis.addEventListener('deviceorientation', e => {
       if (!this.userMarker) return;
-      const heading = e.alpha ?? 0;
+      
+      // Get raw heading
+      const rawHeading = e.alpha ?? 0;
+      
+      // Apply exponential smoothing to reduce jitter
+      // This makes the compass more stable while still being responsive
+      const headingDiff = rawHeading - this.lastHeading;
+      
+      // Handle wrap-around at 0/360 degrees
+      let adjustedDiff = headingDiff;
+      if (headingDiff > 180) {
+        adjustedDiff = headingDiff - 360;
+      } else if (headingDiff < -180) {
+        adjustedDiff = headingDiff + 360;
+      }
+      
+      // Apply smoothing
+      const smoothedHeading = this.lastHeading + (adjustedDiff * this.HEADING_SMOOTHING_FACTOR);
+      this.lastHeading = smoothedHeading;
+      
+      // Update marker rotation
       const el = this.userMarker.getElement();
-      el.style.transform = `rotate(${heading}deg)`;
+      el.style.transform = `rotate(${smoothedHeading}deg)`;
     });
   }
 
@@ -286,6 +369,12 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     }
 
   ngOnDestroy(): void {
+    // Stop watching position to prevent memory leaks
+    if (this.watchId !== null) {
+      navigator.geolocation.clearWatch(this.watchId);
+      this.watchId = null;
+    }
+    
     //Deletes the map when the component is destroyed
     if (this.map) {
       this.map.remove();
