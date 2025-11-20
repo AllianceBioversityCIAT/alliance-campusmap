@@ -6,12 +6,12 @@
 .p-togglebutton {
   border: none;
   /* Darken the lighter stop so white text meets WCAG contrast requirements */
-  background: linear-gradient(#0e6fae, #004cc6);
+  background: var(--background-blue);
   font-size: var(--font-size-2xl);
 }
 
 :host ::ng-deep .p-togglebutton-checked .p-togglebutton-content {
-  background: linear-gradient(#0e6fae, #004cc6);
+  background: var(--background-blue);
   color: white;
 }
 
@@ -19,8 +19,23 @@
   font-size: var(--font-size-2xl);
   width: 100%;
 }
+
 @media (min-width: 768px) {
   :host ::ng-deep .p-togglebutton {
     font-size: var(--font-size-3xl);
   }
+}
+
+:host ::ng-deep .p-button {
+  background: var(--background-blue);
+  font-size: var(--font-size-2xl);
+  color: white;
+  border: none;
+}
+
+:host ::ng-deep .p-button:not(:disabled):active,
+.p-button:not(:disabled):hover {
+  background: var(--background-blue);
+  border: none;
+  color: var(--color-primary-white);
 }
