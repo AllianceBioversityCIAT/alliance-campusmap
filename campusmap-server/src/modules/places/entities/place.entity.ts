@@ -4,10 +4,19 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Geometry } from 'geojson';
-import { GroupPlace } from './group-place.entity';
 import { TypePlace } from './type-place.entity';
+import { Unit } from './unity.entity';
+
+export enum ColorEnum {
+  BLUE_GREEN = 'blue/green',
+  BLUE = 'blue',
+  GREEN = 'green',
+  ORANGE = 'orange',
+  YELLOW = 'yellow',
+}
 
 @Entity({ name: 'place', schema: 'campus_map' })
 export class Place {
@@ -42,30 +51,31 @@ export class Place {
 
   @Column({
     type: 'integer',
-    name: 'group_id',
-    nullable: true,
-  })
-  groupId: number;
-
-  @Column({
-    type: 'integer',
     name: 'type_id',
     nullable: true,
   })
   typeId: number;
 
   @Column({
-    type: 'text',
-    name: 'image_url',
+    type: 'varchar',
+    name: 'icon',
+    length: 100,
     nullable: true,
   })
-  imageUrl: string;
+  icon: string;
 
-  @ManyToOne(() => GroupPlace, { nullable: true })
-  @JoinColumn({ name: 'group_id' })
-  group: GroupPlace;
+  @Column({
+    type: 'enum',
+    enum: ColorEnum,
+    enumName: 'color_enum',
+    nullable: true,
+  })
+  color: ColorEnum;
 
   @ManyToOne(() => TypePlace, { nullable: true })
   @JoinColumn({ name: 'type_id' })
   type: TypePlace;
+
+  @OneToMany(() => Unit, (unit) => unit.place)
+  units: Unit[];
 }
