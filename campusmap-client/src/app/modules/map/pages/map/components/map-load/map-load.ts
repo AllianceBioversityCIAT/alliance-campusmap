@@ -200,6 +200,34 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.currentMarkers = [];
   }
 
+  //Get icon path based on place type
+  private getIconForType(typeCode: string, placeName: string): string {
+    // Special handling for parking lots with specific names
+    if (typeCode === 'parking') {
+      // Extract parking number/identifier from name if present
+      const parkingRegex = /Parqueadero\s+(\w+)/i;
+      const parkingMatch = parkingRegex.exec(placeName);
+      if (parkingMatch) {
+        const parkingId = parkingMatch[1];
+        // Check if specific parking icon exists
+        const specificIcon = `assets/icons/mapPage/parking_${parkingId}.svg`;
+        return specificIcon;
+      }
+      return 'assets/icons/mapPage/parking.svg';
+    }
+
+    // Map type codes to icon paths
+    const iconMap: Record<string, string> = {
+      'building': 'assets/icons/mapPage/building.svg',
+      'bathroom': 'assets/icons/mapPage/bath.svg',
+      'cafeteria': 'assets/icons/mapPage/cafeteria.svg',
+      'assembly_point': 'assets/icons/mapPage/assembly_point.svg',
+      'warehouse': 'assets/icons/mapPage/warehouse.svg'
+    };
+
+    return iconMap[typeCode] || 'assets/icons/mapPage/building.svg';
+  }
+
   //Add centroid markers to the map
   private addCentroidsToMap(features: PlaceFeature[]): void {
     
@@ -210,16 +238,17 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       if (centroid?.coordinates && Array.isArray(centroid.coordinates)) {
         const [lng, lat] = centroid.coordinates as number[];
 
-        // Create a custom marker element
+        // Get the appropriate icon for this place type
+        const iconPath = this.getIconForType(properties.typeCode || 'building', properties.name);
+
+        // Create a custom marker element with just the icon
         const markerEl = document.createElement('div');
-        markerEl.style.width = '30px';
-        markerEl.style.height = '30px';
-        markerEl.style.backgroundColor = 'red'; // Color de respaldo visible
-        markerEl.style.borderRadius = '50%';
-        markerEl.style.border = '3px solid white';
-        markerEl.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
-        markerEl.style.backgroundImage = 'url(assets/icons/mapPage/bath.svg)';
-        markerEl.style.backgroundSize = 'cover';
+        markerEl.style.width = '24px';
+        markerEl.style.height = '24px';
+        markerEl.style.backgroundImage = `url(${iconPath})`;
+        markerEl.style.backgroundSize = 'contain';
+        markerEl.style.backgroundRepeat = 'no-repeat';
+        markerEl.style.backgroundPosition = 'center';
         markerEl.style.cursor = 'pointer';
 
         // Add click event to marker
@@ -245,16 +274,16 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   //Navigate to specific coordinates
-  public flyToLocation(lng: number, lat: number, zoom: number = 19): void {
-    if (this.map) {
-      this.map.flyTo({
-        center: [lng, lat],
-        zoom: zoom,
-        duration: 1500, // Animation duration in milliseconds
-        essential: true // This animation is essential for the user
-      });
+    public flyToLocation(lng: number, lat: number, zoom = 19): void {
+      if (this.map) {
+        this.map.flyTo({
+          center: [lng, lat],
+          zoom: zoom,
+          duration: 1500, // Animation duration in milliseconds
+          essential: true // This animation is essential for the user
+        });
+      }
     }
-  }
 
   ngOnDestroy(): void {
     //Deletes the map when the component is destroyed
