@@ -11,6 +11,7 @@ type SupportedGeometry = Point | Polygon | MultiPolygon;
 
 export class PlacesMapper {
   static toFeature(place: Place): FeatureDto<PlacePropertiesDto> {
+    const typeCode = place.type?.code;
     return {
       type: 'Feature',
       id: place.id,
@@ -18,7 +19,7 @@ export class PlacesMapper {
       properties: {
         id: place.id,
         name: place.name,
-        typeId: place.typeId,
+        type: typeCode,
         icon: place.icon,
         color: place.color,
         units: place.units?.map((unit) => ({ id: unit.id, name: unit.name })) || [],

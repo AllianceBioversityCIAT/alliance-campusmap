@@ -11,8 +11,8 @@ export class PlacePropertiesDto {
   @ApiProperty({ isArray: true, type: () => Object, description: 'Unidades asociadas al lugar' })
   units?: { id: number; name: string }[];
 
-  @ApiProperty({ example: 1, required: false })
-  typeId?: number;
+  @ApiProperty({ example: "building" })
+  type?: string;
 
   icon: string;
   color: string;

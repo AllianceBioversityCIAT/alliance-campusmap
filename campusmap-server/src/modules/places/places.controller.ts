@@ -1,15 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { PlacesService } from './places.service';
 import { FeatureCollectionDto } from '../../common/dto/geojson.dto';
 import { PlacePropertiesDto } from './dtos/places.dto';
 
-@ApiTags('places')
+@ApiTags('Places of palmira campus')
 @Controller('places')
 export class PlacesController {
   constructor(private readonly placesService: PlacesService) {}
@@ -20,8 +21,15 @@ export class PlacesController {
     type: FeatureCollectionDto,
     description: 'Lista de lugares en formato GeoJSON',
   })
-  getAllPlaces(): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
-    return this.placesService.getAllPlaces();
+
+  @ApiQuery({
+    name: 'search',
+    type: String,
+    description: 'Término de búsqueda para filtrar lugares por nombre o unidad',
+    required: false, 
+  })
+  getAllPlaces( @Query('search') search?: string,): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
+    return this.placesService.getAllPlaces(search);
   }
 
   @Get('type/:code')
