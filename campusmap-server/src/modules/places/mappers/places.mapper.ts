@@ -20,14 +20,10 @@ export class PlacesMapper {
         id: place.id,
         name: place.name,
         typeId: place.typeId,
-<<<<<<< Updated upstream
-        imageUrl: place.imageUrl,
-=======
         icon: place.icon,
         color: place.color,
         units:
           place.units?.map((unit) => ({ id: unit.id, name: unit.name })) || [],
->>>>>>> Stashed changes
         centroid: this.geometryToDto(place.centroid as SupportedGeometry),
       },
     };
