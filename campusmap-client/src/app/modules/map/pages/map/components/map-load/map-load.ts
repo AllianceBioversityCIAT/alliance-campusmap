@@ -11,11 +11,10 @@ import { Api } from '../../../../../../core/service/api';
 })
 export class MapLoad implements AfterViewInit, OnDestroy {
   private map!: maplibregl.Map;
-  private geolocate!: maplibregl.GeolocateControl;
   private userMarker!: maplibregl.Marker;
 
   @ViewChild('mapContainer', { static: true })
-  private mapContainer!: ElementRef<HTMLDivElement>;
+  private readonly mapContainer!: ElementRef<HTMLDivElement>;
 
   private readonly api = inject(Api);
 
@@ -52,7 +51,11 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         const lng = pos.coords.longitude;
         const lat = pos.coords.latitude;
 
-        if (!this.userMarker) {
+        //If the marker does not exist, create it with the visual elements
+        if (this.userMarker) {
+          //Updates user position
+          this.userMarker.setLngLat([lng, lat]);
+        } else {
           // Create user marker
           const elContainer = document.createElement('div');
           elContainer.style.position = 'absolute';
@@ -91,8 +94,6 @@ export class MapLoad implements AfterViewInit, OnDestroy {
             .addTo(this.map);
 
           this.requestOrientationPermission();
-        } else {
-          this.userMarker.setLngLat([lng, lat]);
         }
       },
       err => console.error(err),
@@ -100,7 +101,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     );
 
     // Orbit control to follow user
-    window.addEventListener('deviceorientation', e => {
+    globalThis.addEventListener('deviceorientation', e => {
       if (!this.userMarker) return;
       const heading = e.alpha ?? 0;
       const el = this.userMarker.getElement();
@@ -129,7 +130,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   private enableDeviceOrientation() {
-    window.addEventListener('deviceorientation', e => {
+    globalThis.addEventListener('deviceorientation', e => {
       if (!this.userMarker) return;
       const heading = e.alpha ?? 0;
       const el = this.userMarker.getElement();
