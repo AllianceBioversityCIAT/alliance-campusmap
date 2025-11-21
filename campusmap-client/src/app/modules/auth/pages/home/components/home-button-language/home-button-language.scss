@@ -5,17 +5,33 @@
 :host ::ng-deep .p-selectbutton .p-togglebutton {
   width: 150px;
   height: 55px;
-  font-size: 30px;
+  font-size: var(--font-size-3xl);
   font-weight: 500;
   box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
   background-color: #e5e5e5;
-  color: #6e6e6e;
+  color: #595959;
   border: none;
 }
 
-:host ::ng-deep .p-togglebutton.p-togglebutton-checked {
+:host ::ng-deep .p-togglebutton .p-togglebutton-checked {
   flex: 50%;
   background: #e5e5e5;
   border: none;
-  color: black;
+  color: var(--color-primary-black);
+}
+
+@media screen and (min-width: 768px) {
+  :host ::ng-deep .p-selectbutton .p-togglebutton {
+    width: 200px;
+    height: 75px;
+    font-size: var(--font-size-4xl);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :host ::ng-deep .p-selectbutton .p-togglebutton {
+    width: 140px;
+    height: 65px;
+    font-size: var(--font-size-2xl);
+  }
 }

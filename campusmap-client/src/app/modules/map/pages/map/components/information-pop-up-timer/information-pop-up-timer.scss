@@ -1,0 +1,9 @@
+:host ::ng-deep .p-button {
+  border: none;
+}
+
+:host ::ng-deep .p-button-outlined:not(:disabled):hover {
+  background: none;
+  color: none;
+  border: none;
+}

@@ -1,9 +1,9 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory , HttpAdapterHost } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppLoggerService } from './common/logger/app-logger.service';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-import { HttpAdapterHost } from '@nestjs/core';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -38,7 +38,7 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
 
-  appLogger.log(`CORS habilitado para los orígenes: ${corsOrigins.join(', ')}`);
+  
 
   const config = new DocumentBuilder()
     .setTitle('CampusMap Server')
@@ -49,7 +49,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: { persistAuthorization: true },
   });
-  const port = Number(process.env.PORT ?? 3000);
+  const port = Number(process.env.PORT ?? 3001);
   await app.listen(port);
   appLogger.log(`Servidor escuchando en http://localhost:${port}`);
   appLogger.log(`Documentación API en http://localhost:${port}/api/docs`);

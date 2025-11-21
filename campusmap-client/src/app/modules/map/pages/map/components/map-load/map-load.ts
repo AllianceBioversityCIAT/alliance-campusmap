@@ -1,25 +1,34 @@
-import { AfterViewInit, Component, OnDestroy, inject } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ElementRef, ViewChild, inject } from '@angular/core';
 import maplibregl from 'maplibre-gl';
 import { Api } from '../../../../../../core/service/api';
 
 @Component({
   selector: 'app-map-load',
+  standalone: true,
   imports: [],
   templateUrl: './map-load.html',
   styleUrls: ['./map-load.scss']
 })
 export class MapLoad implements AfterViewInit, OnDestroy {
+  //Map instances and controls
   private map!: maplibregl.Map;
   private geolocate!: maplibregl.GeolocateControl;
   private userMarker!: maplibregl.Marker;
 
+  //Reference to the map container in the template
+  @ViewChild('mapContainer', { static: true })
+  private mapContainer!: ElementRef<HTMLDivElement>;
+
+  //Service for future requests to the backend
   private readonly api = inject(Api);
 
+  //Initialize the map using the referenced element
   ngAfterViewInit(): void {
     this.map = new maplibregl.Map({
-      container: 'map', // id container
+      // Use the element reference instead of the global id to avoid "Container 'map' not found" errors
+      container: this.mapContainer?.nativeElement ?? 'map',
       style:
-        'https://api.maptiler.com/maps/019a0d96-0c62-770e-82b8-be41643f8563/style.json?key=ysbhdSG63XiCe6Sgq0TG', // map style
+        'https://api.maptiler.com/maps/019a0d96-0c62-770e-82b8-be41643f8563/style.json?key=FZvbkS3DkmF7kMOIUmLZ', // map style
       center: [-76.35655, 3.50442], // [longitude, latitude]
       zoom: 17,
       minZoom: 15,
@@ -28,17 +37,16 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       pitch: 0
     });
 
-    // Navigation control (zoom and rotation)
+    // Navigation control (only rotation)
     this.map.addControl(new maplibregl.NavigationControl({ showZoom: false }), 'top-right');
 
+    //Wait for the map to load to begin user tracking
     this.map.on('load', () => {
       this.trackUser();
     });
   }
 
-  // Track user location
-  // Geolocation used only to display user's position locally.
-  // Data is not stored or sent to any external service.
+  //Turn on user location tracking
   private trackUser() {
     if (!navigator.geolocation) return;
 
@@ -47,13 +55,15 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         const lng = pos.coords.longitude;
         const lat = pos.coords.latitude;
 
+        //If the marker does not exist, create it with the visual elements
         if (!this.userMarker) {
           // Create user marker
           const elContainer = document.createElement('div');
+          elContainer.style.position = 'absolute';
           elContainer.style.width = '40px';
           elContainer.style.height = '40px';
 
-          // Accuracy circle
+          //Accuracy circle
           const circle = document.createElement('div');
           circle.style.position = 'absolute';
           circle.style.top = '50%';
@@ -66,8 +76,8 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           circle.style.zIndex = '0';
           circle.className = 'absolute w-10 h-10 bg-blue-500 rounded-full animate-pulse-circle';
 
+          //Arrow indicating user orientation
           const arrow = document.createElement('div');
-          arrow.className = 'user-arrow';
           arrow.style.position = 'absolute';
           arrow.style.top = '50%';
           arrow.style.left = '50%';
@@ -81,12 +91,14 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           elContainer.appendChild(circle);
           elContainer.appendChild(arrow);
 
+          //Add the marker to the map
           this.userMarker = new maplibregl.Marker({ element: elContainer })
             .setLngLat([lng, lat])
             .addTo(this.map);
 
           this.requestOrientationPermission();
         } else {
+          //Updates user position
           this.userMarker.setLngLat([lng, lat]);
         }
       },
@@ -123,6 +135,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     }
   }
 
+  //Enable the device targeting event
   private enableDeviceOrientation() {
     window.addEventListener('deviceorientation', e => {
       if (!this.userMarker) return;
@@ -133,6 +146,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    //Deletes the map when the component is destroyed
     if (this.map) {
       this.map.remove();
     }

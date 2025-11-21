@@ -7,6 +7,6 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [CommonModule, TranslateModule],
   templateUrl: './home-message.html',
-  styleUrl: './home-message.scss'
+  styleUrls: ['./home-message.scss']
 })
 export class HomeMessage {}

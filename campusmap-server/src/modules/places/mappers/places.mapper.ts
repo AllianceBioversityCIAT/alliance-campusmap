@@ -11,6 +11,7 @@ type SupportedGeometry = Point | Polygon | MultiPolygon;
 
 export class PlacesMapper {
   static toFeature(place: Place): FeatureDto<PlacePropertiesDto> {
+    const typeCode = place.type?.code;
     return {
       type: 'Feature',
       id: place.id,

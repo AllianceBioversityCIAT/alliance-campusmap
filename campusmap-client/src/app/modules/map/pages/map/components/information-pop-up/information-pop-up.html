@@ -1,0 +1,41 @@
+<!-- Bottom container showing detailed information of the selected site -->
+<div
+  class="absolute bottom-0 left-0 w-screen lg:w-1/4 h-75 lg:h-screen md:h-110 px-4 md:px-8 lg:pt-12 pt-4 bg-white rounded-t-lg z-3">
+  <div class="flex flex-col h-full">
+    <!-- Point of interest titles -->
+    <div class="flex flex-col pb-4 md:pb-8 lg:text-center">
+      <p class="font-semibold text-(length:--font-size-2xl) md:text-(length:--font-size-4xl)">
+        Semillas del Futuro
+      </p>
+      <p
+        class="text-(length:--font-size-xl) leading-(length:--line-height-xl) md:text-(length:--font-size-3xl) md:leading-(length:--line-height-3xl) text-gray-600">
+        {{ 'InformationPopUp.building' | translate }}
+      </p>
+    </div>
+
+    <!-- Related images section -->
+    <div
+      class="flex flex-auto lg:flex-col w-full h-40 lg:h-full justify-center lg:items-center gap-4 md:gap-8 px-2 md:px-4">
+      <img
+        src="assets/images/rs.webp"
+        [attr.alt]="'InformationPopUp.Alt' | translate"
+        class="w-1/2 lg:w-full h-full rounded-lg object-cover" />
+      <img
+        src="assets/images/sostenibilidad.webp"
+        [attr.alt]="'InformationPopUp.Alt' | translate"
+        class="w-1/2 lg:w-full h-full rounded-lg object-cover" />
+    </div>
+
+    <!-- Button to open the view of how to get there -->
+    <div class="flex h-full justify-center items-center">
+      <a
+        routerLink="/map"
+        pButton
+        class="flex justify-center items-center w-80px h-10 md:w-60 md:h-15 shadow-[4px_4px_5px_rgba(0,0,0,0.3)] text-center rounded-lg">
+        <span pButtonLabel class="font-medium text-white text-center">
+          {{ 'InformationPopUp.howToGet' | translate }}
+        </span>
+      </a>
+    </div>
+  </div>
+</div>

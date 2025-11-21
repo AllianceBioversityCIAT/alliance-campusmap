@@ -15,17 +15,11 @@ export class PlacePropertiesDto {
   })
   units?: { id: number; name: string }[];
 
-  @ApiProperty({ example: 1, required: false })
-  typeId?: number;
+  @ApiProperty({ example: "building" })
+  type?: string;
 
-<<<<<<< Updated upstream
-  @ApiProperty({ example: 'https://...', required: false })
-  imageUrl?: string;
-
-=======
   icon: string;
   color: string;
->>>>>>> Stashed changes
   @ApiProperty({ type: () => GeometryDto, description: 'Centroid del lugar' })
   centroid: GeometryDto;
 }

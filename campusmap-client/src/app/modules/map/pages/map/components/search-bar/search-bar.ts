@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-search-bar',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './search-bar.html',
-  styleUrl: './search-bar.scss'
+  styleUrls: ['./search-bar.scss']
 })
 export class SearchBar {
   isOpen = false;
