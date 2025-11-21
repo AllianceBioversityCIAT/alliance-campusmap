@@ -16,9 +16,9 @@ const MAX_HISTORY_ITEMS = 5;
 })
 export class SearchBar implements OnInit {
   @Output() locationSelected = new EventEmitter<PlaceFeature>();
-  
-  private apiService = inject(Api);
-  
+
+  private readonly apiService = inject(Api);
+
   isOpen = false;
   searchQuery = '';
   allPlaces: PlaceFeature[] = [];
@@ -29,11 +29,11 @@ export class SearchBar implements OnInit {
     console.log('SearchBar component initialized');
     // Cargar todos los lugares desde la API
     this.apiService.getAllPlaces().subscribe({
-      next: (data) => {
+      next: data => {
         console.log('Places loaded:', data.features.length);
         this.allPlaces = data.features;
       },
-      error: (error) => {
+      error: error => {
         console.error('Error loading places:', error);
       }
     });
@@ -56,7 +56,7 @@ export class SearchBar implements OnInit {
 
     // Filtrar lugares por nombre (a partir de 3 caracteres)
     const query = this.searchQuery.toLowerCase();
-    this.filteredPlaces = this.allPlaces.filter(place => 
+    this.filteredPlaces = this.allPlaces.filter(place =>
       place.properties.name.toLowerCase().includes(query)
     );
   }
@@ -79,10 +79,10 @@ export class SearchBar implements OnInit {
   selectPlace(place: PlaceFeature) {
     this.searchQuery = place.properties.name;
     this.isOpen = false;
-    
+
     // Guardar en historial
     this.addToHistory(place);
-    
+
     // Emitir evento con el lugar seleccionado
     this.locationSelected.emit(place);
     console.log('Selected place:', place);
@@ -102,9 +102,7 @@ export class SearchBar implements OnInit {
 
   private addToHistory(place: PlaceFeature) {
     // Verificar si el lugar ya está en el historial
-    const existingIndex = this.searchHistory.findIndex(
-      item => item.id === place.id
-    );
+    const existingIndex = this.searchHistory.findIndex(item => item.id === place.id);
 
     // Si existe, moverlo al principio
     if (existingIndex > -1) {

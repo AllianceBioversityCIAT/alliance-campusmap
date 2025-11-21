@@ -6,11 +6,21 @@ import { FilterControls } from './components/filter-controls/filter-controls';
 import { InformationPopUp } from './components/information-pop-up/information-pop-up';
 import { InformationPopUpParking } from './components/information-pop-up-parking/information-pop-up-parking';
 import { TransportButtonSelector } from './components/transport-button-selector/transport-button-selector';
-
+import { SosButton } from './components/sos-button/sos-button';
+import { PlaceFeature } from '../../../../core/models/place.model';
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [CommonModule, MapLoad, SearchBar, FilterControls, InformationPopUp, InformationPopUpParking, TransportButtonSelector],
+  imports: [
+    CommonModule,
+    MapLoad,
+    SearchBar,
+    FilterControls,
+    InformationPopUp,
+    InformationPopUpParking,
+    TransportButtonSelector,
+    SosButton
+  ],
   templateUrl: './map.html',
   styleUrls: ['./map.scss']
 })
@@ -32,6 +42,8 @@ export class Map {
       ...place,
       isVisible: true
     };
+    // Hide transport selector when a new place is selected
+    this.isTransportSelectorVisible = false;
   }
 
   onShowTransportSelector(): void {
@@ -43,12 +55,21 @@ export class Map {
     this.isTransportSelectorVisible = false;
   }
 
-  onLocationSelected(place: any): void {
+  onLocationSelected(place: PlaceFeature): void {
     // Navigate to the centroid coordinates
     if (place.properties?.centroid?.coordinates) {
-      const [lng, lat] = place.properties.centroid.coordinates;
-      this.mapLoad.flyToLocation(lng, lat);
-      console.log('Navigating to:', place.properties.name, [lng, lat]);
+      const coords = place.properties.centroid.coordinates;
+      // Ensure coordinates are a point [lng, lat]
+      if (
+        Array.isArray(coords) &&
+        coords.length >= 2 &&
+        typeof coords[0] === 'number' &&
+        typeof coords[1] === 'number'
+      ) {
+        const [lng, lat] = coords as [number, number];
+        this.mapLoad.flyToLocation(lng, lat);
+        console.log('Navigating to:', place.properties.name, [lng, lat]);
+      }
     }
   }
 }

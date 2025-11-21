@@ -1,9 +1,13 @@
 <!-- Component that renders the map -->
-<app-map-load (placeSelected)="onPlaceSelected($event)" (mapClicked)="onMapClicked()"></app-map-load>
+<app-map-load
+  (placeSelected)="onPlaceSelected($event)"
+  (mapClicked)="onMapClicked()"></app-map-load>
 <!-- Floating search bar. Allows you to write and select results -->
 <app-search-bar (locationSelected)="onLocationSelected($event)"></app-search-bar>
 <!-- Filter controls. They show options to adjust the view or results -->
 <app-filter-controls></app-filter-controls>
+<!-- SOS button. In case of emergency, go to the nearest meeting point -->
+<app-sos-button></app-sos-button>
 <!-- Information popup for selected place (non-parking) -->
 <app-information-pop-up
   *ngIf="selectedPlace.type !== 'parking'"
@@ -24,5 +28,4 @@
   (showTransportSelector)="onShowTransportSelector()">
 </app-information-pop-up-parking>
 <!-- Transport button selector popup -->
-<app-transport-button-selector *ngIf="isTransportSelectorVisible">
-</app-transport-button-selector>
+<app-transport-button-selector *ngIf="isTransportSelectorVisible"> </app-transport-button-selector>
