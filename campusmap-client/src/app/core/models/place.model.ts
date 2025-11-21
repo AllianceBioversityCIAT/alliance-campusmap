@@ -12,6 +12,8 @@ export interface PlaceProperties {
   typeId?: number;
   typeCode?: string;
   imageUrl?: string;
+  icon?: string;
+  color?: string;
   centroid: Geometry;
 }
 

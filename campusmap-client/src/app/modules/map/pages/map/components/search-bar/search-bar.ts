@@ -26,11 +26,9 @@ export class SearchBar implements OnInit {
   searchHistory: PlaceFeature[] = [];
 
   ngOnInit() {
-    console.log('SearchBar component initialized');
     // Cargar todos los lugares desde la API
     this.apiService.getAllPlaces().subscribe({
       next: data => {
-        console.log('Places loaded:', data.features.length);
         this.allPlaces = data.features;
       },
       error: error => {
@@ -40,7 +38,6 @@ export class SearchBar implements OnInit {
 
     // Cargar historial desde localStorage
     this.loadHistory();
-    console.log('History loaded:', this.searchHistory.length, 'items');
   }
 
   toggleList() {

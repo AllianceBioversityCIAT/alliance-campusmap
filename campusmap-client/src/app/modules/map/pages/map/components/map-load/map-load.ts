@@ -66,6 +66,11 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.map.on('click', () => {
       this.mapClicked.emit();
     });
+
+    //Listen to zoom changes to update label visibility
+    this.map.on('zoom', () => {
+      this.updateAllLabelVisibility();
+    });
   }
 
   //Turn on user location tracking
@@ -200,32 +205,36 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.currentMarkers = [];
   }
 
-  //Get icon path based on place type
-  private getIconForType(typeCode: string, placeName: string): string {
-    // Special handling for parking lots with specific names
-    if (typeCode === 'parking') {
-      // Extract parking number/identifier from name if present
-      const parkingRegex = /Parqueadero\s+(\w+)/i;
-      const parkingMatch = parkingRegex.exec(placeName);
-      if (parkingMatch) {
-        const parkingId = parkingMatch[1];
-        // Check if specific parking icon exists
-        const specificIcon = `assets/icons/mapPage/parking_${parkingId}.svg`;
-        return specificIcon;
+  //Update visibility of all marker labels based on zoom level
+  private updateAllLabelVisibility(): void {
+    for (const marker of this.currentMarkers) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((marker as any).updateLabelVisibility) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (marker as any).updateLabelVisibility();
       }
-      return 'assets/icons/mapPage/parking.svg';
     }
+  }
 
-    // Map type codes to icon paths
-    const iconMap: Record<string, string> = {
-      'building': 'assets/icons/mapPage/building.svg',
-      'bathroom': 'assets/icons/mapPage/bath.svg',
-      'cafeteria': 'assets/icons/mapPage/cafeteria.svg',
-      'assembly_point': 'assets/icons/mapPage/assembly_point.svg',
-      'warehouse': 'assets/icons/mapPage/warehouse.svg'
-    };
-
-    return iconMap[typeCode] || 'assets/icons/mapPage/building.svg';
+  //Get icon path from backend or use fallback
+  private getIconForPlace(properties: PlaceFeature['properties']): string {
+    // Use the icon from the backend if available
+    if (properties.icon) {
+      const iconPath = properties.icon;
+      
+      // If it's already a full URL (starts with http), use it as is
+      if (iconPath.startsWith('http://') || iconPath.startsWith('https://')) {
+        return iconPath;
+      }
+      
+      // Backend sends paths like "icons/building.svg"
+      // We need to construct: http://localhost:3001/public/icons/building.svg
+      const cleanPath = iconPath.startsWith('/') ? iconPath.substring(1) : iconPath;
+      return `http://localhost:3001/public/${cleanPath}`;
+    }
+    
+    // Fallback to default icon if not provided
+    return 'assets/icons/mapPage/building.svg';
   }
 
   //Add centroid markers to the map
@@ -235,24 +244,101 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       const properties = feature.properties;
       const centroid = properties?.centroid;
 
+      // Skip places with color null
+      if (properties.color === null) {
+        continue;
+      }
+
       if (centroid?.coordinates && Array.isArray(centroid.coordinates)) {
         const [lng, lat] = centroid.coordinates as number[];
 
-        // Get the appropriate icon for this place type
-        const iconPath = this.getIconForType(properties.typeCode || 'building', properties.name);
+        // Get the icon from backend or use default
+        const iconPath = this.getIconForPlace(properties);
 
-        // Create a custom marker element with just the icon
+        // Map color names to hex values
+        const colorMap: Record<string, string> = {
+          'blue': '#0088c6',
+          'orange': '#f68b33',
+          'yellow': '#f5d226',
+          'green': '#8ebf3f'
+        };
+
+        // Get the color hex value
+        const colorHex = properties.color ? colorMap[properties.color] : null;
+
+        // Create a custom marker element
+        const markerContainer = document.createElement('div');
+        markerContainer.style.display = 'flex';
+        markerContainer.style.flexDirection = 'column';
+        markerContainer.style.alignItems = 'center';
+        markerContainer.style.cursor = 'pointer';
+
         const markerEl = document.createElement('div');
         markerEl.style.width = '24px';
         markerEl.style.height = '24px';
-        markerEl.style.backgroundImage = `url(${iconPath})`;
-        markerEl.style.backgroundSize = 'contain';
-        markerEl.style.backgroundRepeat = 'no-repeat';
-        markerEl.style.backgroundPosition = 'center';
-        markerEl.style.cursor = 'pointer';
 
-        // Add click event to marker
-        markerEl.addEventListener('click', (e) => {
+        // If we have a color, load the SVG and modify it
+        if (colorHex && iconPath.includes('.svg')) {
+          fetch(iconPath)
+            .then(response => response.text())
+            .then(svgText => {
+              // Replace the fill color of the circle (st1 class)
+              const modifiedSvg = svgText.replace(
+                /(class="st1"[^>]*>)/,
+                `$1<style>.st1{fill:${colorHex}!important;}</style>`
+              );
+              // Create a data URL from the modified SVG
+              const blob = new Blob([modifiedSvg], { type: 'image/svg+xml' });
+              const url = URL.createObjectURL(blob);
+              markerEl.style.backgroundImage = `url(${url})`;
+              markerEl.style.backgroundSize = 'contain';
+              markerEl.style.backgroundRepeat = 'no-repeat';
+              markerEl.style.backgroundPosition = 'center';
+            })
+            .catch(() => {
+              // Fallback to original icon if fetch fails
+              markerEl.style.backgroundImage = `url(${iconPath})`;
+              markerEl.style.backgroundSize = 'contain';
+              markerEl.style.backgroundRepeat = 'no-repeat';
+              markerEl.style.backgroundPosition = 'center';
+            });
+        } else {
+          // Use the original icon without color modification
+          markerEl.style.backgroundImage = `url(${iconPath})`;
+          markerEl.style.backgroundSize = 'contain';
+          markerEl.style.backgroundRepeat = 'no-repeat';
+          markerEl.style.backgroundPosition = 'center';
+        }
+
+        // Create label element for the building name
+        const labelEl = document.createElement('div');
+        labelEl.textContent = properties.name;
+        labelEl.style.fontSize = '16px';
+        labelEl.style.fontWeight = '400';
+        labelEl.style.letterSpacing = '1px';
+        labelEl.style.color = colorHex || '#0088c6';
+        labelEl.style.textShadow = '-1px -1px 1px #ffffffff, 1px 1px 1px #ffffffff, -1px 1px 1px #ffffffff, 1px -1px 1px #ffffffff';
+        labelEl.style.textAlign = 'center';
+        labelEl.style.marginTop = '4px';
+        labelEl.style.whiteSpace = 'nowrap';
+        labelEl.style.pointerEvents = 'none';
+        labelEl.style.display = 'none'; // Initially hidden
+
+        // Add icon and label to container
+        markerContainer.appendChild(markerEl);
+        markerContainer.appendChild(labelEl);
+
+        // Function to update label visibility based on zoom level
+        const updateLabelVisibility = () => {
+          const zoom = this.map.getZoom();
+          labelEl.style.display = zoom >= 18 ? 'block' : 'none';
+        };
+
+        // Set initial visibility
+        updateLabelVisibility();
+
+        // Add click event to marker container
+        markerContainer.addEventListener('click', (e) => {
           e.stopPropagation(); // Prevent map click event
           this.placeSelected.emit({
             name: properties.name,
@@ -262,11 +348,15 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         });
 
         // Add marker to map and store reference
-        const marker = new maplibregl.Marker({ element: markerEl })
+        const marker = new maplibregl.Marker({ element: markerContainer })
           .setLngLat([lng, lat])
           .addTo(this.map);
         
         this.currentMarkers.push(marker);
+
+        // Store update function to call on zoom changes
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (marker as any).updateLabelVisibility = updateLabelVisibility;
       } else {
         console.warn(`Feature ${index + 1} no tiene coordenadas válidas de centroid`);
       }

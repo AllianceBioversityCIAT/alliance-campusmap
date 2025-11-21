@@ -49,8 +49,8 @@ export class TransportButtonSelector {
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.messageService.add({
-        detail: 'Form Submitted',
-        life: 3000
+        detail: 'Prueba',
+        life: 1000
       });
       form.resetForm();
     }
