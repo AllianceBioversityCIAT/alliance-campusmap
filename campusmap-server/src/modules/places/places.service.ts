@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { Place } from './entities/place.entity';
 import { PlacesMapper } from './mappers/places.mapper';
 import { FeatureCollectionDto } from '../../common/dto/geojson.dto';
@@ -13,9 +13,11 @@ export class PlacesService {
     private readonly placeRepository: Repository<Place>,
   ) {}
 
-  async getAllPlaces(): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
+  async getAllPlaces(search?:string): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
     const places = await this.placeRepository.find({
-      relations: ['type'],
+      relations: ['type', 'units'],
+      where: [search ? { name:  Like(`%${search}%`)} : {}],
+      
     });
     return PlacesMapper.toFeatureCollection(places, 'All Places');
   }
@@ -25,7 +27,7 @@ export class PlacesService {
   ): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
     const places = await this.placeRepository.find({
       where: { type: { code } },
-      relations: ['type'],
+      relations: ['type', 'units']
     });
     return PlacesMapper.toFeatureCollection(places, `Places of type ${code}`);
   }

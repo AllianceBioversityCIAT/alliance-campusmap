@@ -8,18 +8,14 @@ export class PlacePropertiesDto {
   @ApiProperty({ example: 'Edificio Principal' })
   name: string;
 
-  @ApiProperty({ example: 1, required: false })
-  groupId?: number;
+  @ApiProperty({ isArray: true, type: () => Object, description: 'Unidades asociadas al lugar' })
+  units?: { id: number; name: string }[];
 
-  @ApiProperty({ example: 1, required: false })
-  typeId?: number;
+  @ApiProperty({ example: "building" })
+  type?: string;
 
-  @ApiProperty({ example: 'parking', required: false })
-  typeCode?: string;
-
-  @ApiProperty({ example: 'https://...', required: false })
-  imageUrl?: string;
-
+  icon: string;
+  color: string;
   @ApiProperty({ type: () => GeometryDto, description: 'Centroid del lugar' })
   centroid: GeometryDto;
 }
