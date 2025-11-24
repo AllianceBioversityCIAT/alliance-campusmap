@@ -9,7 +9,7 @@ import { FeatureCollection } from '../models/place.model';
 })
 export class Api {
   private readonly apiUrl = environment.apiUrl;
-
+  
   private readonly http = inject(HttpClient);
 
   //Gets all buildings in GeoJSON format

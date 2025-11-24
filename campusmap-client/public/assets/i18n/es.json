@@ -61,5 +61,17 @@
     "km": "km",
     "backAlt": "Regresar",
     "closeAlt": "Cerrar"
+  },
+  "Buildings": {
+    "Salas de conferencias": "Salas de conferencias",
+    "Edficio administrativo 2": "Edficio administrativo 2",
+    "Edificio Administrativo 1": "Edificio Administrativo 1",
+    "Cafeterias": "Cafeterías",
+    "Protección Institucional": "Protección Institucional",
+    "Edificio de Investigación": "Edificio de Investigación",
+    "Laboratorios": "Laboratorios",
+    "Biblioteca": "Biblioteca",
+    "Auditorio": "Auditorio",
+    "Bodega": "Bodega"
   }
 }

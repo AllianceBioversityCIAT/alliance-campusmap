@@ -1,24 +1,23 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-information-pop-up-parking',
-  imports: [CommonModule, RouterLink, ButtonModule, TranslateModule],
+  imports: [CommonModule, ButtonModule, TranslateModule],
   templateUrl: './information-pop-up-parking.html',
-  styleUrls: ['./information-pop-up-parking.scss']
+  styleUrls: ['./information-pop-up-parking.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InformationPopUpParking {
-  @Input() placeName = '';
-  @Input() imageUrl = '';
-  @Input() isVisible = false;
-  @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() showTransportSelector = new EventEmitter<void>();
+  placeName = input('');
+  imageUrl = input('');
+  isVisible = input(false);
+  visibleChange = output<boolean>();
+  showTransportSelector = output<void>();
 
   close(): void {
-    this.isVisible = false;
     this.visibleChange.emit(false);
   }
 

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, viewChild, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapLoad } from './components/map-load/map-load';
 import { SearchBar } from './components/search-bar/search-bar';
@@ -10,7 +10,6 @@ import { SosButton } from './components/sos-button/sos-button';
 import { PlaceFeature } from '../../../../core/models/place.model';
 @Component({
   selector: 'app-map',
-  standalone: true,
   imports: [
     CommonModule,
     MapLoad,
@@ -22,37 +21,42 @@ import { PlaceFeature } from '../../../../core/models/place.model';
     SosButton
   ],
   templateUrl: './map.html',
-  styleUrls: ['./map.scss']
+  styleUrls: ['./map.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Map {
-  @ViewChild(MapLoad) mapLoad!: MapLoad;
-  @ViewChild(InformationPopUp) informationPopUp!: InformationPopUp;
+  mapLoad = viewChild.required<MapLoad>(MapLoad);
+  informationPopUp = viewChild.required<InformationPopUp>(InformationPopUp);
 
-  selectedPlace = {
+  selectedPlace = signal({
     name: '',
     type: '',
     imageUrl: '',
     isVisible: false
-  };
+  });
 
-  isTransportSelectorVisible = false;
+  isTransportSelectorVisible = signal(false);
 
   onPlaceSelected(place: { name: string; type: string; imageUrl: string }): void {
-    this.selectedPlace = {
+    this.selectedPlace.set({
       ...place,
       isVisible: true
-    };
+    });
     // Hide transport selector when a new place is selected
-    this.isTransportSelectorVisible = false;
+    this.isTransportSelectorVisible.set(false);
   }
 
   onShowTransportSelector(): void {
-    this.isTransportSelectorVisible = true;
+    this.isTransportSelectorVisible.set(true);
+  }
+
+  onVisibleChange(visible: boolean): void {
+    this.selectedPlace.update(place => ({ ...place, isVisible: visible }));
   }
 
   onMapClicked(): void {
-    this.selectedPlace.isVisible = false;
-    this.isTransportSelectorVisible = false;
+    this.selectedPlace.update(place => ({ ...place, isVisible: false }));
+    this.isTransportSelectorVisible.set(false);
   }
 
   onLocationSelected(place: PlaceFeature): void {
@@ -67,7 +71,7 @@ export class Map {
         typeof coords[1] === 'number'
       ) {
         const [lng, lat] = coords as [number, number];
-        this.mapLoad.flyToLocation(lng, lat);
+        this.mapLoad()?.flyToLocation(lng, lat);
         console.log('Navigating to:', place.properties.name, [lng, lat]);
       }
     }

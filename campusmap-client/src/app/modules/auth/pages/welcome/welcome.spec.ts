@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideRouter } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Welcome } from './welcome';
 
-import { Map } from '../../../map/pages/map/map';
-
-describe('Map', () => {
+describe('Welcome', () => {
   let component: Welcome;
   let fixture: ComponentFixture<Welcome>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Map]
+      imports: [Welcome, TranslateModule.forRoot()],
+      providers: [provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(Welcome);

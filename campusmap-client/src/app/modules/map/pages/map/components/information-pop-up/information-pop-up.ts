@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
@@ -7,18 +7,18 @@ import { CommonModule } from '@angular/common';
   selector: 'app-information-pop-up',
   imports: [CommonModule, ButtonModule, TranslateModule],
   templateUrl: './information-pop-up.html',
-  styleUrls: ['./information-pop-up.scss']
+  styleUrls: ['./information-pop-up.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InformationPopUp {
-  @Input() placeName = '';
-  @Input() placeType = '';
-  @Input() imageUrl = '';
-  @Input() isVisible = false;
-  @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() showTransportSelector = new EventEmitter<void>();
+  placeName = input('');
+  placeType = input('');
+  imageUrl = input('');
+  isVisible = input(false);
+  visibleChange = output<boolean>();
+  showTransportSelector = output<void>();
 
   close(): void {
-    this.isVisible = false;
     this.visibleChange.emit(false);
   }
 

@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TranslateModule } from '@ngx-translate/core';
 import { Map } from './map';
-import { Api } from '../../../../core/service/api';
+import { Api } from '../../../../core/services/api';
 import { MapLoad } from './components/map-load/map-load';
 
 describe('Map', () => {
@@ -10,8 +12,8 @@ describe('Map', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, Map, MapLoad], // ← agregado
-      providers: [Api]
+      imports: [Map, MapLoad, TranslateModule.forRoot()],
+      providers: [Api, provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(Map);

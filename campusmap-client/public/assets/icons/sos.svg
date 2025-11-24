@@ -3,8 +3,8 @@
 
 <svg
    width="10.583333mm"
-   height="10.583351mm"
-   viewBox="0 0 10.583333 10.583351"
+   height="10.583334mm"
+   viewBox="0 0 10.583333 10.583334"
    version="1.1"
    id="svg1"
    xml:space="preserve"
@@ -26,10 +26,10 @@
       }
     </style></defs><g
      id="layer1"
-     transform="translate(-182.16001,-143.55001)"><g
+     transform="translate(-93.124172,-147.23376)"><g
        id="g1"
-       transform="matrix(0.05825742,0,0,0.05825742,181.32372,140.40672)"><circle
-         style="fill:#0088c6;fill-opacity:1;stroke-width:0.264583"
+       transform="matrix(0.05825742,0,0,0.05825742,92.287881,144.09047)"><circle
+         style="fill:#000000;fill-opacity:1;stroke-width:0.264583"
          id="path1"
          cx="105.1875"
          cy="144.78749"

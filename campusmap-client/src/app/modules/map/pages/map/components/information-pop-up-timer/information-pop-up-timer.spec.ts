@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TranslateModule } from '@ngx-translate/core';
 import { InformationPopUpTimer } from './information-pop-up-timer';
 
 describe('InformationPopUpTimer', () => {
@@ -8,9 +8,8 @@ describe('InformationPopUpTimer', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InformationPopUpTimer]
-    })
-    .compileComponents();
+      imports: [InformationPopUpTimer, TranslateModule.forRoot()]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(InformationPopUpTimer);
     component = fixture.componentInstance;

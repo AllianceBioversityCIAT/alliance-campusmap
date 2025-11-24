@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MapFilterService } from '../../../../../../core/services/map-filter.service';
 
@@ -7,39 +7,40 @@ import { MapFilterService } from '../../../../../../core/services/map-filter.ser
   selector: 'app-filter-controls',
   imports: [CommonModule, TranslateModule],
   templateUrl: './filter-controls.html',
-  styleUrls: ['./filter-controls.scss']
+  styleUrls: ['./filter-controls.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterControls {
   private readonly translate = inject(TranslateService);
   private readonly mapFilterService = inject(MapFilterService);
 
   //Checks if the filter panel is visible
-  open = false;
+  open = signal(false);
 
   //Currently active filter
-  activeFilter: string | null = null;
+  activeFilter = signal<string | null>(null);
 
   // Changes the status of the panel when the user presses the main button
   toggle() {
-    this.open = !this.open;
+    this.open.update(value => !value);
   }
 
   // Handle filter selection
   onFilterClick(filterKey: string): void {
-    if (this.activeFilter === filterKey) {
+    if (this.activeFilter() === filterKey) {
       // If clicking the same filter, deactivate it
-      this.activeFilter = null;
+      this.activeFilter.set(null);
       this.mapFilterService.clearFilter();
     } else {
       // Activate the new filter
-      this.activeFilter = filterKey;
+      this.activeFilter.set(filterKey);
       this.mapFilterService.setFilter(filterKey);
     }
   }
 
   // Check if a filter is active
   isFilterActive(filterKey: string): boolean {
-    return this.activeFilter === filterKey;
+    return this.activeFilter() === filterKey;
   }
 
   // List of available filters. Each filter contains its key, tag,

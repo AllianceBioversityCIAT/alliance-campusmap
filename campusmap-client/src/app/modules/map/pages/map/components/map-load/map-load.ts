@@ -1,21 +1,31 @@
-import { AfterViewInit, Component, OnDestroy, ElementRef, ViewChild, inject, Output, EventEmitter } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  ElementRef,
+  viewChild,
+  inject,
+  output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import maplibregl from 'maplibre-gl';
-import { Api } from '../../../../../../core/service/api';
+import { Api } from '../../../../../../core/services/api';
 import { PlaceFeature, FeatureCollection } from '../../../../../../core/models/place.model';
 import { MapFilterService } from '../../../../../../core/services/map-filter.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-map-load',
-  standalone: true,
   imports: [],
   templateUrl: './map-load.html',
-  styleUrls: ['./map-load.scss']
+  styleUrls: ['./map-load.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MapLoad implements AfterViewInit, OnDestroy {
   //Output event when a place is selected
-  @Output() placeSelected = new EventEmitter<{ name: string; type: string; imageUrl: string }>();
+  placeSelected = output<{ name: string; type: string; imageUrl: string }>();
   //Output event when the map is clicked
-  @Output() mapClicked = new EventEmitter<void>();
+  mapClicked = output<void>();
 
   //Map instances and controls
   private map!: maplibregl.Map;
@@ -23,21 +33,20 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private userMarker!: maplibregl.Marker;
 
   //Reference to the map container in the template
-  @ViewChild('mapContainer', { static: true })
-  private readonly mapContainer!: ElementRef<HTMLDivElement>;
+  mapContainer = viewChild.required<ElementRef<HTMLDivElement>>('mapContainer');
 
   //Service for future requests to the backend
   private readonly api = inject(Api);
   private readonly mapFilterService = inject(MapFilterService);
+  private readonly translate = inject(TranslateService);
 
   //Store current markers to remove them when filter changes
   private currentMarkers: maplibregl.Marker[] = [];
 
-  //Initialize the map using the referenced element
   ngAfterViewInit(): void {
     this.map = new maplibregl.Map({
       // Use the element reference instead of the global id to avoid "Container 'map' not found" errors
-      container: this.mapContainer?.nativeElement ?? 'map',
+      container: this.mapContainer()?.nativeElement ?? 'map',
       style:
         'https://api.maptiler.com/maps/019a0d96-0c62-770e-82b8-be41643f8563/style.json?key=FZvbkS3DkmF7kMOIUmLZ', // map style
       center: [-76.35655, 3.50442], // [longitude, latitude]
@@ -55,10 +64,15 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.map.on('load', () => {
       this.trackUser();
       this.loadPlaces();
-      
+
       // Subscribe to filter changes
       this.mapFilterService.filter$.subscribe(filterKey => {
         this.loadPlaces(filterKey);
+      });
+
+      // Subscribe to language changes
+      this.translate.onLangChange.subscribe(() => {
+        this.updateAllLabelTranslations();
       });
     });
 
@@ -178,20 +192,17 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.clearMarkers();
 
     // Choose API call based on filter
-    const apiCall = filterKey 
-      ? this.api.getPlacesByType(filterKey)
-      : this.api.getAllPlaces();
+    const apiCall = filterKey ? this.api.getPlacesByType(filterKey) : this.api.getAllPlaces();
 
     apiCall.subscribe({
       next: (data: FeatureCollection) => {
-        
         if (data?.features && Array.isArray(data.features)) {
           this.addCentroidsToMap(data.features);
         } else {
-          console.warn('No hay features en los datos recibidos');
+          console.warn('No features found in received data');
         }
       },
-      error: (error) => {
+      error: error => {
         console.error('Error loading places:', error);
       }
     });
@@ -216,30 +227,49 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     }
   }
 
+  //Update translations of all marker labels when language changes
+  private updateAllLabelTranslations(): void {
+    for (const marker of this.currentMarkers) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const labelElement = (marker as any).labelElement;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const buildingName = (marker as any).buildingName;
+      if (labelElement && buildingName) {
+        labelElement.textContent = this.getTranslatedBuildingName(buildingName);
+      }
+    }
+  }
+
   //Get icon path from backend or use fallback
   private getIconForPlace(properties: PlaceFeature['properties']): string {
     // Use the icon from the backend if available
     if (properties.icon) {
       const iconPath = properties.icon;
-      
+
       // If it's already a full URL (starts with http), use it as is
       if (iconPath.startsWith('http://') || iconPath.startsWith('https://')) {
         return iconPath;
       }
-      
+
       // Backend sends paths like "icons/building.svg"
       // We need to construct: http://localhost:3001/public/icons/building.svg
       const cleanPath = iconPath.startsWith('/') ? iconPath.substring(1) : iconPath;
       return `http://localhost:3001/public/${cleanPath}`;
     }
-    
+
     // Fallback to default icon if not provided
     return 'assets/icons/mapPage/building.svg';
   }
 
+  //Get translated building name or return original if no translation exists
+  private getTranslatedBuildingName(name: string): string {
+    const translationKey = `Buildings.${name}`;
+    const translated = this.translate.instant(translationKey);
+    return translated === translationKey ? name : translated;
+  }
+
   //Add centroid markers to the map
   private addCentroidsToMap(features: PlaceFeature[]): void {
-    
     for (const [index, feature] of features.entries()) {
       const properties = feature.properties;
       const centroid = properties?.centroid;
@@ -257,10 +287,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
         // Map color names to hex values
         const colorMap: Record<string, string> = {
-          'blue': '#0088c6',
-          'orange': '#f68b33',
-          'yellow': '#f5d226',
-          'green': '#8ebf3f'
+          blue: '#0088c6',
+          orange: '#f68b33',
+          yellow: '#f5d226',
+          green: '#8ebf3f'
         };
 
         // Get the color hex value
@@ -312,12 +342,13 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
         // Create label element for the building name
         const labelEl = document.createElement('div');
-        labelEl.textContent = properties.name;
+        labelEl.textContent = this.getTranslatedBuildingName(properties.name);
         labelEl.style.fontSize = '16px';
         labelEl.style.fontWeight = '400';
         labelEl.style.letterSpacing = '1px';
         labelEl.style.color = colorHex || '#0088c6';
-        labelEl.style.textShadow = '-1px -1px 1px #ffffffff, 1px 1px 1px #ffffffff, -1px 1px 1px #ffffffff, 1px -1px 1px #ffffffff';
+        labelEl.style.textShadow =
+          '-1px -1px 1px #ffffffff, 1px 1px 1px #ffffffff, -1px 1px 1px #ffffffff, 1px -1px 1px #ffffffff';
         labelEl.style.textAlign = 'center';
         labelEl.style.marginTop = '4px';
         labelEl.style.whiteSpace = 'nowrap';
@@ -338,7 +369,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         updateLabelVisibility();
 
         // Add click event to marker container
-        markerContainer.addEventListener('click', (e) => {
+        markerContainer.addEventListener('click', e => {
           e.stopPropagation(); // Prevent map click event
           this.placeSelected.emit({
             name: properties.name,
@@ -351,29 +382,34 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         const marker = new maplibregl.Marker({ element: markerContainer })
           .setLngLat([lng, lat])
           .addTo(this.map);
-        
+
         this.currentMarkers.push(marker);
 
         // Store update function to call on zoom changes
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (marker as any).updateLabelVisibility = updateLabelVisibility;
+        // Store label element and building name for language updates
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (marker as any).labelElement = labelEl;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (marker as any).buildingName = properties.name;
       } else {
-        console.warn(`Feature ${index + 1} no tiene coordenadas válidas de centroid`);
+        console.warn(`Feature ${index + 1} does not have valid centroid coordinates`);
       }
     }
   }
 
   //Navigate to specific coordinates
-    public flyToLocation(lng: number, lat: number, zoom = 19): void {
-      if (this.map) {
-        this.map.flyTo({
-          center: [lng, lat],
-          zoom: zoom,
-          duration: 1500, // Animation duration in milliseconds
-          essential: true // This animation is essential for the user
-        });
-      }
+  public flyToLocation(lng: number, lat: number, zoom = 19): void {
+    if (this.map) {
+      this.map.flyTo({
+        center: [lng, lat],
+        zoom: zoom,
+        duration: 1500, // Animation duration in milliseconds
+        essential: true // This animation is essential for the user
+      });
     }
+  }
 
   ngOnDestroy(): void {
     //Deletes the map when the component is destroyed

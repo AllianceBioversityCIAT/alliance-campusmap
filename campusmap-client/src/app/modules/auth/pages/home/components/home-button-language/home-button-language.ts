@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -10,10 +10,10 @@ type SupportedLang = 'en' | 'es';
 
 @Component({
   selector: 'app-home-button-language',
-  standalone: true,
   imports: [CommonModule, FormsModule, SelectButtonModule, TranslateModule],
   templateUrl: './home-button-language.html',
-  styleUrls: ['./home-button-language.scss']
+  styleUrls: ['./home-button-language.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeButtonLanguage {
   //Options shown in the select
@@ -23,7 +23,7 @@ export class HomeButtonLanguage {
   ];
 
   //Current value of the selected language
-  value: SupportedLang;
+  value = signal<SupportedLang>('en');
 
   //Translation service
   private readonly translate = inject(TranslateService);
@@ -40,11 +40,11 @@ export class HomeButtonLanguage {
       'en';
 
     //Defines the initial language. Use saved or default
-    this.value = storedLang ?? defaultLang;
+    this.value.set(storedLang ?? defaultLang);
 
     //Listen when the language changes from another place
     this.translate.onLangChange.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(event => {
-      this.value = event.lang as SupportedLang;
+      this.value.set(event.lang as SupportedLang);
     });
   }
 

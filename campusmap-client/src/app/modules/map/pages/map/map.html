@@ -10,22 +10,23 @@
 <app-sos-button></app-sos-button>
 <!-- Information popup for selected place (non-parking) -->
 <app-information-pop-up
-  *ngIf="selectedPlace.type !== 'parking'"
-  [placeName]="selectedPlace.name"
-  [placeType]="selectedPlace.type"
-  [imageUrl]="selectedPlace.imageUrl"
-  [isVisible]="selectedPlace.isVisible"
-  (visibleChange)="selectedPlace.isVisible = $event"
+  *ngIf="selectedPlace().type !== 'parking'"
+  [placeName]="selectedPlace().name"
+  [placeType]="selectedPlace().type"
+  [imageUrl]="selectedPlace().imageUrl"
+  [isVisible]="selectedPlace().isVisible"
+  (visibleChange)="onVisibleChange($event)"
   (showTransportSelector)="onShowTransportSelector()">
 </app-information-pop-up>
 <!-- Information popup for parking places -->
 <app-information-pop-up-parking
-  *ngIf="selectedPlace.type === 'parking' && selectedPlace.isVisible"
-  [placeName]="selectedPlace.name"
-  [imageUrl]="selectedPlace.imageUrl"
-  [isVisible]="selectedPlace.isVisible"
-  (visibleChange)="selectedPlace.isVisible = $event"
+  *ngIf="selectedPlace().type === 'parking' && selectedPlace().isVisible"
+  [placeName]="selectedPlace().name"
+  [imageUrl]="selectedPlace().imageUrl"
+  [isVisible]="selectedPlace().isVisible"
+  (visibleChange)="onVisibleChange($event)"
   (showTransportSelector)="onShowTransportSelector()">
 </app-information-pop-up-parking>
 <!-- Transport button selector popup -->
-<app-transport-button-selector *ngIf="isTransportSelectorVisible"> </app-transport-button-selector>
+<app-transport-button-selector *ngIf="isTransportSelectorVisible()">
+</app-transport-button-selector>

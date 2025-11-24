@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { TranslateModule } from '@ngx-translate/core';
 import { SearchBar } from './search-bar';
+import { Api } from '../../../../../../core/services/api';
 
 describe('SearchBar', () => {
   let component: SearchBar;
@@ -8,9 +11,9 @@ describe('SearchBar', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchBar]
-    })
-    .compileComponents();
+      imports: [SearchBar, TranslateModule.forRoot()],
+      providers: [Api, provideHttpClient(), provideHttpClientTesting()]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SearchBar);
     component = fixture.componentInstance;

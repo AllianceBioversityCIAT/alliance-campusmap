@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RatingModule } from 'primeng/rating';
@@ -21,12 +21,13 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   templateUrl: './review.html',
   styleUrls: ['./review.scss'],
-  providers: [MessageService]
+  providers: [MessageService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Review {
   private readonly messageService = inject(MessageService);
 
-  value: number | null = null;
+  value = signal<number | null>(null);
 
   onSubmit(form: NgForm) {
     if (form.valid) {

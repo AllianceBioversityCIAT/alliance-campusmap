@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home-message',
-  standalone: true,
   imports: [CommonModule, TranslateModule],
   templateUrl: './home-message.html',
-  styleUrls: ['./home-message.scss']
+  styleUrls: ['./home-message.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeMessage {}

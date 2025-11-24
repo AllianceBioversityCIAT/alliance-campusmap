@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MessageModule } from 'primeng/message';
@@ -19,7 +19,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   ],
   providers: [MessageService],
   templateUrl: './transport-button-selector.html',
-  styleUrls: ['./transport-button-selector.scss']
+  styleUrls: ['./transport-button-selector.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TransportButtonSelector {
   //Injection of the PrimeNG messaging service to display notifications
@@ -27,7 +28,7 @@ export class TransportButtonSelector {
   private readonly translate = inject(TranslateService);
 
   //Variable linked to SelectButton. Stores the selected option
-  value: string | null = null;
+  value = signal<string | null>(null);
 
   //Options available for the selector. Each one defines label, value and icon
   get stateOptions(): { label: string; value: string; icon?: string }[] {
