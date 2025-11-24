@@ -28,11 +28,11 @@ describe('PlacesService', () => {
     jest.restoreAllMocks();
   });
 
-  it('debería estar definido', () => {
+  it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  it('getAllPlaces llama al repositorio y mapea los resultados', async () => {
+  it('getAllPlaces calls repository and maps results', async () => {
     const filas = [{} as Place];
     (repo.find as jest.Mock).mockResolvedValue(filas);
 
@@ -42,11 +42,14 @@ describe('PlacesService', () => {
 
     await service.getAllPlaces();
 
-    expect(repo.find).toHaveBeenCalled();
+    expect(repo.find).toHaveBeenCalledWith({
+      relations: ['type', 'units', 'images'],
+      where: [{}],
+    });
     expect(mapperSpy).toHaveBeenCalledWith(filas, 'All Places');
   });
 
-  it('getPlacesByTypeCode filtra por código y mapea', async () => {
+  it('getPlacesByTypeCode filters by code and maps', async () => {
     const filas = [{} as Place];
     (repo.find as jest.Mock).mockResolvedValue(filas);
 
@@ -58,6 +61,7 @@ describe('PlacesService', () => {
 
     expect(repo.find).toHaveBeenCalledWith({
       where: { type: { code: 'BLDG' } },
+      relations: ['type', 'units', 'images'],
     });
     expect(mapperSpy).toHaveBeenCalledWith(filas, 'Places of type BLDG');
   });
