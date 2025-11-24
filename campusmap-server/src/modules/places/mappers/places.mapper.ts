@@ -23,6 +23,7 @@ export class PlacesMapper {
         icon: place.icon,
         color: place.color,
         units: place.units?.map((unit) => ({ id: unit.id, name: unit.name })) || [],
+        images: place.images?.map((img) => ({ id: img.id, img: img.img })) || [],
         centroid: this.geometryToDto(place.centroid as SupportedGeometry),
       },
     };

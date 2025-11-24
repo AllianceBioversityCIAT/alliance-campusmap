@@ -9,6 +9,7 @@ import {
 import { Geometry } from 'geojson';
 import { TypePlace } from './type-place.entity';
 import { Unit } from './unity.entity';
+import { ImgPlace } from './img_place.entit';
 
 export enum ColorEnum {
   BLUE_GREEN = 'blue/green',
@@ -75,6 +76,9 @@ export class Place {
   @ManyToOne(() => TypePlace, { nullable: true })
   @JoinColumn({ name: 'type_id' })
   type: TypePlace;
+
+  @OneToMany(() => ImgPlace, (imgPlace) => imgPlace.place)
+  images: ImgPlace[];
 
   @OneToMany(() => Unit, (unit) => unit.place)
   units: Unit[];
