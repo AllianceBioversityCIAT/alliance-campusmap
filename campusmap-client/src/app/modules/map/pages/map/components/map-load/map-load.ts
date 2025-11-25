@@ -251,10 +251,12 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         return iconPath;
       }
 
-      // Backend sends paths like "icons/building.svg"
-      // We need to construct: http://localhost:3001/public/icons/building.svg
+      // Backend sends paths like "public/icon/parking.svg"
+      // We need to construct: http://localhost:3001/public/icons/parking.svg
+      // Fix the path by replacing "icon" with "icons"
       const cleanPath = iconPath.startsWith('/') ? iconPath.substring(1) : iconPath;
-      return `http://localhost:3001/public/${cleanPath}`;
+      const correctedPath = cleanPath.replace('/icon/', '/icons/');
+      return `http://localhost:3001/${correctedPath}`;
     }
 
     // Fallback to default icon if not provided
@@ -268,16 +270,29 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     return translated === translationKey ? name : translated;
   }
 
+  //Get the color for a place based on its properties
+  private getColorForPlace(properties: PlaceFeature['properties']): string {
+    const colorMap: Record<string, string> = {
+      blue: '#0088c6',
+      orange: '#f68b33',
+      yellow: '#f5d226',
+      green: '#8ebf3f'
+    };
+
+    // If color is defined in properties, use it
+    if (properties.color) {
+      return colorMap[properties.color];
+    }
+
+    // Default to blue (for parking and other types without color)
+    return colorMap['blue'];
+  }
+
   //Add centroid markers to the map
   private addCentroidsToMap(features: PlaceFeature[]): void {
     for (const [index, feature] of features.entries()) {
       const properties = feature.properties;
       const centroid = properties?.centroid;
-
-      // Skip places with color null
-      if (properties.color === null) {
-        continue;
-      }
 
       if (centroid?.coordinates && Array.isArray(centroid.coordinates)) {
         const [lng, lat] = centroid.coordinates as number[];
@@ -285,16 +300,8 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         // Get the icon from backend or use default
         const iconPath = this.getIconForPlace(properties);
 
-        // Map color names to hex values
-        const colorMap: Record<string, string> = {
-          blue: '#0088c6',
-          orange: '#f68b33',
-          yellow: '#f5d226',
-          green: '#8ebf3f'
-        };
-
         // Get the color hex value
-        const colorHex = properties.color ? colorMap[properties.color] : null;
+        const colorHex = this.getColorForPlace(properties);
 
         // Create a custom marker element
         const markerContainer = document.createElement('div');
@@ -371,11 +378,16 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         // Add click event to marker container
         markerContainer.addEventListener('click', e => {
           e.stopPropagation(); // Prevent map click event
-          this.placeSelected.emit({
-            name: properties.name,
-            type: properties.typeCode || 'building',
-            imageUrl: properties.imageUrl || ''
-          });
+          const rawType = (properties.typeCode || properties.type || '').toString().toLowerCase().trim();
+          if (rawType === 'building' || rawType === 'parking') {
+            this.placeSelected.emit({
+              name: properties.name,
+              type: rawType,
+              imageUrl: properties.imageUrl || ''
+            });
+          } else {
+            console.debug('Marker click sin popup. typeCode:', properties.typeCode, 'type:', properties.type);
+          }
         });
 
         // Add marker to map and store reference

@@ -8,9 +8,9 @@
 <app-filter-controls></app-filter-controls>
 <!-- SOS button. In case of emergency, go to the nearest meeting point -->
 <app-sos-button></app-sos-button>
-<!-- Information popup for selected place (non-parking) -->
+<!-- Popup for buildings -->
 <app-information-pop-up
-  *ngIf="selectedPlace().type !== 'parking'"
+  *ngIf="selectedPlace().type === 'building' && selectedPlace().isVisible"
   [placeName]="selectedPlace().name"
   [placeType]="selectedPlace().type"
   [imageUrl]="selectedPlace().imageUrl"
@@ -18,7 +18,7 @@
   (visibleChange)="onVisibleChange($event)"
   (showTransportSelector)="onShowTransportSelector()">
 </app-information-pop-up>
-<!-- Information popup for parking places -->
+<!-- Popup for parking lots -->
 <app-information-pop-up-parking
   *ngIf="selectedPlace().type === 'parking' && selectedPlace().isVisible"
   [placeName]="selectedPlace().name"
