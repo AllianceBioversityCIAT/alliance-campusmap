@@ -14,7 +14,11 @@ export class PlacePropertiesDto {
   @ApiProperty({ example: "building" })
   type?: string;
 
+  @ApiProperty({ isArray: true, type: () => Object, description: 'Imagenes asociadas al lugar' })
+  images?: { id: number; img: string }[];
+  @ApiProperty({ example: 'public/icon/building.svg' })
   icon: string;
+  @ApiProperty({ example: 'red' })
   color: string;
   @ApiProperty({ type: () => GeometryDto, description: 'Centroid del lugar' })
   centroid: GeometryDto;

@@ -10,8 +10,12 @@ import { RequestLoggerMiddleware } from './common/middleware/request-logger.midd
 import { AppLoggerService } from './common/logger/app-logger.service';
 import { buildTypeOrmOptions } from './database/typeorm.config';
 import { PlacesModule } from './modules/places/places.module';
+import { SitesModule } from './modules/sites/sites.module';
 import { join } from 'node:path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+
+
+
 
 @Module({
   imports: [
@@ -32,6 +36,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ApiModule,
     RouterModule.register(routes),
     PlacesModule,
+    SitesModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppLoggerService],
