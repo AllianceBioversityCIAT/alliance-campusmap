@@ -1,14 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { FeatureCollection } from '../models/place.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Api {
-  private readonly apiUrl = environment.apiUrl;
+  private readonly apiUrl = 'http://1hz14f3vx1.execute-api.us-east-1.amazonaws.com';
   
   private readonly http = inject(HttpClient);
 
