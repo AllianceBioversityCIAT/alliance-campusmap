@@ -5,6 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpAdapterHost } from '@nestjs/core';
 import { AppLoggerService } from './common/logger/app-logger.service';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import * as path from 'node:path';
+
 
 /**
  * Configura la aplicación NestJS con filtros globales, prefijos, CORS y Swagger.
@@ -51,9 +53,11 @@ export async function setupApp(app: INestApplication): Promise<void> {
     .setVersion('1.0.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document, {
+  SwaggerModule.setup('api/v1/docs', app, document, {
     swaggerOptions: { persistAuthorization: true },
   });
 
   appLogger.log(`CORS habilitado para: ${corsOrigins.join(', ')}`);
+  console.log("Ruta absoluta calculada para 'public':", 
+        path.resolve(__dirname, '..', 'public'));
 }

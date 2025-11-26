@@ -11,8 +11,8 @@ import { AppLoggerService } from './common/logger/app-logger.service';
 import { buildTypeOrmOptions } from './database/typeorm.config';
 import { PlacesModule } from './modules/places/places.module';
 import { SitesModule } from './modules/sites/sites.module';
-import { join } from 'node:path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'node:path';
 
 
 
@@ -20,8 +20,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'public'),
-      serveRoot: '/public',
+    rootPath: path.resolve(process.cwd(), 'dist', 'public'),
+    serveRoot: '/public/',
       serveStaticOptions: {
         index: false,
       },
