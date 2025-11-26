@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -7,10 +7,10 @@ type SupportedLang = 'en' | 'es';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [RouterOutlet, ButtonModule, TranslateModule],
   templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  styleUrls: ['./app.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
   private readonly translate = inject(TranslateService);

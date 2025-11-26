@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TranslateModule } from '@ngx-translate/core';
 import { InformationPopUpParking } from './information-pop-up-parking';
 
 describe('InformationPopUpParking', () => {
@@ -8,9 +8,8 @@ describe('InformationPopUpParking', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InformationPopUpParking]
-    })
-    .compileComponents();
+      imports: [InformationPopUpParking, TranslateModule.forRoot()]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(InformationPopUpParking);
     component = fixture.componentInstance;

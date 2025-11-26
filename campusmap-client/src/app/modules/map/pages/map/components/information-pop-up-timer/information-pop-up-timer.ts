@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -6,11 +6,12 @@ import { TranslateModule } from '@ngx-translate/core';
   selector: 'app-information-pop-up-timer',
   imports: [ButtonModule, TranslateModule],
   templateUrl: './information-pop-up-timer.html',
-  styleUrls: ['./information-pop-up-timer.scss']
+  styleUrls: ['./information-pop-up-timer.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InformationPopUpTimer implements OnInit {
   //Saves the current time displayed in the pop-up
-  currentTime = '';
+  currentTime = signal('');
 
   ngOnInit(): void {
     this.updateTime(); //Updates the time when loading
@@ -18,10 +19,12 @@ export class InformationPopUpTimer implements OnInit {
 
   //Gets the current time in hh:mm AM/PM format
   updateTime(): void {
-    this.currentTime = new Date().toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
+    this.currentTime.set(
+      new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      })
+    );
   }
 }

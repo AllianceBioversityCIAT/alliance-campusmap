@@ -18,13 +18,14 @@
         <div class="flex flex-col items-center mb-20">
           <p-rating
             #ratingValue="ngModel"
-            [(ngModel)]="value"
+            [ngModel]="value()"
+            (ngModelChange)="value.set($event)"
             required
             name="ratingValue"
             class="flex justify-center">
           </p-rating>
           <p-message
-            *ngIf="exampleForm.submitted && value === null"
+            *ngIf="exampleForm.submitted && value() === null"
             severity="error"
             size="large"
             variant="simple">
@@ -44,7 +45,11 @@
               >{{ 'Review.cancel' | translate }}</span
             >
           </button>
-          <button pButton severity="primary" class="w-30 h-13 shadow-[4px_4px_5px_rgba(0,0,0,0.3)]">
+          <button
+            pButton
+            severity="primary"
+            type="submit"
+            class="w-30 h-13 shadow-[4px_4px_5px_rgba(0,0,0,0.3)]">
             <span
               pButtonLabel
               class="text-(length:--font-size-2xl) leading-(length:--line-height-2xl)"

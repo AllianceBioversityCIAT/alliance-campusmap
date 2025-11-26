@@ -7,7 +7,9 @@
         <ng-template pTemplate="content">
           <img
             src="assets/icons/popUpTImer/arrowBack.svg"
-            [attr.alt]="'InformationPopUpTimer.backAlt' | translate" />
+            title="Back"
+            [alt]="'InformationPopUpTimer.backAlt' | translate"
+            [title]="'InformationPopUpTimer.backAlt' | translate" />
         </ng-template>
       </p-button>
     </div>
@@ -16,7 +18,7 @@
     <div class="flex flex-auto flex-col justify-center items-center">
       <!-- Row with clock icon and estimated time -->
       <div class="flex gap-2">
-        <img src="assets/icons/popUpTImer/timerSmall.svg" alt="" class="object-contain" />
+        <img src="assets/icons/popUpTImer/timerSmall.svg" alt="" title="" class="object-contain" />
         <p class="font-bold text-(length:--font-size-2xl) leading-(length:--line-height-2xl)">
           2 {{ 'InformationPopUpTimer.minutes' | translate }}
         </p>
@@ -25,7 +27,7 @@
       <!-- Row with distance and current time-->
       <div class="flex gap-4 mt-2 leading-(length:--line-height-xl) text-(length:--font-size-xl)">
         <p>1 {{ 'InformationPopUpTimer.km' | translate }}</p>
-        <p>{{ currentTime }}</p>
+        <p>{{ currentTime() }}</p>
       </div>
     </div>
 
@@ -35,7 +37,9 @@
         <ng-template pTemplate="content">
           <img
             src="assets/icons/popUpTImer/close.svg"
-            [attr.alt]="'InformationPopUpTimer.closeAlt' | translate" />
+            title="Close"
+            [alt]="'InformationPopUpTimer.closeAlt' | translate"
+            [title]="'InformationPopUpTimer.closeAlt' | translate" />
         </ng-template>
       </p-button>
     </div>

@@ -12,6 +12,22 @@
   color: var(--color-primary-white);
 }
 
+// Slide up animation
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+:host ::ng-deep .animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
 @media (width >= 48rem) {
   :host ::ng-deep .p-button {
     font-size: var(--font-size-4xl);

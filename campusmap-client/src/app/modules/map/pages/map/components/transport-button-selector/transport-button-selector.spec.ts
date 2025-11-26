@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TranslateModule } from '@ngx-translate/core';
 import { TransportButtonSelector } from './transport-button-selector';
 
 describe('TransportButtonSelector', () => {
@@ -8,9 +8,8 @@ describe('TransportButtonSelector', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TransportButtonSelector]
-    })
-    .compileComponents();
+      imports: [TransportButtonSelector, TranslateModule.forRoot()]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TransportButtonSelector);
     component = fixture.componentInstance;

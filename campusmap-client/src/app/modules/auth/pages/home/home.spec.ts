@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Home } from './home';
 import { Map } from '../../../map/pages/map/map';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 class FakeLoader implements TranslateLoader {
@@ -22,12 +22,11 @@ describe('Home', () => {
       imports: [
         Home,
         Map,
-        HttpClientModule,
-        RouterTestingModule,
         TranslateModule.forRoot({
           loader: { provide: TranslateLoader, useClass: FakeLoader }
         })
-      ]
+      ],
+      providers: [provideHttpClient(), provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(Home);

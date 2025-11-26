@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { LogoSection } from './components/logo-section/logo-section';
 import { LanguageService } from '../../../../core/services/language.service';
 
 @Component({
   selector: 'app-welcome',
-  standalone: true,
   imports: [CommonModule, LogoSection],
   templateUrl: './welcome.html',
-  styleUrls: ['./welcome.scss']
+  styleUrls: ['./welcome.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Welcome implements OnInit {
   private readonly router = inject(Router);

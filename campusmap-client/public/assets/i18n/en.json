@@ -10,7 +10,6 @@
     "title": "To explore",
     "promptLine1": "campus facilities,",
     "promptLine2": "Connect to the network:",
-    "guest": "VISITORS",
     "connectionStatus": "Connection status",
     "ariaLabel": "Home section",
     "button": {
@@ -27,6 +26,7 @@
   "Map": {
     "searchPlaceholder": "Search",
     "label": "Label",
+    "noResults": "No results found",
     "filters": {
       "ariaLabel": "Show filters",
       "title": "Show filters",
@@ -61,5 +61,17 @@
     "km": "km",
     "backAlt": "Go back",
     "closeAlt": "Close"
+  },
+  "Buildings": {
+    "Salas de conferencias": "Conference Rooms",
+    "Edficio administrativo 2": "Administrative Building 2",
+    "Edificio Administrativo 1": "Administrative Building 1",
+    "Cafeterias": "Cafeterias",
+    "Protección Institucional": "Institutional Protection",
+    "Edificio de Investigación": "Research Building",
+    "Laboratorios": "Laboratories",
+    "Biblioteca": "Library",
+    "Auditorio": "Auditorium",
+    "Bodega": "Warehouse"
   }
 }

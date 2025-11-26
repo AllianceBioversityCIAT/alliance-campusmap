@@ -7,6 +7,7 @@ import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 // ngx-translate v17 (standalone)
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
@@ -21,6 +22,8 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     //App routing
     provideRouter(routes),
+    //Animations support for PrimeNG
+    provideAnimations(),
 
     //HTTP client with support for interceptors
     provideHttpClient(withInterceptorsFromDi()),

@@ -10,7 +10,6 @@
     "title": "Para explorar",
     "promptLine1": "las instalaciones del campus,",
     "promptLine2": "conéctate a la red:",
-    "guest": "VISITANTES",
     "connectionStatus": "Estado de conexión",
     "ariaLabel": "Sección de inicio",
     "button": {
@@ -27,6 +26,7 @@
   "Map": {
     "searchPlaceholder": "Buscar",
     "label": "Etiqueta",
+    "noResults": "No se encontraron resultados",
     "filters": {
       "ariaLabel": "Mostrar filtros",
       "title": "Mostrar filtros",
@@ -61,5 +61,17 @@
     "km": "km",
     "backAlt": "Regresar",
     "closeAlt": "Cerrar"
+  },
+  "Buildings": {
+    "Salas de conferencias": "Salas de conferencias",
+    "Edficio administrativo 2": "Edficio administrativo 2",
+    "Edificio Administrativo 1": "Edificio Administrativo 1",
+    "Cafeterias": "Cafeterías",
+    "Protección Institucional": "Protección Institucional",
+    "Edificio de Investigación": "Edificio de Investigación",
+    "Laboratorios": "Laboratorios",
+    "Biblioteca": "Biblioteca",
+    "Auditorio": "Auditorio",
+    "Bodega": "Bodega"
   }
 }

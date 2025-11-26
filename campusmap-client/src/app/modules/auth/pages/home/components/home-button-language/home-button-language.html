@@ -1,9 +1,9 @@
 <section class="items-center">
   <p-selectbutton
     [options]="stateOptions"
-    [(ngModel)]="value"
+    [ngModel]="value()"
+    (ngModelChange)="onLanguageChange($event)"
     optionLabel="label"
     optionValue="value"
-    (ngModelChange)="onLanguageChange($event)"
     [attr.aria-label]="'HOME.LANGUAGE.TOGGLE' | translate" />
 </section>
