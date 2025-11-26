@@ -73,5 +73,11 @@
     "Biblioteca": "Biblioteca",
     "Auditorio": "Auditorio",
     "Bodega": "Bodega"
+  },
+  "LocationPermission": {
+    "title": "Permiso de Ubicación",
+    "description": "Necesitamos tu ubicación para mostrarte en el mapa y ayudarte a navegar por el campus.",
+    "accept": "Permitir",
+    "decline": "Ahora No"
   }
 }
