@@ -143,8 +143,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
           this.requestOrientationPermission();
         }
       },
-      err => console.error(err),
-      { enableHighAccuracy: true }
+      err => {
+        console.error(`Error de geolocalización: ${err.message}`);
+      },
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
     );
 
     // Orbit control to follow user
