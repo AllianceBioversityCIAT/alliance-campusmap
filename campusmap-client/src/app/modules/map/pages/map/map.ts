@@ -7,6 +7,7 @@ import { InformationPopUp } from './components/information-pop-up/information-po
 import { InformationPopUpParking } from './components/information-pop-up-parking/information-pop-up-parking';
 import { TransportButtonSelector } from './components/transport-button-selector/transport-button-selector';
 import { SosButton } from './components/sos-button/sos-button';
+import { LocationPermissionPopup } from './components/location-permission-popup/location-permission-popup';
 import { PlaceFeature } from '../../../../core/models/place.model';
 @Component({
   selector: 'app-map',
@@ -18,7 +19,8 @@ import { PlaceFeature } from '../../../../core/models/place.model';
     InformationPopUp,
     InformationPopUpParking,
     TransportButtonSelector,
-    SosButton
+    SosButton,
+    LocationPermissionPopup
   ],
   templateUrl: './map.html',
   styleUrls: ['./map.scss'],
@@ -36,6 +38,7 @@ export class Map {
   });
 
   isTransportSelectorVisible = signal(false);
+  showLocationPermissionPopup = signal(true);
 
   onPlaceSelected(place: { name: string; type: string; imageUrl: string }): void {
     this.selectedPlace.set({
@@ -75,5 +78,14 @@ export class Map {
         console.log('Navigating to:', place.properties.name, [lng, lat]);
       }
     }
+  }
+
+  onLocationPermissionAccepted(): void {
+    this.showLocationPermissionPopup.set(false);
+    this.mapLoad()?.enableLocationTracking();
+  }
+
+  onLocationPermissionDeclined(): void {
+    this.showLocationPermissionPopup.set(false);
   }
 }

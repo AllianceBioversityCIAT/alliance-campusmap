@@ -62,7 +62,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
     //Wait for the map to load to begin user tracking
     this.map.on('load', () => {
-      this.trackUser();
+      // Don't automatically track user - wait for permission popup
       this.loadPlaces();
 
       // Subscribe to filter changes
@@ -154,6 +154,11 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       const el = this.userMarker.getElement();
       el.style.transform = `rotate(${heading}deg)`;
     });
+  }
+
+  // Public method to enable location tracking (called after user grants permission)
+  public enableLocationTracking(): void {
+    this.trackUser();
   }
 
   // Request permission for device orientation
