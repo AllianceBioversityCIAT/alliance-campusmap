@@ -260,7 +260,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       // Fix the path by replacing "icon" with "icons"
       const cleanPath = iconPath.startsWith('/') ? iconPath.substring(1) : iconPath;
       const correctedPath = cleanPath.replace('/icon/', '/icons/');
-      return `http://1hz14f3vx1.execute-api.us-east-1.amazonaws.com/${correctedPath}`;
+      return `https://campusmap-file-storage.s3.us-east-1.amazonaws.com/${correctedPath}`;
     }
 
     // Fallback to default icon if not provided
