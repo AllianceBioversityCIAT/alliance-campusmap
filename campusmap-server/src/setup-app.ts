@@ -7,7 +7,6 @@ import { AppLoggerService } from './common/logger/app-logger.service';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import * as path from 'node:path';
 
-
 /**
  * Configura la aplicación NestJS con filtros globales, prefijos, CORS y Swagger.
  * @param app Instancia de la aplicación NestJS.
@@ -58,6 +57,8 @@ export async function setupApp(app: INestApplication): Promise<void> {
   });
 
   appLogger.log(`CORS habilitado para: ${corsOrigins.join(', ')}`);
-  console.log("Ruta absoluta calculada para 'public':", 
-        path.resolve(__dirname, '..', 'public'));
+  console.log(
+    "Ruta absoluta calculada para 'public':",
+    path.resolve(__dirname, '..', 'public'),
+  );
 }

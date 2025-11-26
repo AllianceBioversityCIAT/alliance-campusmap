@@ -33,7 +33,11 @@ export class PlacesController {
    * @returns Promise<FeatureCollectionDto<PlacePropertiesDto>> - FeatureCollection with all or filtered places.
    */
   @Get()
-  @ApiOperation({ summary: 'Get all places', description: 'Returns all places as a GeoJSON FeatureCollection. Optionally filters by search term.' })
+  @ApiOperation({
+    summary: 'Get all places',
+    description:
+      'Returns all places as a GeoJSON FeatureCollection. Optionally filters by search term.',
+  })
   @ApiOkResponse({
     type: FeatureCollectionDto,
     description: 'List of places in GeoJSON format',
@@ -44,7 +48,9 @@ export class PlacesController {
     description: 'Search term to filter places by name or unit',
     required: false,
   })
-  getAllPlaces(@Query('search') search?: string): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
+  getAllPlaces(
+    @Query('search') search?: string,
+  ): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
     return this.placesService.getAllPlaces(search);
   }
 
@@ -57,7 +63,11 @@ export class PlacesController {
    * @returns Promise<FeatureCollectionDto<PlacePropertiesDto>> - FeatureCollection with filtered places.
    */
   @Get('type/:code')
-  @ApiOperation({ summary: 'Get places by type', description: 'Returns places filtered by type code as a GeoJSON FeatureCollection.' })
+  @ApiOperation({
+    summary: 'Get places by type',
+    description:
+      'Returns places filtered by type code as a GeoJSON FeatureCollection.',
+  })
   @ApiParam({
     name: 'code',
     type: String,
