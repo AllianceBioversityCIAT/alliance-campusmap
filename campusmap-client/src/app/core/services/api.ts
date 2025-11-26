@@ -7,8 +7,8 @@ import { FeatureCollection } from '../models/place.model';
   providedIn: 'root'
 })
 export class Api {
- private readonly apiUrl = 'https://1hz14f3vx1.execute-api.us-east-1.amazonaws.com';
-  
+  private readonly apiUrl = 'https://1hz14f3vx1.execute-api.us-east-1.amazonaws.com';
+
   private readonly http = inject(HttpClient);
 
   //Gets all buildings in GeoJSON format

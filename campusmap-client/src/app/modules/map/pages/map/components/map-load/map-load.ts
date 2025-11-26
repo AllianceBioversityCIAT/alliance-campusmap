@@ -252,15 +252,14 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       }
 
       // Backend sends paths like "public/icon/parking.svg"
-      // We need to construct: http://localhost:3001/public/icons/parking.svg
       // Fix the path by replacing "icon" with "icons"
       const cleanPath = iconPath.startsWith('/') ? iconPath.substring(1) : iconPath;
       const correctedPath = cleanPath.replace('/icon/', '/icons/');
-      return `http://localhost:3001/${correctedPath}`;
+      return `http://1hz14f3vx1.execute-api.us-east-1.amazonaws.com/${correctedPath}`;
     }
 
     // Fallback to default icon if not provided
-    return 'assets/icons/mapPage/building.svg';
+    return 'assets/icons/building.svg';
   }
 
   //Get translated building name or return original if no translation exists
@@ -378,7 +377,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         // Add click event to marker container
         markerContainer.addEventListener('click', e => {
           e.stopPropagation(); // Prevent map click event
-          const rawType = (properties.typeCode || properties.type || '').toString().toLowerCase().trim();
+          const rawType = (properties.typeCode || properties.type || '')
+            .toString()
+            .toLowerCase()
+            .trim();
           if (rawType === 'building' || rawType === 'parking') {
             this.placeSelected.emit({
               name: properties.name,
@@ -386,7 +388,12 @@ export class MapLoad implements AfterViewInit, OnDestroy {
               imageUrl: properties.imageUrl || ''
             });
           } else {
-            console.debug('Marker click sin popup. typeCode:', properties.typeCode, 'type:', properties.type);
+            console.debug(
+              'Marker click sin popup. typeCode:',
+              properties.typeCode,
+              'type:',
+              properties.type
+            );
           }
         });
 
