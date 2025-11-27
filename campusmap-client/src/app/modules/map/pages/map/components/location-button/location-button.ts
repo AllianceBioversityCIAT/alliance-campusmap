@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, output } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GeolocationService } from '../../../../../../core/services/geolocation.service';
 
@@ -19,7 +19,8 @@ import { GeolocationService } from '../../../../../../core/services/geolocation.
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg">
+        xmlns="http://www.w3.org/2000/svg"
+        [style.transform]="'rotate(' + orientation() + 'deg)'">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -34,9 +35,7 @@ import { GeolocationService } from '../../../../../../core/services/geolocation.
 
       <!-- Accuracy indicator -->
       @if (geolocationService.isTracking()) {
-        <span
-          class="accuracy-indicator"
-          [class]="accuracyClass()"></span>
+        <span class="accuracy-indicator" [class]="accuracyClass()"></span>
       }
     </button>
   `,
@@ -46,6 +45,20 @@ import { GeolocationService } from '../../../../../../core/services/geolocation.
 export class LocationButton {
   readonly geolocationService = inject(GeolocationService);
   readonly centerOnLocation = output<void>();
+
+  // Signal for device orientation (alpha)
+  private readonly orientationSignal = signal<number>(0);
+  orientation = this.orientationSignal.asReadonly();
+
+  constructor() {
+    if ('DeviceOrientationEvent' in globalThis) {
+      globalThis.addEventListener('deviceorientation', (event: DeviceOrientationEvent) => {
+        if (typeof event.alpha === 'number') {
+          this.orientationSignal.set(event.alpha);
+        }
+      });
+    }
+  }
 
   onCenterLocation(): void {
     this.centerOnLocation.emit();
