@@ -221,11 +221,17 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     // Create and store new handler
     this.orientationHandler = (e: DeviceOrientationEvent) => {
       if (!this.userMarker) return;
+      
+      // Get the compass heading
+      // alpha represents the rotation around the Z axis (0-360 degrees)
+      // We need to invert the rotation for correct orientation
       const heading = e.alpha ?? 0;
+      const correctedHeading = 360 - heading; // Invert the rotation
+      
       const el = this.userMarker.getElement();
       const arrow = el.querySelector('div:last-child') as HTMLDivElement;
       if (arrow) {
-        arrow.style.transform = `translate(-50%, -50%) rotate(${heading}deg)`;
+        arrow.style.transform = `translate(-50%, -50%) rotate(${correctedHeading}deg)`;
       }
     };
 
