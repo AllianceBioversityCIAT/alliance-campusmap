@@ -7,7 +7,6 @@ import { InformationPopUp } from './components/information-pop-up/information-po
 import { InformationPopUpParking } from './components/information-pop-up-parking/information-pop-up-parking';
 import { TransportButtonSelector } from './components/transport-button-selector/transport-button-selector';
 import { SosButton } from './components/sos-button/sos-button';
-import { LocationPermissionPopup } from './components/location-permission-popup/location-permission-popup';
 import { LocationButton } from './components/location-button/location-button';
 import { PlaceFeature } from '../../../../core/models/place.model';
 import { GeolocationService } from '../../../../core/services/geolocation.service';
@@ -22,7 +21,6 @@ import { GeolocationService } from '../../../../core/services/geolocation.servic
     InformationPopUpParking,
     TransportButtonSelector,
     SosButton,
-    LocationPermissionPopup,
     LocationButton
   ],
   templateUrl: './map.html',
@@ -43,7 +41,6 @@ export class Map {
   });
 
   isTransportSelectorVisible = signal(false);
-  showLocationPermissionPopup = signal(true);
 
   onPlaceSelected(place: { name: string; type: string; imageUrl: string }): void {
     this.selectedPlace.set({
@@ -85,16 +82,13 @@ export class Map {
     }
   }
 
-  onLocationPermissionAccepted(): void {
-    this.showLocationPermissionPopup.set(false);
-    this.mapLoad()?.enableLocationTracking();
-  }
+  async onCenterOnUserLocation(): Promise<void> {
+    // If not tracking, request permission and start tracking
+    if (!this.geolocationService.isTracking()) {
+      await this.mapLoad()?.enableLocationTracking();
+    }
 
-  onLocationPermissionDeclined(): void {
-    this.showLocationPermissionPopup.set(false);
-  }
-
-  onCenterOnUserLocation(): void {
+    // Center on user location if available
     const position = this.geolocationService.currentPosition();
     if (position) {
       this.mapLoad()?.flyToLocation(position.longitude, position.latitude, 19);
