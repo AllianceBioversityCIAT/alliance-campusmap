@@ -119,6 +119,12 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     const lng = position.longitude;
     const lat = position.latitude;
 
+    // Validate coordinates are valid (not 0,0 and within reasonable bounds)
+    if (!lng || !lat || (lng === 0 && lat === 0)) {
+      console.warn('Invalid coordinates received:', { lng, lat });
+      return;
+    }
+
     if (this.userMarker) {
       //Updates user position
       this.userMarker.setLngLat([lng, lat]);
@@ -166,8 +172,11 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     elContainer.appendChild(circle);
     elContainer.appendChild(arrow);
 
-    //Add the marker to the map
-    this.userMarker = new maplibregl.Marker({ element: elContainer })
+    //Add the marker to the map with center anchor to prevent position jumping
+    this.userMarker = new maplibregl.Marker({ 
+      element: elContainer,
+      anchor: 'center' // Ensure marker is centered on coordinates
+    })
       .setLngLat([lng, lat])
       .addTo(this.map);
   }

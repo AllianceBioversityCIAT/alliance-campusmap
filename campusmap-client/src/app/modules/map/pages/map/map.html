@@ -12,12 +12,6 @@
 <div class="absolute top-54 right-4 md:right-8 z-2 flex flex-col items-end select-none mt-20">
   <app-location-button (centerOnLocation)="onCenterOnUserLocation()"></app-location-button>
 </div>
-<!-- Location permission popup -->
-<app-location-permission-popup
-  *ngIf="showLocationPermissionPopup()"
-  (accepted)="onLocationPermissionAccepted()"
-  (declined)="onLocationPermissionDeclined()">
-</app-location-permission-popup>
 <!-- Popup for buildings -->
 <app-information-pop-up
   *ngIf="selectedPlace().type === 'building' && selectedPlace().isVisible"
