@@ -84,10 +84,14 @@ export class GeolocationService {
    * Check current permission state (if Permissions API is supported)
    */
   async checkPermission(): Promise<PermissionState | 'unsupported'> {
+    // Only check permission if a location-dependent feature is active
+    if (!this.isLocationFeatureActive()) {
+      // Geolocation not needed, skip permission query
+      return 'unsupported';
+    }
     if (!('permissions' in navigator)) {
       return 'unsupported';
     }
-
     try {
       const result = await navigator.permissions.query({ name: 'geolocation' });
       return result.state;
@@ -97,9 +101,14 @@ export class GeolocationService {
     }
   }
 
-  /**
-   * Request permission and start tracking user location
-   */
+  //Determines if a location-dependent feature is currently active.
+  private isLocationFeatureActive(): boolean {
+    // Example: check if tracking is requested or permission popup is shown
+    // This should be replaced with real logic from your app state
+    return this.isTracking() || this._status() === 'requesting-permission';
+  }
+
+  // Request permission and start tracking user location
   async requestPermissionAndStartTracking(): Promise<boolean> {
     if (!this.isSupported()) {
       const error = {
@@ -139,6 +148,12 @@ export class GeolocationService {
         return;
       }
 
+      // Only use geolocation if necessary
+      if (!this.isLocationFeatureActive()) {
+        reject(new Error('Geolocation not necessary'));
+        return;
+      }
+
       const options = this._isHighAccuracy()
         ? this.HIGH_ACCURACY_OPTIONS
         : this.STANDARD_ACCURACY_OPTIONS;
@@ -165,6 +180,12 @@ export class GeolocationService {
   startTracking(): void {
     if (!this.isSupported()) {
       console.error('Geolocation not supported');
+      return;
+    }
+
+    // Only use geolocation if necessary
+    if (!this.isLocationFeatureActive()) {
+      console.error('Geolocation not necessary');
       return;
     }
 
