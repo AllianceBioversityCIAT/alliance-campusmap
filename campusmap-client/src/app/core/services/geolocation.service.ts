@@ -81,30 +81,11 @@ export class GeolocationService {
   }
 
   /**
-   * Check current permission state (if Permissions API is supported)
+   * Determines if a location-dependent feature is currently active.
+   * Geolocation is only necessary when user has explicitly accepted via the permission popup.
    */
-  async checkPermission(): Promise<PermissionState | 'unsupported'> {
-    // Only check permission if a location-dependent feature is active
-    if (!this.isLocationFeatureActive()) {
-      // Geolocation not needed, skip permission query
-      return 'unsupported';
-    }
-    if (!('permissions' in navigator)) {
-      return 'unsupported';
-    }
-    try {
-      const result = await navigator.permissions.query({ name: 'geolocation' });
-      return result.state;
-    } catch (error) {
-      console.warn('Could not query geolocation permission:', error);
-      return 'unsupported';
-    }
-  }
-
-  //Determines if a location-dependent feature is currently active.
   private isLocationFeatureActive(): boolean {
-    // Example: check if tracking is requested or permission popup is shown
-    // This should be replaced with real logic from your app state
+    // Geolocation is necessary only when tracking or permission was explicitly requested
     return this.isTracking() || this._status() === 'requesting-permission';
   }
 
