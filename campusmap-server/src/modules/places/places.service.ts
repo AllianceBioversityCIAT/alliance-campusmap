@@ -27,7 +27,9 @@ export class PlacesService {
    * @param search Optional search term to filter places by name.
    * @returns {Promise<FeatureCollectionDto<PlacePropertiesDto>>} FeatureCollection with all or filtered places.
    */
-  async getAllPlaces(search?: string): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
+  async getAllPlaces(
+    search?: string,
+  ): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
     const places = await this.placeRepository.find({
       relations: ['type', 'units', 'images'],
       where: [search ? { name: ILike(`%${search}%`) } : {}],
