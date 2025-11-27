@@ -6,13 +6,18 @@ import {
   viewChild,
   inject,
   output,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
+  effect
 } from '@angular/core';
 import maplibregl from 'maplibre-gl';
 import { Api } from '../../../../../../core/services/api';
 import { PlaceFeature, FeatureCollection } from '../../../../../../core/models/place.model';
 import { MapFilterService } from '../../../../../../core/services/map-filter.service';
 import { TranslateService } from '@ngx-translate/core';
+import {
+  GeolocationService,
+  UserGeolocationPosition
+} from '../../../../../../core/services/geolocation.service';
 
 @Component({
   selector: 'app-map-load',
@@ -27,21 +32,43 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   //Output event when the map is clicked
   mapClicked = output<void>();
 
+  constructor() {
+    // React to geolocation position changes
+    effect(() => {
+      const position = this.geolocationService.currentPosition();
+      if (position && this.map) {
+        this.updateUserMarker(position);
+      }
+    });
+
+    // React to geolocation errors
+    effect(() => {
+      const error = this.geolocationService.error();
+      if (error) {
+        console.error('Geolocation error:', error);
+        // You could emit an event here to show an error message to the user
+      }
+    });
+  }
+
   //Map instances and controls
   private map!: maplibregl.Map;
-  private readonly geolocate!: maplibregl.GeolocateControl;
   private userMarker!: maplibregl.Marker;
 
   //Reference to the map container in the template
   mapContainer = viewChild.required<ElementRef<HTMLDivElement>>('mapContainer');
 
-  //Service for future requests to the backend
+  //Services
   private readonly api = inject(Api);
   private readonly mapFilterService = inject(MapFilterService);
   private readonly translate = inject(TranslateService);
+  private readonly geolocationService = inject(GeolocationService);
 
   //Store current markers to remove them when filter changes
   private currentMarkers: maplibregl.Marker[] = [];
+
+  //Orientation handler
+  private orientationHandler?: (e: DeviceOrientationEvent) => void;
 
   ngAfterViewInit(): void {
     this.map = new maplibregl.Map({
@@ -87,80 +114,72 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     });
   }
 
-  //Turn on user location tracking
-  private trackUser() {
-    if (!navigator.geolocation) return;
+  //Update user marker on map with position from geolocation service
+  private updateUserMarker(position: UserGeolocationPosition): void {
+    const lng = position.longitude;
+    const lat = position.latitude;
 
-    navigator.geolocation.watchPosition(
-      pos => {
-        const lng = pos.coords.longitude;
-        const lat = pos.coords.latitude;
+    if (this.userMarker) {
+      //Updates user position
+      this.userMarker.setLngLat([lng, lat]);
+    } else {
+      // Create user marker with visual elements
+      this.createUserMarker(lng, lat);
+      this.requestOrientationPermission();
+    }
+  }
 
-        //If the marker does not exist, create it with the visual elements
-        if (this.userMarker) {
-          //Updates user position
-          this.userMarker.setLngLat([lng, lat]);
-        } else {
-          // Create user marker
-          const elContainer = document.createElement('div');
-          elContainer.style.position = 'absolute';
-          elContainer.style.width = '40px';
-          elContainer.style.height = '40px';
+  //Create the user marker with blue pulsing circle and direction arrow
+  private createUserMarker(lng: number, lat: number): void {
+    const elContainer = document.createElement('div');
+    elContainer.style.position = 'absolute';
+    elContainer.style.width = '40px';
+    elContainer.style.height = '40px';
 
-          //Accuracy circle
-          const circle = document.createElement('div');
-          circle.style.position = 'absolute';
-          circle.style.top = '50%';
-          circle.style.left = '50%';
-          circle.style.transform = 'translate(-50%, -50%)';
-          circle.style.width = '35px';
-          circle.style.height = '35px';
-          circle.style.background = '#007aff4d';
-          circle.style.borderRadius = '50%';
-          circle.style.zIndex = '0';
-          circle.className = 'absolute w-10 h-10 bg-blue-500 rounded-full animate-pulse-circle';
+    //Blue pulsing circle
+    const circle = document.createElement('div');
+    circle.style.position = 'absolute';
+    circle.style.top = '50%';
+    circle.style.left = '50%';
+    circle.style.transform = 'translate(-50%, -50%)';
+    circle.style.width = '35px';
+    circle.style.height = '35px';
+    circle.style.background = '#007aff4d';
+    circle.style.borderRadius = '50%';
+    circle.style.zIndex = '0';
+    circle.className = 'absolute w-10 h-10 bg-blue-500 rounded-full animate-pulse-circle';
 
-          //Arrow indicating user orientation
-          const arrow = document.createElement('div');
-          arrow.style.position = 'absolute';
-          arrow.style.top = '50%';
-          arrow.style.left = '50%';
-          arrow.style.transform = 'translate(-50%, -50%)';
-          arrow.style.width = '20px';
-          arrow.style.height = '20px';
-          arrow.style.backgroundImage = 'url(assets/icons/mapPage/userLocation.svg)';
-          arrow.style.backgroundSize = 'cover';
-          arrow.style.zIndex = '1';
+    //Arrow indicating user orientation
+    const arrow = document.createElement('div');
+    arrow.style.position = 'absolute';
+    arrow.style.top = '50%';
+    arrow.style.left = '50%';
+    arrow.style.transform = 'translate(-50%, -50%)';
+    arrow.style.width = '20px';
+    arrow.style.height = '20px';
+    arrow.style.backgroundImage = 'url(assets/icons/mapPage/userLocation.svg)';
+    arrow.style.backgroundSize = 'cover';
+    arrow.style.backgroundRepeat = 'no-repeat';
+    arrow.style.backgroundPosition = 'center';
+    arrow.style.zIndex = '1';
 
-          elContainer.appendChild(circle);
-          elContainer.appendChild(arrow);
+    elContainer.appendChild(circle);
+    elContainer.appendChild(arrow);
 
-          //Add the marker to the map
-          this.userMarker = new maplibregl.Marker({ element: elContainer })
-            .setLngLat([lng, lat])
-            .addTo(this.map);
-
-          this.requestOrientationPermission();
-        }
-      },
-      err => {
-        console.error(`Error de geolocalización: ${err.message}`);
-      },
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-    );
-
-    // Orbit control to follow user
-    globalThis.addEventListener('deviceorientation', e => {
-      if (!this.userMarker) return;
-      const heading = e.alpha ?? 0;
-      const el = this.userMarker.getElement();
-      el.style.transform = `rotate(${heading}deg)`;
-    });
+    //Add the marker to the map
+    this.userMarker = new maplibregl.Marker({ element: elContainer })
+      .setLngLat([lng, lat])
+      .addTo(this.map);
   }
 
   // Public method to enable location tracking (called after user grants permission)
-  public enableLocationTracking(): void {
-    this.trackUser();
+  public async enableLocationTracking(): Promise<void> {
+    const success = await this.geolocationService.requestPermissionAndStartTracking();
+    if (success) {
+      console.log('Location tracking enabled');
+    } else {
+      console.error('Failed to enable location tracking');
+    }
   }
 
   // Request permission for device orientation
@@ -185,12 +204,23 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   //Enable the device targeting event
   private enableDeviceOrientation() {
-    globalThis.addEventListener('deviceorientation', e => {
+    // Remove old handler if exists
+    if (this.orientationHandler) {
+      globalThis.removeEventListener('deviceorientation', this.orientationHandler);
+    }
+
+    // Create and store new handler
+    this.orientationHandler = (e: DeviceOrientationEvent) => {
       if (!this.userMarker) return;
       const heading = e.alpha ?? 0;
       const el = this.userMarker.getElement();
-      el.style.transform = `rotate(${heading}deg)`;
-    });
+      const arrow = el.querySelector('div:last-child') as HTMLDivElement;
+      if (arrow) {
+        arrow.style.transform = `translate(-50%, -50%) rotate(${heading}deg)`;
+      }
+    };
+
+    globalThis.addEventListener('deviceorientation', this.orientationHandler);
   }
 
   //Load places from API and display centroids on map
@@ -438,6 +468,14 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    //Stop location tracking
+    this.geolocationService.stopTracking();
+
+    //Remove orientation event listener
+    if (this.orientationHandler) {
+      globalThis.removeEventListener('deviceorientation', this.orientationHandler);
+    }
+
     //Deletes the map when the component is destroyed
     if (this.map) {
       this.map.remove();
