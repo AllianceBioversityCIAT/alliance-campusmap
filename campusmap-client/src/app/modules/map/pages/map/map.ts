@@ -1,4 +1,4 @@
-import { Component, viewChild, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, viewChild, signal, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapLoad } from './components/map-load/map-load';
 import { SearchBar } from './components/search-bar/search-bar';
@@ -8,7 +8,9 @@ import { InformationPopUpParking } from './components/information-pop-up-parking
 import { TransportButtonSelector } from './components/transport-button-selector/transport-button-selector';
 import { SosButton } from './components/sos-button/sos-button';
 import { LocationPermissionPopup } from './components/location-permission-popup/location-permission-popup';
+import { LocationButton } from './components/location-button/location-button';
 import { PlaceFeature } from '../../../../core/models/place.model';
+import { GeolocationService } from '../../../../core/services/geolocation.service';
 @Component({
   selector: 'app-map',
   imports: [
@@ -20,7 +22,8 @@ import { PlaceFeature } from '../../../../core/models/place.model';
     InformationPopUpParking,
     TransportButtonSelector,
     SosButton,
-    LocationPermissionPopup
+    LocationPermissionPopup,
+    LocationButton
   ],
   templateUrl: './map.html',
   styleUrls: ['./map.scss'],
@@ -29,6 +32,8 @@ import { PlaceFeature } from '../../../../core/models/place.model';
 export class Map {
   mapLoad = viewChild.required<MapLoad>(MapLoad);
   informationPopUp = viewChild.required<InformationPopUp>(InformationPopUp);
+
+  private readonly geolocationService = inject(GeolocationService);
 
   selectedPlace = signal({
     name: '',
@@ -87,5 +92,12 @@ export class Map {
 
   onLocationPermissionDeclined(): void {
     this.showLocationPermissionPopup.set(false);
+  }
+
+  onCenterOnUserLocation(): void {
+    const position = this.geolocationService.currentPosition();
+    if (position) {
+      this.mapLoad()?.flyToLocation(position.longitude, position.latitude, 19);
+    }
   }
 }

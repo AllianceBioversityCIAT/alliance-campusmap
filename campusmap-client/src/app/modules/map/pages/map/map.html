@@ -8,6 +8,10 @@
 <app-filter-controls></app-filter-controls>
 <!-- SOS button. In case of emergency, go to the nearest meeting point -->
 <app-sos-button></app-sos-button>
+<!-- Location button. Center map on user location -->
+<div class="absolute top-54 right-4 md:right-8 z-2 flex flex-col items-end select-none mt-20">
+  <app-location-button (centerOnLocation)="onCenterOnUserLocation()"></app-location-button>
+</div>
 <!-- Location permission popup -->
 <app-location-permission-popup
   *ngIf="showLocationPermissionPopup()"
