@@ -1,21 +1,21 @@
 @if (isVisible()) {
   <!-- Main container fixed at the bottom -->
   <div
-    class="absolute bottom-0 left-0 w-screen lg:w-1/4 px-4 md:px-8 lg:pt-8 pt-4 bg-white rounded-t-lg z-3 animate-slide-up">
+    class="fixed bottom-0 left-0 w-full max-w-full md:max-w-2xl lg:max-w-xl mx-auto px-4 md:px-8 lg:pt-8 pt-4 bg-white rounded-t-lg z-30 animate-slide-up shadow-lg">
     <!-- Parking title -->
     <p
-      class="font-semibold text-(length:--font-size-2xl) md:text-(length:--font-size-4xl) lg:text-(length:--font-size-2xl)">
+      class="font-semibold text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
       {{ placeName() || ('InformationPopUpParking.parking' | translate) }}
     </p>
     <!-- Main image of the place -->
-    <div class="flex flex-none w-full h-30 md:h-55 justify-center my-4 md:pb-4">
+    <div class="flex flex-none w-full justify-center my-4 md:pb-4">
       <img
         src="assets/images/sostenibilidad.webp"
         alt="'InformationPopUpParking.Alt' | translate"
         title="placeName() || ('InformationPopUpParking.parking' | translate)"
-        class="rounded-lg object-none w-full" />
+        class="rounded-lg object-cover w-full h-40 md:h-64 lg:h-72 ng-optimized-image"
+        priority />
     </div>
-
     <!-- Button to open the path to the point -->
     <div class="flex flex-auto justify-center items-center pb-4">
       <a
@@ -23,10 +23,10 @@
         (keydown.enter)="openTransportSelector()"
         tabindex="0"
         pButton
-        class="flex justify-center items-center w-55 md:w-60 lg:w-40 h-12 md:h-15 lg:h-10 shadow-[4px_4px_5px_rgba(0,0,0,0.3)] text-center rounded-lg cursor-pointer">
+        class="flex justify-center items-center w-44 md:w-60 lg:w-40 h-12 md:h-15 lg:h-12 shadow-lg text-center rounded-lg cursor-pointer">
         <span
           pButtonLabel
-          class="text-(length:--font-size-2xl) leading-(length:--line-height-2xl) md:text-(length:--font-size-4xl) lg:text-(length:--font-size-2xl) md:leading-(length:--line-height-4xl) lg:leading-(length:--line-height-2xl) font-medium text-white text-center">
+          class="text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal font-medium text-white text-center">
           {{ 'InformationPopUpParking.howToGet' | translate }}
         </span>
       </a>

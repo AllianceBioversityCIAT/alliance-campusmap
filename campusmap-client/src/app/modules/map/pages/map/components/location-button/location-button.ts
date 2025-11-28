@@ -32,11 +32,6 @@ import { GeolocationService } from '../../../../../../core/services/geolocation.
           stroke-width="2"
           d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
       </svg>
-
-      <!-- Accuracy indicator -->
-      @if (geolocationService.isTracking()) {
-        <span class="accuracy-indicator" [class]="accuracyClass()"></span>
-      }
     </button>
   `,
   styleUrls: ['./location-button.scss'],
@@ -62,17 +57,5 @@ export class LocationButton {
 
   onCenterLocation(): void {
     this.centerOnLocation.emit();
-  }
-
-  accuracyClass(): string {
-    const position = this.geolocationService.currentPosition();
-    if (!position) return 'poor';
-
-    const accuracy = position.accuracy;
-
-    if (accuracy <= 10) return 'excellent';
-    if (accuracy <= 30) return 'good';
-    if (accuracy <= 50) return 'fair';
-    return 'poor';
   }
 }

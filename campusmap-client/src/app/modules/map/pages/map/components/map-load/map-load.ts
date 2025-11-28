@@ -28,7 +28,12 @@ import {
 })
 export class MapLoad implements AfterViewInit, OnDestroy {
   //Output event when a place is selected
-  placeSelected = output<{ name: string; type: string; imageUrl: string }>();
+  placeSelected = output<{
+    name: string;
+    type: string;
+    imageUrl: string;
+    images?: { id: number; img: string }[];
+  }>();
   //Output event when the map is clicked
   mapClicked = output<void>();
 
@@ -173,7 +178,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     elContainer.appendChild(arrow);
 
     //Add the marker to the map with center anchor to prevent position jumping
-    this.userMarker = new maplibregl.Marker({ 
+    this.userMarker = new maplibregl.Marker({
       element: elContainer,
       anchor: 'center' // Ensure marker is centered on coordinates
     })
@@ -221,13 +226,13 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     // Create and store new handler
     this.orientationHandler = (e: DeviceOrientationEvent) => {
       if (!this.userMarker) return;
-      
+
       // Get the compass heading
       // alpha represents the rotation around the Z axis (0-360 degrees)
       // We need to invert the rotation for correct orientation
       const heading = e.alpha ?? 0;
       const correctedHeading = 360 - heading; // Invert the rotation
-      
+
       const el = this.userMarker.getElement();
       const arrow = el.querySelector('div:last-child') as HTMLDivElement;
       if (arrow) {
@@ -243,19 +248,44 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     // Clear existing markers
     this.clearMarkers();
 
-    // Choose API call based on filter
-    const apiCall = filterKey ? this.api.getPlacesByType(filterKey) : this.api.getAllPlaces();
+    // Si hay filtro, solo mostrar ese tipo
+    if (filterKey) {
+      this.api.getPlacesByType(filterKey).subscribe({
+        next: (data: FeatureCollection) => {
+          if (data?.features && Array.isArray(data.features)) {
+            this.addCentroidsToMap(data.features);
+          } else {
+            console.warn('No features found in received data');
+          }
+        },
+        error: error => {
+          console.error('Error loading places:', error);
+        }
+      });
+      return;
+    }
 
-    apiCall.subscribe({
+    // Si no hay filtro, mostrar buildings, parking y assembly_point juntos
+    // buildings y parking
+    this.api.getAllPlaces().subscribe({
       next: (data: FeatureCollection) => {
         if (data?.features && Array.isArray(data.features)) {
           this.addCentroidsToMap(data.features);
-        } else {
-          console.warn('No features found in received data');
         }
       },
       error: error => {
         console.error('Error loading places:', error);
+      }
+    });
+    // assembly_point
+    this.api.getPlacesByType('assembly_point').subscribe({
+      next: (data: FeatureCollection) => {
+        if (data?.features && Array.isArray(data.features)) {
+          this.addCentroidsToMap(data.features);
+        }
+      },
+      error: error => {
+        console.error('Error loading assembly points:', error);
       }
     });
   }
@@ -292,25 +322,21 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     }
   }
 
-  //Get icon path from backend or use fallback
+  //Get icon path for assembly_point from API
   private getIconForPlace(properties: PlaceFeature['properties']): string {
+    if (properties.type === 'assembly_point') {
+      return 'https://1hz14f3vx1.execute-api.us-east-1.amazonaws.com/public/icons/assembly_point.svg';
+    }
     // Use the icon from the backend if available
     if (properties.icon) {
       const iconPath = properties.icon;
-
-      // If it's already a full URL (starts with http), use it as is
       if (iconPath.startsWith('http://') || iconPath.startsWith('https://')) {
         return iconPath;
       }
-
-      // Backend sends paths like "public/icon/parking.svg"
-      // Fix the path by replacing "icon" with "icons"
       const cleanPath = iconPath.startsWith('/') ? iconPath.substring(1) : iconPath;
       const correctedPath = cleanPath.replace('/icon/', '/icons/');
       return `https://campusmap-file-storage.s3.us-east-1.amazonaws.com/${correctedPath}`;
     }
-
-    // Fallback to default icon if not provided
     return 'assets/icons/building.svg';
   }
 
@@ -341,132 +367,161 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   //Add centroid markers to the map
   private addCentroidsToMap(features: PlaceFeature[]): void {
+    // Define a custom marker type to avoid 'any'
+    interface MarkerWithLabel extends maplibregl.Marker {
+      updateLabelVisibility: () => void;
+      labelElement: HTMLDivElement;
+      buildingName: string;
+    }
+
     for (const [index, feature] of features.entries()) {
       const properties = feature.properties;
-      const centroid = properties?.centroid;
+      const coordinates = this.getFeatureCoordinates(feature);
 
-      if (centroid?.coordinates && Array.isArray(centroid.coordinates)) {
-        const [lng, lat] = centroid.coordinates as number[];
-
-        // Get the icon from backend or use default
+      if (coordinates && Array.isArray(coordinates)) {
+        const [lng, lat] = coordinates;
         const iconPath = this.getIconForPlace(properties);
-
-        // Get the color hex value
         const colorHex = this.getColorForPlace(properties);
 
-        // Create a custom marker element
-        const markerContainer = document.createElement('div');
-        markerContainer.style.display = 'flex';
-        markerContainer.style.flexDirection = 'column';
-        markerContainer.style.alignItems = 'center';
-        markerContainer.style.cursor = 'pointer';
+        const markerContainer = this.createMarkerContainer();
+        const markerEl = this.createMarkerElement(iconPath, colorHex);
+        const labelEl = this.createLabelElement(properties, colorHex);
 
-        const markerEl = document.createElement('div');
-        markerEl.style.width = '24px';
-        markerEl.style.height = '24px';
-
-        // If we have a color, load the SVG and modify it
-        if (colorHex && iconPath.includes('.svg')) {
-          fetch(iconPath)
-            .then(response => response.text())
-            .then(svgText => {
-              // Replace the fill color of the circle (st1 class)
-              const modifiedSvg = svgText.replace(
-                /(class="st1"[^>]*>)/,
-                `$1<style>.st1{fill:${colorHex}!important;}</style>`
-              );
-              // Create a data URL from the modified SVG
-              const blob = new Blob([modifiedSvg], { type: 'image/svg+xml' });
-              const url = URL.createObjectURL(blob);
-              markerEl.style.backgroundImage = `url(${url})`;
-              markerEl.style.backgroundSize = 'contain';
-              markerEl.style.backgroundRepeat = 'no-repeat';
-              markerEl.style.backgroundPosition = 'center';
-            })
-            .catch(() => {
-              // Fallback to original icon if fetch fails
-              markerEl.style.backgroundImage = `url(${iconPath})`;
-              markerEl.style.backgroundSize = 'contain';
-              markerEl.style.backgroundRepeat = 'no-repeat';
-              markerEl.style.backgroundPosition = 'center';
-            });
-        } else {
-          // Use the original icon without color modification
-          markerEl.style.backgroundImage = `url(${iconPath})`;
-          markerEl.style.backgroundSize = 'contain';
-          markerEl.style.backgroundRepeat = 'no-repeat';
-          markerEl.style.backgroundPosition = 'center';
-        }
-
-        // Create label element for the building name
-        const labelEl = document.createElement('div');
-        labelEl.textContent = this.getTranslatedBuildingName(properties.name);
-        labelEl.style.fontSize = '16px';
-        labelEl.style.fontWeight = '400';
-        labelEl.style.letterSpacing = '1px';
-        labelEl.style.color = colorHex || '#0088c6';
-        labelEl.style.textShadow =
-          '-1px -1px 1px #ffffffff, 1px 1px 1px #ffffffff, -1px 1px 1px #ffffffff, 1px -1px 1px #ffffffff';
-        labelEl.style.textAlign = 'center';
-        labelEl.style.marginTop = '4px';
-        labelEl.style.whiteSpace = 'nowrap';
-        labelEl.style.pointerEvents = 'none';
-        labelEl.style.display = 'none'; // Initially hidden
-
-        // Add icon and label to container
         markerContainer.appendChild(markerEl);
         markerContainer.appendChild(labelEl);
 
-        // Function to update label visibility based on zoom level
         const updateLabelVisibility = () => {
           const zoom = this.map.getZoom();
           labelEl.style.display = zoom >= 18 ? 'block' : 'none';
         };
-
-        // Set initial visibility
         updateLabelVisibility();
 
-        // Add click event to marker container
         markerContainer.addEventListener('click', e => {
-          e.stopPropagation(); // Prevent map click event
-          const rawType = (properties.typeCode || properties.type || '')
-            .toString()
-            .toLowerCase()
-            .trim();
-          if (rawType === 'building' || rawType === 'parking') {
-            this.placeSelected.emit({
-              name: properties.name,
-              type: rawType,
-              imageUrl: properties.imageUrl || ''
-            });
-          } else {
-            console.debug(
-              'Marker click sin popup. typeCode:',
-              properties.typeCode,
-              'type:',
-              properties.type
-            );
-          }
+          e.stopPropagation();
+          this.handleMarkerClick(properties);
         });
 
-        // Add marker to map and store reference
         const marker = new maplibregl.Marker({ element: markerContainer })
           .setLngLat([lng, lat])
-          .addTo(this.map);
+          .addTo(this.map) as MarkerWithLabel;
 
         this.currentMarkers.push(marker);
 
-        // Store update function to call on zoom changes
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (marker as any).updateLabelVisibility = updateLabelVisibility;
-        // Store label element and building name for language updates
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (marker as any).labelElement = labelEl;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (marker as any).buildingName = properties.name;
+        marker.updateLabelVisibility = updateLabelVisibility;
+        marker.labelElement = labelEl;
+        marker.buildingName = properties.name;
       } else {
-        console.warn(`Feature ${index + 1} does not have valid centroid coordinates`);
+        console.warn(`Feature ${index + 1} does not have valid coordinates`);
       }
+    }
+  }
+
+  // Helper to get coordinates from feature
+  private getFeatureCoordinates(feature: PlaceFeature): number[] | undefined {
+    const properties = feature.properties;
+    if (
+      (properties.type || '').toLowerCase() === 'assembly_point' &&
+      feature.geometry?.coordinates
+    ) {
+      return feature.geometry.coordinates as number[];
+    }
+    if (properties?.centroid?.coordinates && Array.isArray(properties.centroid.coordinates)) {
+      return properties.centroid.coordinates as number[];
+    }
+    return undefined;
+  }
+
+  // Helper to create marker container
+  private createMarkerContainer(): HTMLDivElement {
+    const markerContainer = document.createElement('div');
+    markerContainer.style.display = 'flex';
+    markerContainer.style.flexDirection = 'column';
+    markerContainer.style.alignItems = 'center';
+    markerContainer.style.cursor = 'pointer';
+    return markerContainer;
+  }
+
+  // Helper to create marker element
+  private createMarkerElement(iconPath: string, colorHex: string): HTMLDivElement {
+    const markerEl = document.createElement('div');
+    markerEl.style.width = '24px';
+    markerEl.style.height = '24px';
+
+    if (colorHex && iconPath.includes('.svg')) {
+      fetch(iconPath)
+        .then(response => response.text())
+        .then(svgText => {
+          const modifiedSvg = svgText.replace(
+            /(class="st1"[^>]*>)/,
+            `$1<style>.st1{fill:${colorHex}!important;}</style>`
+          );
+          const blob = new Blob([modifiedSvg], { type: 'image/svg+xml' });
+          const url = URL.createObjectURL(blob);
+          markerEl.style.backgroundImage = `url(${url})`;
+          markerEl.style.backgroundSize = 'contain';
+          markerEl.style.backgroundRepeat = 'no-repeat';
+          markerEl.style.backgroundPosition = 'center';
+        })
+        .catch(() => {
+          markerEl.style.backgroundImage = `url(${iconPath})`;
+          markerEl.style.backgroundSize = 'contain';
+          markerEl.style.backgroundRepeat = 'no-repeat';
+          markerEl.style.backgroundPosition = 'center';
+        });
+    } else {
+      markerEl.style.backgroundImage = `url(${iconPath})`;
+      markerEl.style.backgroundSize = 'contain';
+      markerEl.style.backgroundRepeat = 'no-repeat';
+      markerEl.style.backgroundPosition = 'center';
+    }
+    return markerEl;
+  }
+
+  // Helper to create label element
+  private createLabelElement(
+    properties: PlaceFeature['properties'],
+    colorHex: string
+  ): HTMLDivElement {
+    const labelEl = document.createElement('div');
+    labelEl.textContent = this.getTranslatedBuildingName(properties.name);
+    labelEl.style.fontSize = '16px';
+    labelEl.style.fontWeight = '400';
+    labelEl.style.letterSpacing = '1px';
+    if ((properties.type || '').toLowerCase() === 'assembly_point') {
+      labelEl.style.color = '#358540';
+    } else {
+      labelEl.style.color = colorHex || '#0088c6';
+    }
+    labelEl.style.textShadow =
+      '-1px -1px 1px #ffffffff, 1px 1px 1px #ffffffff, -1px 1px 1px #ffffffff, 1px -1px 1px #ffffffff';
+    labelEl.style.textAlign = 'center';
+    labelEl.style.marginTop = '4px';
+    labelEl.style.whiteSpace = 'nowrap';
+    labelEl.style.pointerEvents = 'none';
+    labelEl.style.display = 'none';
+    return labelEl;
+  }
+
+  // Helper to handle marker click
+  private handleMarkerClick(properties: PlaceFeature['properties']): void {
+    const rawType = (properties.typeCode || properties.type || '').toString().toLowerCase().trim();
+    if (rawType === 'building' || rawType === 'parking') {
+      this.placeSelected.emit({
+        name: properties.name,
+        type: rawType,
+        imageUrl: properties.imageUrl || '',
+        images: (properties.images || []).map(imgObj => ({
+          id: imgObj.id,
+          img: imgObj.img
+        }))
+      });
+    } else {
+      console.debug(
+        'Marker click sin popup. typeCode:',
+        properties.typeCode,
+        'type:',
+        properties.type
+      );
     }
   }
 

@@ -33,21 +33,42 @@ export class Map {
 
   private readonly geolocationService = inject(GeolocationService);
 
-  selectedPlace = signal({
+  selectedPlace = signal<{
+    name: string;
+    type: string;
+    imageUrl: string;
+    images: { id: number; img: string }[];
+    isVisible: boolean;
+  }>({
     name: '',
     type: '',
     imageUrl: '',
+    images: [],
     isVisible: false
   });
 
   isTransportSelectorVisible = signal(false);
 
-  onPlaceSelected(place: { name: string; type: string; imageUrl: string }): void {
+  onPlaceSelected(place: {
+    name: string;
+    type: string;
+    imageUrl: string;
+    images?: { id: number; img: string }[];
+  }): void {
+    // Convert image path to absolute if needed
     this.selectedPlace.set({
       ...place,
+      images:
+        place.images?.map(imgObj => ({
+          id: imgObj.id,
+          img: imgObj.img.startsWith('http')
+            ? imgObj.img
+            : 'https://1hz14f3vx1.execute-api.us-east-1.amazonaws.com/' +
+              imgObj.img.replace(/^\//, '')
+        })) ?? [],
       isVisible: true
     });
-    // Hide transport selector when a new place is selected
+    // Hide transport selector when new place selected
     this.isTransportSelectorVisible.set(false);
   }
 
@@ -56,19 +77,23 @@ export class Map {
   }
 
   onVisibleChange(visible: boolean): void {
-    this.selectedPlace.update(place => ({ ...place, isVisible: visible }));
+    this.selectedPlace.update(place => ({
+      ...place,
+      isVisible: visible
+    }));
   }
 
   onMapClicked(): void {
-    this.selectedPlace.update(place => ({ ...place, isVisible: false }));
+    this.selectedPlace.update(place => ({
+      ...place,
+      isVisible: false
+    }));
     this.isTransportSelectorVisible.set(false);
   }
 
   onLocationSelected(place: PlaceFeature): void {
-    // Navigate to the centroid coordinates
     if (place.properties?.centroid?.coordinates) {
       const coords = place.properties.centroid.coordinates;
-      // Ensure coordinates are a point [lng, lat]
       if (
         Array.isArray(coords) &&
         coords.length >= 2 &&
@@ -77,18 +102,16 @@ export class Map {
       ) {
         const [lng, lat] = coords as [number, number];
         this.mapLoad()?.flyToLocation(lng, lat);
-        console.log('Navigating to:', place.properties.name, [lng, lat]);
       }
     }
   }
 
   async onCenterOnUserLocation(): Promise<void> {
-    // If not tracking, request permission and start tracking
+    // Check if tracking is enabled
     if (!this.geolocationService.isTracking()) {
       await this.mapLoad()?.enableLocationTracking();
     }
-
-    // Center on user location if available
+    // Center map on user location
     const position = this.geolocationService.currentPosition();
     if (position) {
       this.mapLoad()?.flyToLocation(position.longitude, position.latitude, 19);

@@ -1,53 +1,61 @@
 <!-- Bottom container showing detailed information of the selected site -->
 @if (isVisible()) {
   <div
-    class="absolute bottom-0 w-screen lg:w-1/3 px-4 md:px-8 lg:px-4 pt-4 bg-white rounded-t-lg z-3 animate-slide-up">
+    class="fixed bottom-0 left-0 w-full max-w-full md:max-w-2xl lg:max-w-xl mx-auto px-4 md:px-8 lg:px-4 pt-4 bg-white rounded-t-lg z-30 animate-slide-up shadow-lg">
     <div class="flex flex-col h-full">
       <!-- Point of interest titles -->
       <div class="flex flex-col">
         <p
-          class="font-semibold text-(length:--font-size-2xl) leading-(length:--line-height-2xl) md:text-(length:--font-size-4xl) md:leading-(length:--line-height-4xl) lg:text-(length:--font-size-xl) lg:leading-(length:--line-height-xl)">
+          class="font-semibold text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
           {{ placeName() || 'Sin nombre' }}
         </p>
         <p
-          class="text-gray-600 text-(length:--font-size-2xl) leading-(length:--line-height-2xl) md:text-(length:--font-size-4xl) md:leading-(length:--line-height-4xl) lg:text-(length:--font-size-xl) lg:leading-(length:--line-height-xl)">
+          class="text-gray-600 text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
           {{ placeType() || ('InformationPopUp.building' | translate) }}
         </p>
       </div>
-
       <!-- Related images section -->
-      <div
-        class="flex w-full h-full justify-center gap-4 md:gap-8 my-4 md:my-8 lg:my-4 px-2 md:px-4">
+      <div class="flex w-full justify-center gap-4 md:gap-8 my-4 md:my-8 lg:my-4 px-2 md:px-4">
         @if (imageUrl()) {
           <img
             [src]="imageUrl()"
             alt="prueba"
             [attr.alt]="placeName()"
-            class="w-full h-full rounded-lg object-cover" />
+            class="w-full h-40 md:h-64 lg:h-72 rounded-lg object-cover ng-optimized-image"
+            priority />
         }
-        @if (!imageUrl()) {
+        @if (!imageUrl() && images().length) {
+          @for (img of images(); track img.id) {
+            <img
+              [src]="img.img"
+              [attr.alt]="placeName() || ('InformationPopUp.alt' | translate)"
+              title="{{ placeName() || ('InformationPopUp.alt' | translate) }}"
+              class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover"
+              priority />
+          }
+        }
+        @if (!imageUrl() && !images().length) {
           <img
             src="assets/images/rs.webp"
             alt="prueba"
             [attr.alt]="'InformationPopUp.Alt' | translate"
-            class="w-1/2 h-full rounded-lg object-cover" />
+            class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
           <img
             src="assets/images/sostenibilidad.webp"
             alt="prueba"
             [attr.alt]="'InformationPopUp.Alt' | translate"
-            class="w-1/2 h-full rounded-lg object-cover" />
+            class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
         }
       </div>
-
       <!-- Button to open transport button selector -->
       <div class="flex h-full justify-center items-center mb-4 md:mb-8">
         <button
           (click)="openTransportSelector()"
           pButton
-          class="flex justify-center items-center w-55 md:w-80 lg:w-45 h-12 md:h-16 lg:h-10 shadow-[4px_4px_5px_rgba(0,0,0,0.3)] text-center rounded-lg">
+          class="flex justify-center items-center w-44 md:w-80 lg:w-56 h-12 md:h-16 lg:h-12 shadow-lg text-center rounded-lg">
           <span
             pButtonLabel
-            class="font-medium text-white text-center text-(length:--font-size-2xl) leading-(length:--line-height-2xl) md:text-(length:--font-size-4xl) md:leading-(length:--line-height-4xl) lg:text-(length:--font-size-xl) lg:leading-(length:--line-height-xl)">
+            class="font-medium text-white text-center text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
             {{ 'InformationPopUp.howToGet' | translate }}
           </span>
         </button>

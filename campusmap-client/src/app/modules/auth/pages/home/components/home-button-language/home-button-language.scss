@@ -5,7 +5,7 @@
 :host ::ng-deep .p-selectbutton .p-togglebutton {
   width: 150px;
   height: 55px;
-  font-size: var(--font-size-2xl);
+  font-size: 1.5rem;
   font-weight: 500;
   box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
   background-color: #e5e5e5;
@@ -24,7 +24,7 @@
   :host ::ng-deep .p-selectbutton .p-togglebutton {
     width: 200px;
     height: 75px;
-    font-size: var(--font-size-5xl);
+    font-size: 3rem;
   }
 }
 
@@ -32,6 +32,6 @@
   :host ::ng-deep .p-selectbutton .p-togglebutton {
     width: 140px;
     height: 65px;
-    font-size: var(--font-size-3xl);
+    font-size: 1.875rem;
   }
 }

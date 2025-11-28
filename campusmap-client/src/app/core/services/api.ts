@@ -7,7 +7,7 @@ import { FeatureCollection } from '../models/place.model';
   providedIn: 'root'
 })
 export class Api {
-  private readonly apiUrl = 'https://1hz14f3vx1.execute-api.us-east-1.amazonaws.com';
+  private readonly apiUrl = 'https://1hz14f3vx1.execute-api.us-east-1.amazonaws.com/';
 
   private readonly http = inject(HttpClient);
 
@@ -22,7 +22,7 @@ export class Api {
   }
 
   //Gets places filtered by type example: 'building', 'parking'
-  getPlacesByType(typeCode: string): Observable<FeatureCollection> {
-    return this.http.get<FeatureCollection>(`${this.apiUrl}/api/v1/places/type/${typeCode}`);
-  }
+    getPlacesByType(typeCode: string): Observable<FeatureCollection> {
+      return this.http.get<FeatureCollection>(`${this.apiUrl}/api/v1/sites/type/${typeCode}`);
+    }
 }
