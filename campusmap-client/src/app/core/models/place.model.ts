@@ -16,6 +16,7 @@ export interface PlaceProperties {
   icon?: string;
   color?: string | null;
   centroid: Geometry;
+  images?: { id: number; img: string }[]; // Agregado para soportar imágenes
 }
 
 // Represents a single geographic feature with geometry and properties

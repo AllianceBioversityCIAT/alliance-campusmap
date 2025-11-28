@@ -84,7 +84,6 @@ export class SearchBar implements OnInit {
 
     // Emit event with selected place
     this.locationSelected.emit(place);
-    console.log('Selected place:', place);
   }
 
   private loadHistory() {

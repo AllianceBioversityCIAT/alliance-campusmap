@@ -1,6 +1,6 @@
 :host ::ng-deep .p-button {
   background: var(--background-blue);
-  font-size: var(--font-size-2xl);
+  font-size: 1.5rem;
   color: white;
   border: none;
 }
@@ -30,12 +30,12 @@
 
 @media (width >= 48rem) {
   :host ::ng-deep .p-button {
-    font-size: var(--font-size-4xl);
+    font-size: 2.25rem;
   }
 }
 
 @media (width >= 64rem) {
   :host ::ng-deep .p-selectbutton .p-togglebutton {
-    font-size: var(--font-size-2xl);
+    font-size: 1.5rem;
   }
 }

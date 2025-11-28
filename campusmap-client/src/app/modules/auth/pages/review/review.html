@@ -1,20 +1,16 @@
 <div
   class="flex flex-col h-screen justify-center items-center bg-[url(/assets/images/map.webp)] bg-center bg-no-repeat bg-cover">
   <div class="flex flex-col gap-20 text-center mb-10">
-    <p class="font-bold text-(length:--font-size-3xl) leading-(length:--line-height-3xl)">
+    <p class="font-bold text-3xl leading-9">
       {{ 'Review.title' | translate }}
     </p>
-    <p class="text-(length:--font-size-2xl) leading-(length:--line-height-2xl)">
+    <p class="text-2xl leading-8">
       {{ 'Review.subtitle' | translate }}
     </p>
   </div>
   <div class="flex flex-col justify-center items-center">
-    <p-toast />
     <div class="flex justify-center items-center">
-      <form
-        #exampleForm="ngForm"
-        (ngSubmit)="onSubmit(exampleForm)"
-        class="flex flex-col flex-auto gap-4">
+      <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="flex flex-col flex-auto gap-4">
         <div class="flex flex-col items-center mb-20">
           <p-rating
             #ratingValue="ngModel"
@@ -25,7 +21,7 @@
             class="flex justify-center">
           </p-rating>
           <p-message
-            *ngIf="exampleForm.submitted && value() === null"
+            *ngIf="form.submitted && value() === null"
             severity="error"
             size="large"
             variant="simple">
@@ -39,22 +35,14 @@
             severity="secondary"
             type="button"
             class="w-30 h-13 shadow-[4px_4px_5px_rgba(0,0,0,0.3)]">
-            <span
-              pButtonLabel
-              class="text-(length:--font-size-2xl) leading-(length:--line-height-2xl)"
-              >{{ 'Review.cancel' | translate }}</span
-            >
+            <span pButtonLabel class="text-2xl leading-8">{{ 'Review.cancel' | translate }}</span>
           </button>
           <button
             pButton
             severity="primary"
             type="submit"
             class="w-30 h-13 shadow-[4px_4px_5px_rgba(0,0,0,0.3)]">
-            <span
-              pButtonLabel
-              class="text-(length:--font-size-2xl) leading-(length:--line-height-2xl)"
-              >{{ 'Review.submit' | translate }}</span
-            >
+            <span pButtonLabel class="text-2xl leading-8">{{ 'Review.submit' | translate }}</span>
           </button>
         </div>
       </form>

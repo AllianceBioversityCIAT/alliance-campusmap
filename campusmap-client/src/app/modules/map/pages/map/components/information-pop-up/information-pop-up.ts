@@ -14,6 +14,7 @@ export class InformationPopUp {
   placeName = input('');
   placeType = input('');
   imageUrl = input('');
+  images = input<{ id: number; img: string }[]>([]); // Input para el array de imágenes con id y url
   isVisible = input(false);
   visibleChange = output<boolean>();
   showTransportSelector = output<void>();
