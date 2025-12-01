@@ -16,17 +16,20 @@ export class SitesPropertiesDto {
   /** Name of the site */
   @ApiProperty({ example: 'Main Building Bathroom', description: 'Site name' })
   name: string;
-  
+
   /** Type code of the site (e.g., "bathroom", "assembly-point") */
   @ApiProperty({ example: 'bathroom', description: 'Site type code' })
   type: string;
-  
+
   /** Name of the place where this site is located */
   @ApiProperty({ example: 'Building A', description: 'Associated place name' })
   place: string;
-  
+
   /** Icon identifier for map display */
-  @ApiProperty({ example: 'bathroom-icon.svg', description: 'Icon path or identifier' })
+  @ApiProperty({
+    example: 'bathroom-icon.svg',
+    description: 'Icon path or identifier',
+  })
   icon: string;
 }
 
@@ -53,6 +56,9 @@ export class PlaceFeatureDto {
   geometry: GeometryDto;
 
   /** Site properties and metadata */
-  @ApiProperty({ type: () => SitesPropertiesDto, description: 'Site properties' })
+  @ApiProperty({
+    type: () => SitesPropertiesDto,
+    description: 'Site properties',
+  })
   properties: SitesPropertiesDto;
 }

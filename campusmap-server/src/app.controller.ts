@@ -26,7 +26,10 @@ export class AppController {
    * @returns {string} Health status message
    */
   @Get('/health')
-  @ApiOperation({ summary: 'Health check endpoint', description: 'Returns server health status' })
+  @ApiOperation({
+    summary: 'Health check endpoint',
+    description: 'Returns server health status',
+  })
   getHello(): string {
     return this.appService.getHello();
   }

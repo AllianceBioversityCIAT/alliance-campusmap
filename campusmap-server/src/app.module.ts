@@ -65,15 +65,18 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
         ttl: 60000,
         limit: 100,
       },
-    ])
+    ]),
   ],
 
   controllers: [AppController],
-  providers: [AppService, AppLoggerService, {
+  providers: [
+    AppService,
+    AppLoggerService,
+    {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
-    },],
-  
+    },
+  ],
 })
 export class AppModule implements NestModule {
   /**
