@@ -7,11 +7,11 @@
       <div class="flex flex-col">
         <p
           class="font-semibold text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
-          {{ placeName() || 'Sin nombre' }}
+          {{ 'Buildings.' + placeName() | translate: {} : placeName() }}
         </p>
         <p
           class="text-gray-600 text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
-          {{ placeType() || ('InformationPopUp.building' | translate) }}
+          {{ 'InformationPopUp.' + placeType() | translate }}
         </p>
       </div>
       <!-- Related images section -->
@@ -48,7 +48,7 @@
         }
       </div>
       <!-- Button to open transport button selector -->
-      <div class="flex h-full justify-center items-center mb-4 md:mb-8">
+      <div class="flex h-full justify-center items-center mb-4">
         <button
           (click)="openTransportSelector()"
           pButton
