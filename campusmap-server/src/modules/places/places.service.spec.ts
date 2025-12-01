@@ -44,7 +44,7 @@ describe('PlacesService', () => {
 
     expect(repo.find).toHaveBeenCalledWith({
       relations: ['type', 'units', 'images'],
-      where: [{}],
+      where: undefined,
     });
     expect(mapperSpy).toHaveBeenCalledWith(filas, 'All Places');
   });
