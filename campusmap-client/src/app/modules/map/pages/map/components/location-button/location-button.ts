@@ -12,7 +12,7 @@ import { GeolocationService } from '../../../../../../core/services/geolocation.
       (click)="onCenterLocation()"
       [attr.aria-label]="'Center on my location'"
       [attr.title]="'Center on my location'"
-      class="w-12 h-12 md:w-16 md:h-16 bg-white rounded-full shadow-[0_0_0_2px_rgba(0,0,0,0.1)] hover:bg-gray-100 flex items-center justify-center relative">
+      class="w-12 h-12 md:w-16 md:h-16 bg-white rounded-full shadow-[0_0_0_2px_rgba(0,0,0,0.1)] flex items-center justify-center relative">
       <!-- Location Icon -->
       <svg
         class="w-6 h-6 md:w-8 md:h-8"

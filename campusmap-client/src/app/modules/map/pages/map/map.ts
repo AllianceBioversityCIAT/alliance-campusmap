@@ -28,8 +28,17 @@ import { GeolocationService } from '../../../../core/services/geolocation.servic
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Map {
+  // Cierra el popup al abrir el filtro
+  onOpenFilter(): void {
+    this.selectedPlace.update(place => ({
+      ...place,
+      isVisible: false
+    }));
+    this.isTransportSelectorVisible.set(false);
+  }
   mapLoad = viewChild.required<MapLoad>(MapLoad);
   informationPopUp = viewChild.required<InformationPopUp>(InformationPopUp);
+  filterControls = viewChild.required<FilterControls>(FilterControls);
 
   private readonly geolocationService = inject(GeolocationService);
 
@@ -89,6 +98,8 @@ export class Map {
       isVisible: false
     }));
     this.isTransportSelectorVisible.set(false);
+    // Cierra el filtro si está abierto
+    this.filterControls()?.close();
   }
 
   onLocationSelected(place: PlaceFeature): void {

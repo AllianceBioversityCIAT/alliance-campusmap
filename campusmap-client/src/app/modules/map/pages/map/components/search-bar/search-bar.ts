@@ -27,7 +27,7 @@ export class SearchBar implements OnInit {
   searchHistory = signal<PlaceFeature[]>([]);
 
   ngOnInit() {
-    // Load all places from the API
+    // Here we get all places from the API when the component loads
     this.apiService.getAllPlaces().subscribe({
       next: data => {
         this.allPlaces.set(data.features);
@@ -37,39 +37,55 @@ export class SearchBar implements OnInit {
       }
     });
 
-    // Load history from localStorage
+    // We also load the search history from localStorage
     this.loadHistory();
   }
 
   toggleList() {
+    // This just toggles the dropdown list open or closed
     this.isOpen.update(value => !value);
   }
 
+  private searchTimeout: ReturnType<typeof setTimeout> | undefined = undefined;
+
   onInputChange(newValue: string) {
     this.searchQuery.set(newValue);
-    // If less than 3 characters, show history
-    if (newValue.length < 3) {
+    // If the query is less than 3 characters, just show the history and don't search
+    if (newValue.length < 2) {
       this.filteredPlaces.set([]);
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout);
+      }
       return;
     }
 
-    // Filter places by name (from 3 characters onwards)
-    const query = newValue.toLowerCase();
-    this.filteredPlaces.set(
-      this.allPlaces().filter(place => place.properties.name.toLowerCase().includes(query))
-    );
+    // Debounce: wait 300ms before searching so we don't spam the backend
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    this.searchTimeout = setTimeout(() => {
+      this.apiService.searchPlaces(newValue).subscribe({
+        next: data => {
+          this.filteredPlaces.set(data.features);
+        },
+        error: error => {
+          console.error('Error searching places:', error);
+          this.filteredPlaces.set([]);
+        }
+      });
+    }, 300);
   }
 
   onFocus() {
     this.isOpen.set(true);
-    // If no active search, show only history
-    if (this.searchQuery().length < 3) {
+    // If there is no active search, just show the history
+    if (this.searchQuery().length < 2) {
       this.filteredPlaces.set([]);
     }
   }
 
   onBlur() {
-    // Delay to allow clicking on an element
+    // We delay closing so the user can click on a result
     setTimeout(() => {
       this.isOpen.set(false);
     }, 200);
@@ -79,14 +95,15 @@ export class SearchBar implements OnInit {
     this.searchQuery.set(place.properties.name);
     this.isOpen.set(false);
 
-    // Save to history
+    // Add the selected place to the history
     this.addToHistory(place);
 
-    // Emit event with selected place
+    // Emit the event with the selected place
     this.locationSelected.emit(place);
   }
 
   private loadHistory() {
+    // This loads the search history from localStorage
     try {
       const historyJson = localStorage.getItem(HISTORY_KEY);
       if (historyJson) {
@@ -100,26 +117,26 @@ export class SearchBar implements OnInit {
 
   private addToHistory(place: PlaceFeature) {
     const currentHistory = this.searchHistory();
-    // Check if the place is already in history
+    // See if the place is already in the history
     const existingIndex = currentHistory.findIndex(item => item.id === place.id);
 
     let newHistory = [...currentHistory];
-    // If it exists, move it to the beginning
+    // If it is, move it to the front
     if (existingIndex > -1) {
       newHistory.splice(existingIndex, 1);
     }
 
-    // Add to the beginning
+    // Add the new place to the front
     newHistory.unshift(place);
 
-    // Keep only the last MAX_HISTORY_ITEMS
+    // Only keep the last MAX_HISTORY_ITEMS
     if (newHistory.length > MAX_HISTORY_ITEMS) {
       newHistory = newHistory.slice(0, MAX_HISTORY_ITEMS);
     }
 
     this.searchHistory.set(newHistory);
 
-    // Save to localStorage
+    // Save the updated history to localStorage
     try {
       localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
     } catch (error) {
@@ -128,11 +145,11 @@ export class SearchBar implements OnInit {
   }
 
   get displayedItems(): PlaceFeature[] {
-    // If active search (3+ characters), show filtered results
+    // If there is an active search (3+ characters), show the filtered results
     if (this.searchQuery().length >= 3) {
       return this.filteredPlaces();
     }
-    // Otherwise, show history
+    // Otherwise, just show the history
     return this.searchHistory();
   }
 }

@@ -1,15 +1,9 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, output } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { MapFilterService } from '../../../../../../core/services/map-filter.service';
 
-type FilterKey =
-  | 'building'
-  | 'parking'
-  | 'bathroom'
-  | 'cafeteria'
-  | 'assembly-point'
-  | 'warehouse';
+type FilterKey = 'building' | 'parking' | 'bathroom' | 'cafeteria' | 'assembly-point' | 'warehouse';
 
 const FILTER_DEFS: readonly {
   key: FilterKey;
@@ -19,8 +13,16 @@ const FILTER_DEFS: readonly {
   { key: 'building', i18nKey: 'Map.filters.buildings', src: 'assets/icons/mapPage/building.svg' },
   { key: 'parking', i18nKey: 'Map.filters.parking', src: 'assets/icons/mapPage/parking.svg' },
   { key: 'bathroom', i18nKey: 'Map.filters.bathrooms', src: 'assets/icons/mapPage/bath.svg' },
-  { key: 'cafeteria', i18nKey: 'Map.filters.cafeterias', src: 'assets/icons/mapPage/cafeteria.svg' },
-  { key: 'assembly-point', i18nKey: 'Map.filters.assemblyPoint', src: 'assets/icons/mapPage/assembly_point.svg' },
+  {
+    key: 'cafeteria',
+    i18nKey: 'Map.filters.cafeterias',
+    src: 'assets/icons/mapPage/cafeteria.svg'
+  },
+  {
+    key: 'assembly-point',
+    i18nKey: 'Map.filters.assemblyPoint',
+    src: 'assets/icons/mapPage/assembly_point.svg'
+  },
   { key: 'warehouse', i18nKey: 'Map.filters.warehouse', src: 'assets/icons/mapPage/warehouse.svg' }
 ];
 
@@ -32,6 +34,8 @@ const FILTER_DEFS: readonly {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterControls {
+  // Output para notificar al padre cuando se abre el filtro
+  readonly openFilter = output<void>();
   private readonly mapFilterService = inject(MapFilterService);
 
   //Checks if the filter panel is visible
@@ -42,7 +46,17 @@ export class FilterControls {
 
   // Changes the status of the panel when the user presses the main button
   toggle() {
+    const wasOpen = this.open();
     this.open.update(value => !value);
+    if (!wasOpen) {
+      // Si se va a abrir el filtro, notifica al padre
+      this.openFilter.emit();
+    }
+  }
+
+  // Permite cerrar el filtro desde el padre
+  close() {
+    this.open.set(false);
   }
 
   // Handle filter selection

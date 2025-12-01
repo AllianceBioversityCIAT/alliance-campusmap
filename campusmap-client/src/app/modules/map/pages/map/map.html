@@ -5,12 +5,12 @@
 <!-- Floating search bar. Allows you to write and select results -->
 <app-search-bar (locationSelected)="onLocationSelected($event)"></app-search-bar>
 <!-- Filter controls. They show options to adjust the view or results -->
-<app-filter-controls></app-filter-controls>
+<app-filter-controls (openFilter)="onOpenFilter()"></app-filter-controls>
 <!-- SOS button. In case of emergency, go to the nearest meeting point -->
 <app-sos-button></app-sos-button>
 <!-- Location button. Center map on user location -->
 <div
-  class="absolute top-54 md:top-59 right-4 md:right-8 z-2 flex flex-col items-end select-none mt-20">
+  class="absolute top-54 md:top-59 right-4 md:right-8 z-1 flex flex-col items-end select-none mt-20">
   <app-location-button (centerOnLocation)="onCenterOnUserLocation()"></app-location-button>
 </div>
 <!-- Popup for buildings -->
