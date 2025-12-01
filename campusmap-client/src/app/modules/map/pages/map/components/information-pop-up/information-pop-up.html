@@ -25,7 +25,7 @@
             priority />
         }
         @if (!imageUrl() && images().length) {
-          @for (img of images(); track img.id) {
+          @for (img of images().slice(0, 2); track img.id) {
             <img
               [src]="img.img"
               [attr.alt]="placeName() || ('InformationPopUp.alt' | translate)"
