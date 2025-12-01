@@ -265,7 +265,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       return;
     }
 
-    // Si no hay filtro, mostrar buildings, parking y assembly_point juntos
+    // Si no hay filtro, mostrar buildings, parking y assembly-point juntos
     // buildings y parking
     this.api.getAllPlaces().subscribe({
       next: (data: FeatureCollection) => {
@@ -277,8 +277,8 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         console.error('Error loading places:', error);
       }
     });
-    // assembly_point
-    this.api.getPlacesByType('assembly_point').subscribe({
+    // assembly-point
+    this.api.getSitesByType('assembly-point').subscribe({
       next: (data: FeatureCollection) => {
         if (data?.features && Array.isArray(data.features)) {
           this.addCentroidsToMap(data.features);
@@ -322,7 +322,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     }
   }
 
-  //Get icon path for assembly_point from API
+  //Get icon path for assembly-point from API
   private getIconForPlace(properties: PlaceFeature['properties']): string {
     if (properties.type === 'assembly_point') {
       return 'https://1hz14f3vx1.execute-api.us-east-1.amazonaws.com/public/icons/assembly_point.svg';
@@ -420,7 +420,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private getFeatureCoordinates(feature: PlaceFeature): number[] | undefined {
     const properties = feature.properties;
     if (
-      (properties.type || '').toLowerCase() === 'assembly_point' &&
+      (properties.type || '').toLowerCase() === 'assembly-point' &&
       feature.geometry?.coordinates
     ) {
       return feature.geometry.coordinates as number[];
@@ -487,7 +487,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     labelEl.style.fontSize = '16px';
     labelEl.style.fontWeight = '400';
     labelEl.style.letterSpacing = '1px';
-    if ((properties.type || '').toLowerCase() === 'assembly_point') {
+    if ((properties.type || '').toLowerCase() === 'assembly-point') {
       labelEl.style.color = '#358540';
     } else {
       labelEl.style.color = colorHex || '#0088c6';
