@@ -81,7 +81,11 @@ export class FeatureDto<T = any> {
   @ApiProperty({ description: 'Custom properties for the feature' })
   properties: T;
 
-  @ApiProperty({ example: 1, required: false, description: 'Optional feature identifier' })
+  @ApiProperty({
+    example: 1,
+    required: false,
+    description: 'Optional feature identifier',
+  })
   id?: number | string;
 }
 
@@ -97,12 +101,22 @@ export class FeatureDto<T = any> {
  * @property features - Array of Feature objects with properties of type T
  */
 export class FeatureCollectionDto<T = any> {
-  @ApiProperty({ example: 'FeatureCollection', description: 'GeoJSON collection type' })
+  @ApiProperty({
+    example: 'FeatureCollection',
+    description: 'GeoJSON collection type',
+  })
   type = 'FeatureCollection' as const;
-  
-  @ApiProperty({ example: 'Places', description: 'Name of the feature collection' })
+
+  @ApiProperty({
+    example: 'Places',
+    description: 'Name of the feature collection',
+  })
   name: string;
-  
-  @ApiProperty({ type: [FeatureDto], isArray: true, description: 'Array of GeoJSON features' })
+
+  @ApiProperty({
+    type: [FeatureDto],
+    isArray: true,
+    description: 'Array of GeoJSON features',
+  })
   features: FeatureDto<T>[];
 }
