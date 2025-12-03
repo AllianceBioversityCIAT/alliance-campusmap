@@ -99,7 +99,7 @@ export class Map implements OnInit {
 
   isTransportSelectorVisible = signal(false);
   ngOnInit(): void {
-    // Cargar ubicación automáticamente al entrar en /map
+    // Automatically load location when entering /map
     this.onCenterOnUserLocation();
   }
 
@@ -143,7 +143,7 @@ export class Map implements OnInit {
       isVisible: false
     }));
     this.isTransportSelectorVisible.set(false);
-    // Cierra el filtro si está abierto
+    // Close the filter if it is open
     this.filterControls()?.close();
   }
 
