@@ -15,10 +15,9 @@ import { InformationPopUpParking } from './components/information-pop-up-parking
 import { TransportButtonSelector } from './components/transport-button-selector/transport-button-selector';
 import { SosButton } from './components/sos-button/sos-button';
 import { LocationButton } from './components/location-button/location-button';
-import { PlaceFeature } from '../../../../core/models/place.model';
+import { PlaceFeature, FeatureCollection } from '../../../../core/models/place.model';
 import { GeolocationService } from '../../../../core/services/geolocation.service';
 import { Api } from '../../../../core/services/api';
-import { FeatureCollection } from '../../../../core/models/place.model';
 @Component({
   selector: 'app-map',
   imports: [
