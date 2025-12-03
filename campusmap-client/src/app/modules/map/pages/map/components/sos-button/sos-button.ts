@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, output } from '@angular/core';
 
 @Component({
   selector: 'app-sos-button',
@@ -7,4 +7,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   styleUrl: './sos-button.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SosButton {}
+export class SosButton {
+  sosClicked = output<void>();
+  onClick(): void {
+    this.sosClicked.emit();
+  }
+}
