@@ -8,13 +8,21 @@ export class PlacePropertiesDto {
   @ApiProperty({ example: 'Edificio Principal' })
   name: string;
 
-  @ApiProperty({ isArray: true, type: () => Object, description: 'Unidades asociadas al lugar' })
+  @ApiProperty({
+    isArray: true,
+    type: () => Object,
+    description: 'Unidades asociadas al lugar',
+  })
   units?: { id: number; name: string }[];
 
-  @ApiProperty({ example: "building" })
+  @ApiProperty({ example: 'building' })
   type?: string;
 
-  @ApiProperty({ isArray: true, type: () => Object, description: 'Imagenes asociadas al lugar' })
+  @ApiProperty({
+    isArray: true,
+    type: () => Object,
+    description: 'Imagenes asociadas al lugar',
+  })
   images?: { id: number; img: string }[];
   @ApiProperty({ example: 'public/icon/building.svg' })
   icon: string;

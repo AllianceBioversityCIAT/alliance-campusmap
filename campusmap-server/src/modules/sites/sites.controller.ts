@@ -26,11 +26,14 @@ export class SitesController {
    * @returns {Promise<FeatureCollectionDto<SitesPropertiesDto>>} FeatureCollection with all sites.
    */
   @Get()
-  @ApiOperation({ summary: 'Get all sites', description: 'Returns all sites as a GeoJSON FeatureCollection.' })
+  @ApiOperation({
+    summary: 'Get all sites',
+    description: 'Returns all sites as a GeoJSON FeatureCollection.',
+  })
   async getAllSites(): Promise<FeatureCollectionDto<SitesPropertiesDto>> {
     return SiteMapper.toFeatureCollection(
       await this.sitesService.getAllSites(),
-      'All Sites'
+      'All Sites',
     );
   }
 
@@ -43,7 +46,11 @@ export class SitesController {
    * @returns {Promise<FeatureCollectionDto<SitesPropertiesDto>>} FeatureCollection with filtered sites.
    */
   @Get('type/:code')
-  @ApiOperation({ summary: 'Get sites by type', description: 'Returns sites filtered by type code as a GeoJSON FeatureCollection.' })
+  @ApiOperation({
+    summary: 'Get sites by type',
+    description:
+      'Returns sites filtered by type code as a GeoJSON FeatureCollection.',
+  })
   @ApiParam({
     name: 'code',
     type: String,
@@ -51,11 +58,11 @@ export class SitesController {
     example: 'assembly point',
   })
   async getSitesByTypeCode(
-    @Param('code') code: string
+    @Param('code') code: string,
   ): Promise<FeatureCollectionDto<SitesPropertiesDto>> {
     return SiteMapper.toFeatureCollection(
       await this.sitesService.getSiteByTypeCode(code),
-      `Sites of type ${code}`
+      `Sites of type ${code}`,
     );
   }
 }

@@ -1,4 +1,11 @@
-import { Component, viewChild, signal, ChangeDetectionStrategy, inject } from '@angular/core';
+import {
+  Component,
+  viewChild,
+  signal,
+  ChangeDetectionStrategy,
+  inject,
+  OnInit
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapLoad } from './components/map-load/map-load';
 import { SearchBar } from './components/search-bar/search-bar';
@@ -8,23 +15,9 @@ import { InformationPopUpParking } from './components/information-pop-up-parking
 import { TransportButtonSelector } from './components/transport-button-selector/transport-button-selector';
 import { SosButton } from './components/sos-button/sos-button';
 import { LocationButton } from './components/location-button/location-button';
-import { PlaceFeature } from '../../../../core/models/place.model';
+import { PlaceFeature, FeatureCollection } from '../../../../core/models/place.model';
 import { GeolocationService } from '../../../../core/services/geolocation.service';
-interface PlacePopupData {
-  name: string;
-  type: string;
-  imageUrl: string;
-  images: { id: number; img: string }[];
-  isVisible: boolean;
-}
-
-interface PlaceInput {
-  name: string;
-  type: string;
-  imageUrl: string;
-  images?: { id: number; img: string }[];
-}
-
+import { Api } from '../../../../core/services/api';
 @Component({
   selector: 'app-map',
   imports: [
@@ -42,7 +35,41 @@ interface PlaceInput {
   styleUrls: ['./map.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Map {
+export class Map implements OnInit {
+  private readonly api: Api = inject(Api);
+  // Encuentra el assemblyPoint más cercano y hace flyTo
+  async onSosClicked(): Promise<void> {
+    const userPosition = this.geolocationService.currentPosition();
+    if (!userPosition) return;
+    // Obtener todos los assembly points
+    this.api.getSitesByType('assembly-point').subscribe({
+      next: (data: FeatureCollection) => {
+        if (!data?.features?.length) return;
+        let minDistance = Number.POSITIVE_INFINITY;
+        let nearest: { lng: number; lat: number } | null = null;
+        for (const feature of data.features) {
+          const coords = feature.geometry?.coordinates;
+          if (Array.isArray(coords) && coords.length >= 2) {
+            const [lng, lat] = coords as [number, number];
+            const dist = this.geolocationService.calculateDistance(
+              userPosition.latitude,
+              userPosition.longitude,
+              lat,
+              lng
+            );
+            if (dist < minDistance) {
+              minDistance = dist;
+              nearest = { lng, lat };
+            }
+          }
+        }
+        if (nearest) {
+          this.mapLoad()?.flyToLocation(nearest.lng, nearest.lat, 19);
+        }
+      }
+    });
+  }
+  // Cierra el popup al abrir el filtro
   onOpenFilter(): void {
     this.selectedPlace.update((place: PlacePopupData) => ({
       ...place,
@@ -65,7 +92,11 @@ export class Map {
     isVisible: false
   });
 
-  isTransportSelectorVisible = signal<boolean>(false);
+  isTransportSelectorVisible = signal(false);
+  ngOnInit(): void {
+    // Automatically load location when entering /map
+    this.onCenterOnUserLocation();
+  }
 
   onPlaceSelected(place: PlaceInput): void {
     this.selectedPlace.set({
@@ -100,6 +131,7 @@ export class Map {
       isVisible: false
     }));
     this.isTransportSelectorVisible.set(false);
+    // Close the filter if it is open
     this.filterControls()?.close();
   }
 

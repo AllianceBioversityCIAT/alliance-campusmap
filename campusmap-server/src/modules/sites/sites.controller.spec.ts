@@ -43,7 +43,9 @@ describe('SitesController', () => {
 
     const result = await controller.getSitesByTypeCode('assembly_point');
 
-    expect(serviceMock.getSiteByTypeCode).toHaveBeenCalledWith('assembly_point');
+    expect(serviceMock.getSiteByTypeCode).toHaveBeenCalledWith(
+      'assembly_point',
+    );
     expect(result.features).toEqual([]);
   });
 });
