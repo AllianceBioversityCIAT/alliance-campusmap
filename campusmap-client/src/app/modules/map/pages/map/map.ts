@@ -10,6 +10,21 @@ import { SosButton } from './components/sos-button/sos-button';
 import { LocationButton } from './components/location-button/location-button';
 import { PlaceFeature } from '../../../../core/models/place.model';
 import { GeolocationService } from '../../../../core/services/geolocation.service';
+interface PlacePopupData {
+  name: string;
+  type: string;
+  imageUrl: string;
+  images: { id: number; img: string }[];
+  isVisible: boolean;
+}
+
+interface PlaceInput {
+  name: string;
+  type: string;
+  imageUrl: string;
+  images?: { id: number; img: string }[];
+}
+
 @Component({
   selector: 'app-map',
   imports: [
@@ -28,27 +43,21 @@ import { GeolocationService } from '../../../../core/services/geolocation.servic
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Map {
-  // Cierra el popup al abrir el filtro
   onOpenFilter(): void {
-    this.selectedPlace.update(place => ({
+    this.selectedPlace.update((place: PlacePopupData) => ({
       ...place,
       isVisible: false
     }));
     this.isTransportSelectorVisible.set(false);
   }
+
   mapLoad = viewChild.required<MapLoad>(MapLoad);
   informationPopUp = viewChild.required<InformationPopUp>(InformationPopUp);
   filterControls = viewChild.required<FilterControls>(FilterControls);
 
   private readonly geolocationService = inject(GeolocationService);
 
-  selectedPlace = signal<{
-    name: string;
-    type: string;
-    imageUrl: string;
-    images: { id: number; img: string }[];
-    isVisible: boolean;
-  }>({
+  selectedPlace = signal<PlacePopupData>({
     name: '',
     type: '',
     imageUrl: '',
@@ -56,15 +65,9 @@ export class Map {
     isVisible: false
   });
 
-  isTransportSelectorVisible = signal(false);
+  isTransportSelectorVisible = signal<boolean>(false);
 
-  onPlaceSelected(place: {
-    name: string;
-    type: string;
-    imageUrl: string;
-    images?: { id: number; img: string }[];
-  }): void {
-    // Convert image path to absolute if needed
+  onPlaceSelected(place: PlaceInput): void {
     this.selectedPlace.set({
       ...place,
       images:
@@ -77,7 +80,6 @@ export class Map {
         })) ?? [],
       isVisible: true
     });
-    // Hide transport selector when new place selected
     this.isTransportSelectorVisible.set(false);
   }
 
@@ -86,19 +88,18 @@ export class Map {
   }
 
   onVisibleChange(visible: boolean): void {
-    this.selectedPlace.update(place => ({
+    this.selectedPlace.update((place: PlacePopupData) => ({
       ...place,
       isVisible: visible
     }));
   }
 
   onMapClicked(): void {
-    this.selectedPlace.update(place => ({
+    this.selectedPlace.update((place: PlacePopupData) => ({
       ...place,
       isVisible: false
     }));
     this.isTransportSelectorVisible.set(false);
-    // Cierra el filtro si está abierto
     this.filterControls()?.close();
   }
 
@@ -118,11 +119,9 @@ export class Map {
   }
 
   async onCenterOnUserLocation(): Promise<void> {
-    // Check if tracking is enabled
     if (!this.geolocationService.isTracking()) {
       await this.mapLoad()?.enableLocationTracking();
     }
-    // Center map on user location
     const position = this.geolocationService.currentPosition();
     if (position) {
       this.mapLoad()?.flyToLocation(position.longitude, position.latitude, 19);

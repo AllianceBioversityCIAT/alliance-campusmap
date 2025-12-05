@@ -487,11 +487,18 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     labelEl.style.fontSize = '16px';
     labelEl.style.fontWeight = '400';
     labelEl.style.letterSpacing = '1px';
-    if ((properties.type || '').toLowerCase() === 'assembly-point') {
-      labelEl.style.color = '#358540';
+
+    // Parking y assembly-point mantienen el color del icono, el resto negro
+    if (
+      properties.type === 'parking' ||
+      (properties.type || '').toLowerCase() === 'assembly-point'
+    ) {
+      labelEl.style.color =
+        (properties.type || '').toLowerCase() === 'assembly-point' ? '#358540' : colorHex;
     } else {
-      labelEl.style.color = colorHex || '#0088c6';
+      labelEl.style.color = '#000000';
     }
+
     labelEl.style.textShadow =
       '-1px -1px 1px #ffffffff, 1px 1px 1px #ffffffff, -1px 1px 1px #ffffffff, 1px -1px 1px #ffffffff';
     labelEl.style.textAlign = 'center';
