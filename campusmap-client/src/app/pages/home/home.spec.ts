@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Home } from './home';
-import { Map } from '../../../map/pages/map/map';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
@@ -21,7 +20,6 @@ describe('Home', () => {
     await TestBed.configureTestingModule({
       imports: [
         Home,
-        Map,
         TranslateModule.forRoot({
           loader: { provide: TranslateLoader, useClass: FakeLoader }
         })

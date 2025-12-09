@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FeatureCollection } from '../models/place.model';
+import { FeatureCollection } from '@shared/types/place.model';
 
 @Injectable({
   providedIn: 'root'

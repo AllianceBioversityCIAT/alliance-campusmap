@@ -5,7 +5,6 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
@@ -42,14 +41,7 @@ export const appConfig: ApplicationConfig = {
         suffix: '.json'
       })
     }),
-    //PrimeNG global configuration with Aura theme
-    providePrimeNG({
-      theme: {
-        preset: Aura,
-        options: {
-          darkModeSelector: ''
-        }
-      }
-    })
+    //PrimeNG global configuration
+    providePrimeNG()
   ]
 };

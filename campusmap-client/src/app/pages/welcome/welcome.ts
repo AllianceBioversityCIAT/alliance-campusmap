@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { LogoSection } from './components/logo-section/logo-section';
-import { LanguageService } from '../../../../core/services/language.service';
+import { LanguageService } from '@shared/services/language.service';
 
 @Component({
   selector: 'app-welcome',

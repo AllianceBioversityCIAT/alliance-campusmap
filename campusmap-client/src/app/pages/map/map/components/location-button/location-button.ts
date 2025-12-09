@@ -1,6 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GeolocationService } from '../../../../../../core/services/geolocation.service';
+import { GeolocationService } from '@shared/services/geolocation.service';
 
 @Component({
   selector: 'app-location-button',

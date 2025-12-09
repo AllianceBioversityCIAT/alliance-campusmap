@@ -8,8 +8,8 @@ import { InformationPopUpParking } from './components/information-pop-up-parking
 import { TransportButtonSelector } from './components/transport-button-selector/transport-button-selector';
 import { SosButton } from './components/sos-button/sos-button';
 import { LocationButton } from './components/location-button/location-button';
-import { PlaceFeature } from '../../../../core/models/place.model';
-import { GeolocationService } from '../../../../core/services/geolocation.service';
+import { PlaceFeature } from '@shared/types/place.model';
+import { GeolocationService } from '@shared/services/geolocation.service';
 interface PlacePopupData {
   name: string;
   type: string;

@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { Api } from '../../../../../../core/services/api';
-import { PlaceFeature } from '../../../../../../core/models/place.model';
+import { Api } from '@shared/services/api';
+import { PlaceFeature } from '@shared/types/place.model';
 
 const HISTORY_KEY = 'searchHistory';
 const MAX_HISTORY_ITEMS = 5;

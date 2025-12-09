@@ -1,7 +1,7 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, inject, signal, ChangeDetectionStrategy, output } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { MapFilterService } from '../../../../../../core/services/map-filter.service';
+import { MapFilterService } from '@shared/services/map-filter.service';
 
 type FilterKey = 'building' | 'parking' | 'bathroom' | 'cafeteria' | 'assembly-point' | 'warehouse';
 

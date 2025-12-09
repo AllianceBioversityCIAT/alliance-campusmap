@@ -1,0 +1,58 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+:host ::ng-deep .p-selectbutton .p-togglebutton {
+  font-weight: 500;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+  background: var(--background-blue);
+  color: var(--color-primary-white);
+  width: 120px;
+  height: 50px;
+  font-size: x-large;
+}
+
+:host ::ng-deep .p-selectbutton {
+  border-radius: 0.5rem;
+}
+
+:host ::ng-deep .p-togglebutton .p-togglebutton-checked {
+  background: #e5e5e5;
+  border: none;
+  color: var(--color-primary-black);
+}
+
+:host ::ng-deep .p-selectbutton .p-togglebutton:last-child {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+:host ::ng-deep .p-selectbutton .p-togglebutton:first-child {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+:host ::ng-deep .p-togglebutton:not(:disabled):not(.p-togglebutton-checked):hover {
+  background: var(--color-primary-blue);
+  color: var(--color-primary-white);
+}
+
+:host ::ng-deep .p-togglebutton.p-togglebutton-checked {
+  background: var(--color-primary-blue);
+}
+
+@media screen and (min-width: 768px) {
+  :host ::ng-deep .p-selectbutton .p-togglebutton {
+    width: 200px;
+    height: 75px;
+    font-size: 3rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :host ::ng-deep .p-selectbutton .p-togglebutton {
+    width: 140px;
+    height: 65px;
+    font-size: 1.875rem;
+  }
+}

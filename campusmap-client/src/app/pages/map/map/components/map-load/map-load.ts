@@ -10,14 +10,11 @@ import {
   effect
 } from '@angular/core';
 import maplibregl from 'maplibre-gl';
-import { Api } from '../../../../../../core/services/api';
-import { PlaceFeature, FeatureCollection } from '../../../../../../core/models/place.model';
-import { MapFilterService } from '../../../../../../core/services/map-filter.service';
+import { Api } from '@shared/services/api';
+import { PlaceFeature, FeatureCollection } from '@shared/types/place.model';
+import { MapFilterService } from '@shared/services/map-filter.service';
 import { TranslateService } from '@ngx-translate/core';
-import {
-  GeolocationService,
-  UserGeolocationPosition
-} from '../../../../../../core/services/geolocation.service';
+import { GeolocationService, UserGeolocationPosition } from '@shared/services/geolocation.service';
 
 @Component({
   selector: 'app-map-load',
@@ -290,6 +287,57 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     });
   }
 
+  //Add centroid markers to the map
+  private addCentroidsToMap(features: PlaceFeature[]): void {
+    // Define a custom marker type to avoid 'any'
+    interface MarkerWithLabel extends maplibregl.Marker {
+      updateLabelVisibility: () => void;
+      labelElement: HTMLDivElement;
+      buildingName: string;
+    }
+
+    for (const [index, feature] of features.entries()) {
+      const properties = feature.properties;
+      const coordinates = this.getFeatureCoordinates(feature);
+
+      if (coordinates && Array.isArray(coordinates)) {
+        const [lng, lat] = coordinates;
+        const iconPath = this.getIconForPlace(properties);
+        const colorHex = this.getColorForPlace(properties);
+
+        const markerContainer = this.createMarkerContainer();
+        const markerEl = this.createMarkerElement(iconPath, colorHex);
+        const labelEl = this.createLabelElement(properties, colorHex);
+
+        markerContainer.appendChild(markerEl);
+        markerContainer.appendChild(labelEl);
+
+        const updateLabelVisibility = () => {
+          const zoom = this.map.getZoom();
+          labelEl.style.display = zoom >= 18 ? 'block' : 'none';
+        };
+        updateLabelVisibility();
+
+        markerContainer.addEventListener('click', e => {
+          e.stopPropagation();
+          this.handleMarkerClick(properties);
+        });
+
+        const marker = new maplibregl.Marker({ element: markerContainer })
+          .setLngLat([lng, lat])
+          .addTo(this.map) as MarkerWithLabel;
+
+        this.currentMarkers.push(marker);
+
+        marker.updateLabelVisibility = updateLabelVisibility;
+        marker.labelElement = labelEl;
+        marker.buildingName = properties.name;
+      } else {
+        console.warn(`Feature ${index + 1} does not have valid coordinates`);
+      }
+    }
+  }
+
   //Clear all markers from the map
   private clearMarkers(): void {
     for (const marker of this.currentMarkers) {
@@ -350,10 +398,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   //Get the color for a place based on its properties
   private getColorForPlace(properties: PlaceFeature['properties']): string {
     const colorMap: Record<string, string> = {
-      blue: '#0088c6',
-      orange: '#f68b33',
-      yellow: '#f5d226',
-      green: '#8ebf3f'
+      blue: '#219ed4',
+      orange: '#fa7921',
+      yellow: '#f6c644',
+      green: '#3da93d'
     };
 
     // If color is defined in properties, use it
@@ -363,57 +411,6 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
     // Default to blue (for parking and other types without color)
     return colorMap['blue'];
-  }
-
-  //Add centroid markers to the map
-  private addCentroidsToMap(features: PlaceFeature[]): void {
-    // Define a custom marker type to avoid 'any'
-    interface MarkerWithLabel extends maplibregl.Marker {
-      updateLabelVisibility: () => void;
-      labelElement: HTMLDivElement;
-      buildingName: string;
-    }
-
-    for (const [index, feature] of features.entries()) {
-      const properties = feature.properties;
-      const coordinates = this.getFeatureCoordinates(feature);
-
-      if (coordinates && Array.isArray(coordinates)) {
-        const [lng, lat] = coordinates;
-        const iconPath = this.getIconForPlace(properties);
-        const colorHex = this.getColorForPlace(properties);
-
-        const markerContainer = this.createMarkerContainer();
-        const markerEl = this.createMarkerElement(iconPath, colorHex);
-        const labelEl = this.createLabelElement(properties, colorHex);
-
-        markerContainer.appendChild(markerEl);
-        markerContainer.appendChild(labelEl);
-
-        const updateLabelVisibility = () => {
-          const zoom = this.map.getZoom();
-          labelEl.style.display = zoom >= 18 ? 'block' : 'none';
-        };
-        updateLabelVisibility();
-
-        markerContainer.addEventListener('click', e => {
-          e.stopPropagation();
-          this.handleMarkerClick(properties);
-        });
-
-        const marker = new maplibregl.Marker({ element: markerContainer })
-          .setLngLat([lng, lat])
-          .addTo(this.map) as MarkerWithLabel;
-
-        this.currentMarkers.push(marker);
-
-        marker.updateLabelVisibility = updateLabelVisibility;
-        marker.labelElement = labelEl;
-        marker.buildingName = properties.name;
-      } else {
-        console.warn(`Feature ${index + 1} does not have valid coordinates`);
-      }
-    }
   }
 
   // Helper to get coordinates from feature
@@ -488,16 +485,8 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     labelEl.style.fontWeight = '400';
     labelEl.style.letterSpacing = '1px';
 
-    // Parking y assembly-point mantienen el color del icono, el resto negro
-    if (
-      properties.type === 'parking' ||
-      (properties.type || '').toLowerCase() === 'assembly-point'
-    ) {
-      labelEl.style.color =
-        (properties.type || '').toLowerCase() === 'assembly-point' ? '#358540' : colorHex;
-    } else {
-      labelEl.style.color = '#000000';
-    }
+    // Usar el color del icono para todos los labels
+    labelEl.style.color = colorHex;
 
     labelEl.style.textShadow =
       '-1px -1px 1px #ffffffff, 1px 1px 1px #ffffffff, -1px 1px 1px #ffffffff, 1px -1px 1px #ffffffff';

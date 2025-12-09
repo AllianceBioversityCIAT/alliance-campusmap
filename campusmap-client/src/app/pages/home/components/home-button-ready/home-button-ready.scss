@@ -4,14 +4,22 @@
   font-size: 1.5rem;
   background: var(--background-green);
   border: none;
+  border-radius: 0.5rem;
   font-weight: 500;
   box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+  color: var(--color-primary-white);
 }
 
 :host ::ng-deep .p-button:not(:disabled):hover {
   background: var(--background-green);
   border: none;
-  color: var(--p-button-primary-hover-color);
+  color: var(--color-primary-white);
+}
+
+:host ::ng-deep .p-button:not(:disabled):active {
+  background: var(--background-green);
+  border: none;
+  color: var(--color-gray);
 }
 
 @media screen and (min-width: 768px) {
@@ -19,7 +27,6 @@
     width: 310px;
     height: 85px;
     font-size: 3rem;
-    background: var(--background-green);
     font-weight: 500;
   }
 }
