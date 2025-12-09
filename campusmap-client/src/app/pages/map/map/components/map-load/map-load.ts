@@ -245,7 +245,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     // Clear existing markers
     this.clearMarkers();
 
-    // Si hay filtro, solo mostrar ese tipo
+    // If there's a filter active, only show that specific type of place
     if (filterKey) {
       this.api.getPlacesByType(filterKey).subscribe({
         next: (data: FeatureCollection) => {
@@ -262,8 +262,8 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       return;
     }
 
-    // Si no hay filtro, mostrar buildings, parking y assembly-point juntos
-    // buildings y parking
+    // When there's no filter, I need to show buildings, parking, and assembly points together
+    // First, loading buildings and parking spots
     this.api.getAllPlaces().subscribe({
       next: (data: FeatureCollection) => {
         if (data?.features && Array.isArray(data.features)) {
@@ -485,8 +485,16 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     labelEl.style.fontWeight = '400';
     labelEl.style.letterSpacing = '1px';
 
-    // Usar el color del icono para todos los labels
-    labelEl.style.color = colorHex;
+    // Parking and assembly-point retain the icon color, the rest is black
+    if (
+      properties.type === 'parking' ||
+      (properties.type || '').toLowerCase() === 'assembly-point'
+    ) {
+      labelEl.style.color =
+        (properties.type || '').toLowerCase() === 'assembly-point' ? '#358540' : colorHex;
+    } else {
+      labelEl.style.color = '#000000';
+    }
 
     labelEl.style.textShadow =
       '-1px -1px 1px #ffffffff, 1px 1px 1px #ffffffff, -1px 1px 1px #ffffffff, 1px -1px 1px #ffffffff';
