@@ -71,25 +71,20 @@ export class Map implements OnInit {
   }
   // Cierra el popup al abrir el filtro
   onOpenFilter(): void {
-    this.selectedPlace.update(place => ({
+    this.selectedPlace.update((place: PlacePopupData) => ({
       ...place,
       isVisible: false
     }));
     this.isTransportSelectorVisible.set(false);
   }
+
   mapLoad = viewChild.required<MapLoad>(MapLoad);
   informationPopUp = viewChild.required<InformationPopUp>(InformationPopUp);
   filterControls = viewChild.required<FilterControls>(FilterControls);
 
   private readonly geolocationService = inject(GeolocationService);
 
-  selectedPlace = signal<{
-    name: string;
-    type: string;
-    imageUrl: string;
-    images: { id: number; img: string }[];
-    isVisible: boolean;
-  }>({
+  selectedPlace = signal<PlacePopupData>({
     name: '',
     type: '',
     imageUrl: '',
@@ -103,13 +98,7 @@ export class Map implements OnInit {
     this.onCenterOnUserLocation();
   }
 
-  onPlaceSelected(place: {
-    name: string;
-    type: string;
-    imageUrl: string;
-    images?: { id: number; img: string }[];
-  }): void {
-    // Convert image path to absolute if needed
+  onPlaceSelected(place: PlaceInput): void {
     this.selectedPlace.set({
       ...place,
       images:
@@ -122,7 +111,6 @@ export class Map implements OnInit {
         })) ?? [],
       isVisible: true
     });
-    // Hide transport selector when new place selected
     this.isTransportSelectorVisible.set(false);
   }
 
@@ -131,14 +119,14 @@ export class Map implements OnInit {
   }
 
   onVisibleChange(visible: boolean): void {
-    this.selectedPlace.update(place => ({
+    this.selectedPlace.update((place: PlacePopupData) => ({
       ...place,
       isVisible: visible
     }));
   }
 
   onMapClicked(): void {
-    this.selectedPlace.update(place => ({
+    this.selectedPlace.update((place: PlacePopupData) => ({
       ...place,
       isVisible: false
     }));
@@ -163,11 +151,9 @@ export class Map implements OnInit {
   }
 
   async onCenterOnUserLocation(): Promise<void> {
-    // Check if tracking is enabled
     if (!this.geolocationService.isTracking()) {
       await this.mapLoad()?.enableLocationTracking();
     }
-    // Center map on user location
     const position = this.geolocationService.currentPosition();
     if (position) {
       this.mapLoad()?.flyToLocation(position.longitude, position.latitude, 19);
