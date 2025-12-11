@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="Capa_1" version="1.1" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .st0 {
+        fill: #1689ca;
+      }
+    </style>
+  </defs>
+  <path class="st0" d="M20,0h0c11,0,20,9,20,20h0c0,11-9,20-20,20h0C9,40,0,31,0,20h0C0,9,9,0,20,0Z" />
+  <path id="path2" d="M13.5,14.9h-1.5v13.1h13.1v-1.5h-11.6v-11.6ZM28,12h-13.1v13.1h13.1v-13.1ZM26.5,23.6h-10.2v-10.2h10.2v10.2Z" style="fill:#ffffff" />
+</svg>

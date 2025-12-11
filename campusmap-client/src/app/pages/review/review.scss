@@ -1,6 +1,6 @@
 :host ::ng-deep .p-button-primary {
   background: var(--background-green);
-  color: white;
+  color: var(--color-primary-white);
   border: none;
 }
 
@@ -12,8 +12,8 @@
 
 :host ::ng-deep .p-button-secondary:not(:disabled):hover {
   background: transparent;
-  border: 2px solid #173f6f;
-  color: #173f6f;
+  border: 2px solid var(--color-primary-blue);
+  color: var(--color-primary-blue);
 }
 
 :host ::ng-deep .p-button-primary:not(:disabled):hover {
@@ -23,7 +23,7 @@
 }
 
 :host ::ng-deep .p-rating-icon {
-  color: #000000;
+  color: var(--color-primary-black);
   border: none;
 }
 

@@ -35,36 +35,16 @@
   font-style: normal;
   --color-primary-blue: #173f6f;
   --color-primary-green: #358540;
-  --color-primary-black: black;
+  --color-primary-black: #231f20;
   --color-primary-white: white;
+  --color-secondary-yellow: #ffcf01;
+  --color-secondary-orange: #f58220;
+  --color-secondary-green: #cac92d;
+  --color-secondary-red: #ba3c27;
+  --color-secondary-blue: #1689ca;
+  --color-secondary-violet: #903f98;
   --background-green: linear-gradient(to top, #358540, #8ebf3f);
-  --background-blue: linear-gradient(to top, #173f6f, #1689ca);
-}
-
-.mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon,
-.maplibregl-ctrl button.maplibregl-ctrl-compass .maplibregl-ctrl-icon {
-  background-image: url('/assets/icons/north.svg');
-  height: 20px;
-}
-
-.mapboxgl-ctrl-group button,
-.maplibregl-ctrl-group button {
-  height: 48px;
-  width: 48px;
-}
-
-.mapboxgl-ctrl-top-right .mapboxgl-ctrl,
-.maplibregl-ctrl-top-right .maplibregl-ctrl {
-  margin-right: 15px;
-  margin-top: 230px;
-  border-radius: calc(infinity * 1px);
-}
-
-//Geolocation
-.mapboxgl-ctrl-bottom-right .mapboxgl-ctrl,
-.maplibregl-ctrl-bottom-right {
-  margin-right: 7px;
-  border-radius: calc(infinity * 1px);
+  --background-blue: linear-gradient(to top, var(--color-primary-blue), #1689ca);
 }
 
 // Animation Circle User Location
@@ -82,24 +62,4 @@
 
 .animate-pulse-circle {
   animation: pulse-circle 2s infinite ease-in-out;
-}
-
-@media (min-width: 48rem) {
-  .mapboxgl-ctrl-top-right .mapboxgl-ctrl,
-  .maplibregl-ctrl-top-right .maplibregl-ctrl {
-    margin-right: 35px;
-    margin-top: 240px;
-    border-radius: calc(infinity * 1px);
-  }
-
-  .mapboxgl-ctrl-group button,
-  .maplibregl-ctrl-group button {
-    height: 60px;
-    width: 60px;
-  }
-
-  .mapboxgl-ctrl button.mapboxgl-ctrl-compass .mapboxgl-ctrl-icon,
-  .maplibregl-ctrl button.maplibregl-ctrl-compass .maplibregl-ctrl-icon {
-    height: 35px;
-  }
 }

@@ -5,8 +5,8 @@
 :host ::ng-deep .p-selectbutton .p-togglebutton {
   font-weight: 500;
   box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
-  background: var(--background-blue);
-  color: var(--color-primary-white);
+  background: #e5e5e5;
+  color: #585858;
   width: 120px;
   height: 50px;
   font-size: x-large;
@@ -33,12 +33,13 @@
 }
 
 :host ::ng-deep .p-togglebutton:not(:disabled):not(.p-togglebutton-checked):hover {
-  background: var(--color-primary-blue);
-  color: var(--color-primary-white);
+  background: #e5e5e5;
+  color: #585858;
 }
 
 :host ::ng-deep .p-togglebutton.p-togglebutton-checked {
-  background: var(--color-primary-blue);
+  background: var(--background-blue);
+  color: var(--color-primary-white);
 }
 
 @media screen and (min-width: 768px) {

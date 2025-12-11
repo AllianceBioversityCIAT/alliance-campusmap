@@ -1,5 +1,5 @@
 :host ::ng-deep .p-button {
-  width: 160px;
+  width: 170px;
   height: 55px;
   font-size: 1.5rem;
   background: var(--background-green);
@@ -19,7 +19,7 @@
 :host ::ng-deep .p-button:not(:disabled):active {
   background: var(--background-green);
   border: none;
-  color: var(--color-gray);
+  color: var(--color-primary-white);
 }
 
 @media screen and (min-width: 768px) {

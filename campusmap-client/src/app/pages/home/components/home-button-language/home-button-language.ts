@@ -50,7 +50,7 @@ export class HomeButtonLanguage {
 
   //Run when the user changes the language from select
   onLanguageChange(lang: SupportedLang) {
-    if (!lang || lang === this.translate.getCurrentLang()) {
+    if (!lang || lang === (this.translate.getCurrentLang() as SupportedLang)) {
       return;
     }
 

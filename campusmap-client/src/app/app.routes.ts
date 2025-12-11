@@ -15,7 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'map',
-    loadComponent: () => import('./pages/map/map/map').then(m => m.Map)
+    loadComponent: () => import('./pages/map/map').then(m => m.Map)
   },
   {
     path: 'review',
