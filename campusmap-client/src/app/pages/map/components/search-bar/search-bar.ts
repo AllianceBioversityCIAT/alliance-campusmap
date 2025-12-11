@@ -3,6 +3,7 @@ import { Component, inject, OnInit, output, signal, ChangeDetectionStrategy } fr
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { Api } from '@shared/services/api';
+import { MapFilterService } from '@shared/services/map-filter.service';
 import { PlaceFeature } from '@shared/types/place.model';
 
 const HISTORY_KEY = 'searchHistory';
@@ -19,12 +20,14 @@ export class SearchBar implements OnInit {
   locationSelected = output<PlaceFeature>();
 
   private readonly apiService = inject(Api);
+  private readonly mapFilterService = inject(MapFilterService);
 
   isOpen = signal(false);
   searchQuery = signal('');
   allPlaces = signal<PlaceFeature[]>([]);
   filteredPlaces = signal<PlaceFeature[]>([]);
   searchHistory = signal<PlaceFeature[]>([]);
+  activeFilter = signal<string | null>(null);
 
   ngOnInit() {
     // Here we get all places from the API when the component loads
@@ -74,6 +77,23 @@ export class SearchBar implements OnInit {
         }
       });
     }, 300);
+  }
+
+  selectFilter(filterType: string) {
+    // Toggle filter: if already selected, deselect it
+    if (this.activeFilter() === filterType) {
+      this.activeFilter.set(null);
+      // Clear the map filter
+      this.mapFilterService.clearFilter();
+    } else {
+      this.activeFilter.set(filterType);
+      // Apply filter to the map
+      this.mapFilterService.setFilter(filterType);
+    }
+  }
+
+  isFilterActive(filterType: string): boolean {
+    return this.activeFilter() === filterType;
   }
 
   onFocus() {

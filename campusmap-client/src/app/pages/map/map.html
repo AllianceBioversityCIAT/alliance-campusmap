@@ -4,15 +4,22 @@
   (mapClicked)="onMapClicked()"></app-map-load>
 <!-- Floating search bar. Allows you to write and select results -->
 <app-search-bar (locationSelected)="onLocationSelected($event)"></app-search-bar>
-<!-- Filter controls. They show options to adjust the view or results -->
-<app-filter-controls (openFilter)="onOpenFilter()"></app-filter-controls>
-<!-- SOS button. In case of emergency, go to the nearest meeting point -->
-<app-sos-button></app-sos-button>
-<!-- Location button. Center map on user location -->
+
+<!-- Action buttons group: SOS, location, and north -->
 <div
-  class="absolute top-54 md:top-59 right-4 md:right-8 z-1 flex flex-col items-end select-none mt-20">
-  <app-location-button (centerOnLocation)="onCenterOnUserLocation()"></app-location-button>
+  class="absolute bottom-15 md:bottom-59 lg:bottom-15 right-4 md:right-8 z-1 bg-white p-1 rounded-full gap-2 flex flex-col">
+  <!-- Location button. Center map on user location -->
+  <app-location-button
+    (centerOnLocation)="onCenterOnUserLocation()"
+    class="flex w-full h-full items-center justify-center"></app-location-button>
+  <!-- North button. Reset map rotation to north -->
+  <app-north-button
+    (resetNorth)="onResetNorth()"
+    class="flex w-full h-full items-center justify-center"></app-north-button>
+  <!-- SOS button. In case of emergency, go to the nearest meeting point -->
+  <app-sos-button class="flex w-full h-full items-center justify-center"></app-sos-button>
 </div>
+
 <!-- Popup for buildings -->
 <app-information-pop-up
   *ngIf="selectedPlace().type === 'building' && selectedPlace().isVisible"

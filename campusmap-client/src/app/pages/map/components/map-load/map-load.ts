@@ -82,18 +82,18 @@ export class MapLoad implements AfterViewInit, OnDestroy {
       container: this.mapContainer()?.nativeElement ?? 'map',
       style:
         'https://api.maptiler.com/maps/019a0d96-0c62-770e-82b8-be41643f8563/style.json?key=FZvbkS3DkmF7kMOIUmLZ', // map style
-      center: [-76.35655, 3.50442], // [longitude, latitude]
+      center: [-76.35617, 3.50318], // [longitude, latitude]
       zoom: 17,
       minZoom: 15,
       maxZoom: 20,
       bearing: 163, // inclination
-      pitch: 0
+      pitch: 100 // tilt
     });
   }
 
   private setupMapControls(): void {
-    // Navigation control (only rotation)
-    this.map.addControl(new maplibregl.NavigationControl({ showZoom: false }), 'top-right');
+    // Navigation control (only zoom, no compass or rotation)
+    this.map.addControl(new maplibregl.NavigationControl({ showZoom: false, showCompass: false }), 'top-right');
   }
 
   private setupMapEventHandlers(): void {
@@ -235,6 +235,16 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         zoom: zoom,
         duration: 1500,
         essential: true
+      });
+    }
+  }
+
+  //Reset map bearing to north (0 degrees)
+  resetBearing(): void {
+    if (this.map) {
+      this.map.easeTo({
+        bearing: 0,
+        duration: 500
       });
     }
   }

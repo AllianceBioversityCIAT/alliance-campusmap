@@ -1,35 +1,49 @@
-:host {
-  color: #ffffff;
-}
 :host ::ng-deep .p-button,
 .p-button:not(:disabled):hover,
 .p-togglebutton {
-  border: none;
-  /* Darken the lighter stop so white text meets WCAG contrast requirements */
-  background: var(--background-blue);
+  border-radius: 0.5rem;
   font-size: 1.5rem;
+  color: var(--color-primary-white);
 }
 
 :host ::ng-deep .p-togglebutton-checked .p-togglebutton-content {
   background: var(--background-blue);
-  color: white;
+  color: var(--color-primary-white);
+  height: auto;
+  border-radius: 0.5rem;
 }
 
 :host ::ng-deep .p-togglebutton {
   font-size: 1.5rem;
   width: 100%;
+  color: var(--color-primary-white);
 }
 
-@media (min-width: 768px) {
+:host ::ng-deep .p-selectbutton {
+  background: var(--color-primary-blue);
+  border-radius: 0.5rem;
+}
+
+:host ::ng-deep .p-togglebutton:not(:disabled):not(.p-togglebutton-checked):hover {
+  color: var(--color-primary-white);
+}
+
+@media (width >= 48rem) {
   :host ::ng-deep .p-togglebutton {
     font-size: 1.875rem;
+  }
+}
+
+@media (width >= 64rem) {
+  :host ::ng-deep .p-togglebutton {
+    font-size: 1.5rem;
   }
 }
 
 :host ::ng-deep .p-button {
   background: var(--background-blue);
   font-size: 1.5rem;
-  color: white;
+  color: var(--color-primary-white);
   border: none;
 }
 

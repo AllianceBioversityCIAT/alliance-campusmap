@@ -2,13 +2,12 @@
   background: var(--background-blue);
   font-size: 1.5rem;
   color: white;
-  border: none;
+  border-radius: 0.5rem;
 }
 
 :host ::ng-deep .p-button:not(:disabled):active,
 .p-button:not(:disabled):hover {
   background: var(--background-blue);
-  border: none;
   color: var(--color-primary-white);
 }
 

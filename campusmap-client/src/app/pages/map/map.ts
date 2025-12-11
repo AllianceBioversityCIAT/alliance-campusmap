@@ -2,12 +2,12 @@ import { Component, viewChild, signal, ChangeDetectionStrategy, inject } from '@
 import { CommonModule } from '@angular/common';
 import { MapLoad } from './components/map-load/map-load';
 import { SearchBar } from './components/search-bar/search-bar';
-import { FilterControls } from './components/filter-controls/filter-controls';
 import { InformationPopUp } from './components/information-pop-up/information-pop-up';
 import { InformationPopUpParking } from './components/information-pop-up-parking/information-pop-up-parking';
 import { TransportButtonSelector } from './components/transport-button-selector/transport-button-selector';
 import { SosButton } from './components/sos-button/sos-button';
 import { LocationButton } from './components/location-button/location-button';
+import { NorthButtonComponent } from './components/north-button/north-button';
 import { PlaceFeature } from '@shared/types/place.model';
 import { GeolocationService } from '@shared/services/geolocation.service';
 interface PlacePopupData {
@@ -31,29 +31,20 @@ interface PlaceInput {
     CommonModule,
     MapLoad,
     SearchBar,
-    FilterControls,
     InformationPopUp,
     InformationPopUpParking,
     TransportButtonSelector,
     SosButton,
-    LocationButton
+    LocationButton,
+    NorthButtonComponent
   ],
   templateUrl: './map.html',
   styleUrls: ['./map.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Map {
-  onOpenFilter(): void {
-    this.selectedPlace.update((place: PlacePopupData) => ({
-      ...place,
-      isVisible: false
-    }));
-    this.isTransportSelectorVisible.set(false);
-  }
-
   mapLoad = viewChild.required<MapLoad>(MapLoad);
   informationPopUp = viewChild.required<InformationPopUp>(InformationPopUp);
-  filterControls = viewChild.required<FilterControls>(FilterControls);
 
   private readonly geolocationService = inject(GeolocationService);
 
@@ -100,7 +91,6 @@ export class Map {
       isVisible: false
     }));
     this.isTransportSelectorVisible.set(false);
-    this.filterControls()?.close();
   }
 
   onLocationSelected(place: PlaceFeature): void {
@@ -126,5 +116,9 @@ export class Map {
     if (position) {
       this.mapLoad()?.flyToLocation(position.longitude, position.latitude, 19);
     }
+  }
+
+  onResetNorth(): void {
+    this.mapLoad()?.resetBearing();
   }
 }
