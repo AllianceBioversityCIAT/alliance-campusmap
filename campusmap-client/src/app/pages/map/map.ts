@@ -62,7 +62,7 @@ export class Map {
     this.selectedPlace.set({
       ...place,
       images:
-        place.images?.map(imgObj => ({
+        place.images?.map((imgObj: { id: number; img: string }) => ({
           id: imgObj.id,
           img: imgObj.img.startsWith('http')
             ? imgObj.img
