@@ -2,17 +2,17 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Place } from './place.entity';
 
 /**
- * TypePlace Entity
+ * PlaceTypes Entity
  *
  * Represents a category or classification type for places.
  * Examples: "building", "parking", "green-area", "sports-facility".
  * Used to filter and organize places on the campus map.
  *
- * @entity type_place
+ * @entity place_types
  * @schema campus_map
  */
-@Entity({ name: 'type_place', schema: 'campus_map' })
-export class TypePlace {
+@Entity({ name: 'place_types', schema: 'campus_map' })
+export class PlaceTypes {
   /** Unique identifier for the place type */
   @PrimaryGeneratedColumn({
     type: 'integer',

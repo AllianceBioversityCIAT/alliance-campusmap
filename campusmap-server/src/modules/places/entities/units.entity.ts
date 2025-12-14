@@ -14,10 +14,10 @@ import { Place } from './place.entity';
  * Examples: "Human Resources", "IT Department", "Laboratory 3".
  * Multiple units can be associated with a single place (building).
  *
- * @entity unit
+ * @entity units
  * @schema campus_map
  */
-@Entity({ name: 'unit', schema: 'campus_map' })
+@Entity({ name: 'units', schema: 'campus_map' })
 export class Unit {
   /** Unique identifier for the unit */
   @PrimaryGeneratedColumn({

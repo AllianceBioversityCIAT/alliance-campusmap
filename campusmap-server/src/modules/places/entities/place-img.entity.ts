@@ -8,17 +8,17 @@ import {
 import { Place } from './place.entity';
 
 /**
- * ImgPlace Entity
+ * PlaceImg Entity
  *
  * Represents an image associated with a place on the campus.
  * Stores the image filename or path for displaying visual references of places.
  * Multiple images can be associated with a single place.
  *
- * @entity img_place
+ * @entity place_img
  * @schema campus_map
  */
-@Entity({ name: 'img_place', schema: 'campus_map' })
-export class ImgPlace {
+@Entity({ name: 'place_img', schema: 'campus_map' })
+export class PlaceImg {
   /** Unique identifier for the image record */
   @PrimaryGeneratedColumn({
     type: 'integer',
