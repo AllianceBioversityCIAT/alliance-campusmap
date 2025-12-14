@@ -14,6 +14,7 @@ import { SitesModule } from './modules/sites/sites.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'node:path';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { RoutingModule } from './modules/routing/routing.module';
 
 /**
  * AppModule
@@ -48,6 +49,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     ApiModule,
     RouterModule.register(routes),
     PlacesModule,
+    RoutingModule,
     SitesModule,
     ThrottlerModule.forRoot([
       {

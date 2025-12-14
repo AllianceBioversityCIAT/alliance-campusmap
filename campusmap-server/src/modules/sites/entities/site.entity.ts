@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Point } from 'geojson';
 import { Vertice } from 'src/modules/routing/entities/vertice.entity';
-import { TypeSites } from './type_site.entity';
+import { SiteTypes } from './site-type.entity';
 import { Place } from 'src/modules/places/entities/place.entity';
 
 /**
@@ -18,10 +18,10 @@ import { Place } from 'src/modules/places/entities/place.entity';
  * parking spots, etc.) rather than larger areas. Each site has a point geometry and
  * can be associated with a place, type, and routing vertex.
  *
- * @entity site
+ * @entity sites
  * @schema campus_map
  */
-@Entity({ name: 'site', schema: 'campus_map' })
+@Entity({ name: 'sites', schema: 'campus_map' })
 export class Site {
   /** Unique identifier for the site */
   @PrimaryGeneratedColumn('increment', { type: 'bigint' })
@@ -45,9 +45,9 @@ export class Site {
   coords: Point;
 
   /** Type classification of the site (bathroom, assembly-point, etc.) */
-  @ManyToOne(() => TypeSites, { nullable: true })
+  @ManyToOne(() => SiteTypes, { nullable: true })
   @JoinColumn({ name: 'type_id' })
-  type: TypeSites;
+  type: SiteTypes;
 
   /** Associated routing vertex for pathfinding navigation */
   @ManyToOne(() => Vertice, { nullable: true })

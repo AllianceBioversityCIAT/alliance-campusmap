@@ -45,7 +45,9 @@ export class PlacesMapper {
     return {
       type: 'FeatureCollection',
       name,
-      features: places.map((place) => this.toFeature(place)),
+      features: places
+        .filter((place) => place !== null) // <-- ¡Agrega este filtro!
+        .map((place) => this.toFeature(place)),
     };
   }
 }

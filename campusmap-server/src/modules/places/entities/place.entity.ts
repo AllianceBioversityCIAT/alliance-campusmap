@@ -7,9 +7,9 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Geometry } from 'geojson';
-import { TypePlace } from './type-place.entity';
-import { Unit } from './unity.entity';
-import { ImgPlace } from './img_place.entit';
+import { PlaceTypes } from './place-type.entity';
+import { Unit } from './units.entity';
+import { PlaceImg } from './place-img.entity';
 
 /**
  * ColorEnum
@@ -32,10 +32,10 @@ export enum ColorEnum {
  * Stores geographic data (polygon area and centroid point),
  * metadata (name, type, color, icon), and relationships to units and images.
  *
- * @entity place
+ * @entity places
  * @schema campus_map
  */
-@Entity({ name: 'place', schema: 'campus_map' })
+@Entity({ name: 'places', schema: 'campus_map' })
 export class Place {
   /** Unique identifier for the place */
   @PrimaryGeneratedColumn({
@@ -97,13 +97,13 @@ export class Place {
   color: ColorEnum;
 
   /** Type classification of the place (building, parking, etc.) */
-  @ManyToOne(() => TypePlace, { nullable: true })
+  @ManyToOne(() => PlaceTypes, { nullable: true })
   @JoinColumn({ name: 'type_id' })
-  type: TypePlace;
+  type: PlaceTypes;
 
   /** Associated images for the place */
-  @OneToMany(() => ImgPlace, (imgPlace) => imgPlace.place)
-  images: ImgPlace[];
+  @OneToMany(() => PlaceImg, (PlaceImg) => PlaceImg.place)
+  images: PlaceImg[];
 
   /** Units or departments located in this place */
   @OneToMany(() => Unit, (unit) => unit.place)

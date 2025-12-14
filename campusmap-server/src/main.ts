@@ -17,7 +17,7 @@ async function bootstrap() {
   await app.listen(port);
 
   appLogger.log(`Servidor escuchando en http://localhost:${port}`);
-  appLogger.log(`Documentación API en http://localhost:${port}/api/docs`);
+  appLogger.log(`Documentación API en http://localhost:${port}/api/v1/docs`);
 }
 
 void bootstrap();
