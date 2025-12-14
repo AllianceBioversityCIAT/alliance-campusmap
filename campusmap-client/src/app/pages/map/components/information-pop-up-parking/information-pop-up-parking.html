@@ -1,0 +1,35 @@
+@if (isVisible()) {
+  <!-- Main container fixed at the bottom -->
+  <div
+    class="fixed bottom-0 left-0 w-full max-w-full md:max-w-2xl lg:max-w-xl mx-auto px-4 md:px-8 lg:px-4 pt-4 bg-white rounded-t-lg z-30 animate-slide-up shadow-lg">
+    <!-- Parking title -->
+    <p
+      class="font-semibold text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
+      {{ 'InformationPopUpParking.' + placeName() | translate: {} : placeName() }}
+    </p>
+    <!-- Main image of the place -->
+    <div class="flex flex-none w-full justify-center my-4 md:pb-4">
+      <img
+        src="assets/images/sostenibilidad.webp"
+        alt="'InformationPopUpParking.Alt' | translate"
+        title="placeName() || ('InformationPopUpParking.parking' | translate)"
+        class="rounded-lg object-cover w-full h-40 md:h-64 lg:h-72 ng-optimized-image"
+        priority />
+    </div>
+    <!-- Button to open the path to the point -->
+    <div class="flex flex-auto justify-center items-center pb-4">
+      <a
+        (click)="openTransportSelector()"
+        (keydown.enter)="openTransportSelector()"
+        tabindex="0"
+        pButton
+        class="flex justify-center items-center w-44 md:w-80 lg:w-56 h-12 md:h-16 lg:h-12 shadow-lg text-center">
+        <span
+          pButtonLabel
+          class="font-medium text-white text-center text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
+          {{ 'InformationPopUpParking.howToGet' | translate }}
+        </span>
+      </a>
+    </div>
+  </div>
+}

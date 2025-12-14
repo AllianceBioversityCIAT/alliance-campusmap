@@ -1,0 +1,40 @@
+:host ::ng-deep .p-button {
+  width: 170px;
+  height: 55px;
+  font-size: 1.5rem;
+  background: var(--background-green);
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
+  color: var(--color-primary-white);
+}
+
+:host ::ng-deep .p-button:not(:disabled):hover {
+  background: var(--background-green);
+  border: none;
+  color: var(--color-primary-white);
+}
+
+:host ::ng-deep .p-button:not(:disabled):active {
+  background: var(--background-green);
+  border: none;
+  color: var(--color-primary-white);
+}
+
+@media screen and (min-width: 768px) {
+  :host ::ng-deep .p-button {
+    width: 310px;
+    height: 85px;
+    font-size: 3rem;
+    font-weight: 500;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :host ::ng-deep .p-button {
+    width: 200px;
+    height: 60px;
+    font-size: 1.875rem;
+  }
+}

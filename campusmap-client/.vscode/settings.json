@@ -27,5 +27,6 @@
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
-  }
+  },
+  "terminal.integrated.defaultProfile.windows": "Git Bash"
 }

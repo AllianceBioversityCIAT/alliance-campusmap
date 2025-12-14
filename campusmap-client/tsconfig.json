@@ -3,6 +3,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -13,7 +15,25 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "ES2022",
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*": ["src/app/pages/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@shared/components/*": ["src/app/shared/components/*"],
+      "@shared/constants/*": ["src/app/shared/constants/*"],
+      "@shared/directives/*": ["src/app/shared/directives/*"],
+      "@shared/guards/*": ["src/app/shared/guards/*"],
+      "@shared/interceptors/*": ["src/app/shared/interceptors/*"],
+      "@shared/interfaces/*": ["src/app/shared/interfaces/*"],
+      "@shared/pipes/*": ["src/app/shared/pipes/*"],
+      "@shared/services/*": ["src/app/shared/services/*"],
+      "@shared/sockets/*": ["src/app/shared/sockets/*"],
+      "@shared/types/*": ["src/app/shared/types/*"],
+      "@shared/utils/*": ["src/app/shared/utils/*"],
+      "@shared/testing/*": ["src/app/shared/testing/*"],
+      "@shared/theme/*": ["src/app/shared/theme/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

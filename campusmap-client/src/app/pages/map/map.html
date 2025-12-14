@@ -1,0 +1,45 @@
+<!-- Component that renders the map -->
+<app-map-load
+  (placeSelected)="onPlaceSelected($event)"
+  (mapClicked)="onMapClicked()"></app-map-load>
+<!-- Floating search bar. Allows you to write and select results -->
+<app-search-bar (locationSelected)="onLocationSelected($event)"></app-search-bar>
+
+<!-- Action buttons group: SOS, location, and north -->
+<div
+  class="absolute bottom-15 md:bottom-59 lg:bottom-15 right-4 md:right-8 z-1 bg-white p-1 rounded-full gap-2 flex flex-col">
+  <!-- Location button. Center map on user location -->
+  <app-location-button
+    (centerOnLocation)="onCenterOnUserLocation()"
+    class="flex w-full h-full items-center justify-center"></app-location-button>
+  <!-- North button. Reset map rotation to north -->
+  <app-north-button
+    (resetNorth)="onResetNorth()"
+    class="flex w-full h-full items-center justify-center"></app-north-button>
+  <!-- SOS button. In case of emergency, go to the nearest meeting point -->
+  <app-sos-button class="flex w-full h-full items-center justify-center"></app-sos-button>
+</div>
+
+<!-- Popup for buildings -->
+<app-information-pop-up
+  *ngIf="selectedPlace().type === 'building' && selectedPlace().isVisible"
+  [placeName]="selectedPlace().name"
+  [placeType]="selectedPlace().type"
+  [imageUrl]="selectedPlace().imageUrl"
+  [images]="selectedPlace().images"
+  [isVisible]="selectedPlace().isVisible"
+  (visibleChange)="onVisibleChange($event)"
+  (showTransportSelector)="onShowTransportSelector()">
+</app-information-pop-up>
+<!-- Popup for parking lots -->
+<app-information-pop-up-parking
+  *ngIf="selectedPlace().type === 'parking' && selectedPlace().isVisible"
+  [placeName]="selectedPlace().name"
+  [imageUrl]="selectedPlace().imageUrl"
+  [isVisible]="selectedPlace().isVisible"
+  (visibleChange)="onVisibleChange($event)"
+  (showTransportSelector)="onShowTransportSelector()">
+</app-information-pop-up-parking>
+<!-- Transport button selector popup -->
+<app-transport-button-selector *ngIf="isTransportSelectorVisible()">
+</app-transport-button-selector>
