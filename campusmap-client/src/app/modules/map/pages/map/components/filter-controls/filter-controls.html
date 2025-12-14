@@ -1,0 +1,52 @@
+<!-- Floating container (place it on the map) -->
+<div class="absolute top-40 right-4 md:right-8 z-2 flex flex-col items-end select-none">
+  <!-- Main button (icon) -->
+  <button
+    type="button"
+    (click)="toggle()"
+    [attr.aria-label]="'Map.filters.ariaLabel' | translate"
+    [attr.title]="'Map.filters.title' | translate"
+    class="w-12 h-12 md:w-16 md:h-16 bg-white rounded-full shadow-[0_0_0_2px_rgba(0,0,0,0.1)] hover:bg-gray-100">
+    <!-- Icon of the button -->
+    <img
+      ngSrc="assets/icons/filters.svg"
+      alt="Filtros"
+      [title]="'Map.filters.title' | translate"
+      width="64"
+      height="64"
+      class="w-full h-full"
+      priority />
+  </button>
+
+  <!-- Icon bar (dropdown) -->
+  <div class="flex justify-end items-center w-auto h-auto">
+    <!-- List of filters. Only shown when the user clicks on the icon -->
+    @if (open()) {
+      <div class="grid grid-cols-2 gap-4 bg-inherit z-2 w-[260px]">
+        <!-- Button for each available filter -->
+        @for (f of filters; track f.key) {
+          <button
+            type="button"
+            (click)="onFilterClick(f.key)"
+            [class]="
+              isFilterActive(f.key)
+                ? 'w-full h-full bg-blue-100 border-2 border-blue-500 rounded-lg shadow-[4px_4px_5px_rgba(0,0,0,0.3)]'
+                : 'w-full h-full bg-white border border-[#cccccc] rounded-lg shadow-[4px_4px_5px_rgba(0,0,0,0.3)]'
+            "
+            aria-label="{{ f.i18nKey | translate }}"
+            title="{{ f.i18nKey | translate }}">
+            <!-- Internal content of the filter button -->
+            <div class="flex flex-col items-center justify-center w-full h-full">
+              <img
+                [src]="f.src"
+                alt="(f.i18nKey | translate) ?? ''"
+                title="{{ f.i18nKey | translate }}"
+                class="w-1/2 h-1/2" />
+              <span aria-hidden="true" class="mt-2">{{ f.i18nKey | translate }}</span>
+            </div>
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -7,10 +7,16 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Geometry } from 'geojson';
-import { TypePlace } from './type-place.entity';
-import { Unit } from './unity.entity';
-import { ImgPlace } from './img_place.entit';
+import { PlaceTypes } from './place-type.entity';
+import { Unit } from './units.entity';
+import { PlaceImg } from './place-img.entity';
 
+/**
+ * ColorEnum
+ *
+ * Enumeration of colors used to categorize places on the campus map.
+ * Used for visual differentiation in the UI.
+ */
 export enum ColorEnum {
   BLUE_GREEN = 'blue/green',
   BLUE = 'blue',
@@ -19,14 +25,26 @@ export enum ColorEnum {
   YELLOW = 'yellow',
 }
 
-@Entity({ name: 'place', schema: 'campus_map' })
+/**
+ * Place Entity
+ *
+ * Represents a physical location or area on the Palmira campus.
+ * Stores geographic data (polygon area and centroid point),
+ * metadata (name, type, color, icon), and relationships to units and images.
+ *
+ * @entity places
+ * @schema campus_map
+ */
+@Entity({ name: 'places', schema: 'campus_map' })
 export class Place {
+  /** Unique identifier for the place */
   @PrimaryGeneratedColumn({
     type: 'integer',
     name: 'id',
   })
   id: number;
 
+  /** Name of the place (e.g., "Building A", "Central Park") */
   @Column({
     type: 'varchar',
     length: 255,
@@ -34,6 +52,7 @@ export class Place {
   })
   name: string;
 
+  /** Polygon geometry representing the physical area of the place (SRID 4326 - WGS84) */
   @Column({
     type: 'geometry',
     spatialFeatureType: 'Polygon',
@@ -42,6 +61,7 @@ export class Place {
   })
   area: Geometry;
 
+  /** Point geometry representing the centroid of the place (SRID 4326 - WGS84) */
   @Column({
     type: 'geometry',
     spatialFeatureType: 'Point',
@@ -50,6 +70,7 @@ export class Place {
   })
   centroid: Geometry;
 
+  /** Foreign key to the place type */
   @Column({
     type: 'integer',
     name: 'type_id',
@@ -57,6 +78,7 @@ export class Place {
   })
   typeId: number;
 
+  /** Icon identifier or path for displaying the place on the map */
   @Column({
     type: 'varchar',
     name: 'icon',
@@ -65,6 +87,7 @@ export class Place {
   })
   icon: string;
 
+  /** Color category for visual representation on the map */
   @Column({
     type: 'enum',
     enum: ColorEnum,
@@ -73,13 +96,16 @@ export class Place {
   })
   color: ColorEnum;
 
-  @ManyToOne(() => TypePlace, { nullable: true })
+  /** Type classification of the place (building, parking, etc.) */
+  @ManyToOne(() => PlaceTypes, { nullable: true })
   @JoinColumn({ name: 'type_id' })
-  type: TypePlace;
+  type: PlaceTypes;
 
-  @OneToMany(() => ImgPlace, (imgPlace) => imgPlace.place)
-  images: ImgPlace[];
+  /** Associated images for the place */
+  @OneToMany(() => PlaceImg, (PlaceImg) => PlaceImg.place)
+  images: PlaceImg[];
 
+  /** Units or departments located in this place */
   @OneToMany(() => Unit, (unit) => unit.place)
   units: Unit[];
 }

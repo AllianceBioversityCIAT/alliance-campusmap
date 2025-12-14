@@ -24,13 +24,21 @@ export class PlacesService {
   /**
    * Retrieves all places from the database, optionally filtered by a search term.
    * Includes related type, units, and images entities.
-   * @param search Optional search term to filter places by name.
+   * Search filters by place name or unit name.
+   * @param search Optional search term to filter places by name or unit name.
    * @returns {Promise<FeatureCollectionDto<PlacePropertiesDto>>} FeatureCollection with all or filtered places.
    */
-  async getAllPlaces(search?: string): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
+  async getAllPlaces(
+    search?: string,
+  ): Promise<FeatureCollectionDto<PlacePropertiesDto>> {
     const places = await this.placeRepository.find({
       relations: ['type', 'units', 'images'],
-      where: [search ? { name: ILike(`%${search}%`) } : {}],
+      where: search
+        ? [
+            { name: ILike(`%${search}%`) },
+            { units: { name: ILike(`%${search}%`) } },
+          ]
+        : undefined,
     });
     return PlacesMapper.toFeatureCollection(places, 'All Places');
   }

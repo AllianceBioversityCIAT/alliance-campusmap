@@ -22,8 +22,10 @@ export class PlacesMapper {
         type: typeCode,
         icon: place.icon,
         color: place.color,
-        units: place.units?.map((unit) => ({ id: unit.id, name: unit.name })) || [],
-        images: place.images?.map((img) => ({ id: img.id, img: img.img })) || [],
+        units:
+          place.units?.map((unit) => ({ id: unit.id, name: unit.name })) || [],
+        images:
+          place.images?.map((img) => ({ id: img.id, img: img.img })) || [],
         centroid: this.geometryToDto(place.centroid as SupportedGeometry),
       },
     };
@@ -43,7 +45,9 @@ export class PlacesMapper {
     return {
       type: 'FeatureCollection',
       name,
-      features: places.map((place) => this.toFeature(place)),
+      features: places
+        .filter((place) => place !== null) // <-- ¡Agrega este filtro!
+        .map((place) => this.toFeature(place)),
     };
   }
 }

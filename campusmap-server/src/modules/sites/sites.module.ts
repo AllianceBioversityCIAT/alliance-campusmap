@@ -5,10 +5,10 @@ import { Vertice } from '../routing/entities/vertice.entity';
 import { Place } from '../places/entities/place.entity';
 import { Site } from './entities/site.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeSites } from './entities/type_site.entity';
+import { SiteTypes } from './entities/site-type.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Site, TypeSites, Vertice, Place])],
+  imports: [TypeOrmModule.forFeature([Site, SiteTypes, Vertice, Place])],
   controllers: [SitesController],
   providers: [SitesService],
 })

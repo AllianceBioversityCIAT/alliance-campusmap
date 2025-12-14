@@ -1,4 +1,11 @@
-import { Component, viewChild, signal, ChangeDetectionStrategy, inject } from '@angular/core';
+import {
+  Component,
+  viewChild,
+  signal,
+  ChangeDetectionStrategy,
+  inject,
+  OnInit
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapLoad } from './components/map-load/map-load';
 import { SearchBar } from './components/search-bar/search-bar';
@@ -42,7 +49,7 @@ interface PlaceInput {
   styleUrls: ['./map.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Map {
+export class Map implements OnInit {
   mapLoad = viewChild.required<MapLoad>(MapLoad);
   informationPopUp = viewChild.required<InformationPopUp>(InformationPopUp);
 
@@ -56,7 +63,11 @@ export class Map {
     isVisible: false
   });
 
-  isTransportSelectorVisible = signal<boolean>(false);
+  isTransportSelectorVisible = signal(false);
+  ngOnInit(): void {
+    // Automatically load location when entering /map
+    this.onCenterOnUserLocation();
+  }
 
   onPlaceSelected(place: PlaceInput): void {
     this.selectedPlace.set({
