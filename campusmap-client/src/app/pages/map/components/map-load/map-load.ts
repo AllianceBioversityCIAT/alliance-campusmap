@@ -10,14 +10,26 @@ import {
   effect
 } from '@angular/core';
 import maplibregl from 'maplibre-gl';
+import type { FeatureCollection as GeoJsonFeatureCollection } from 'geojson';
+import { firstValueFrom, take } from 'rxjs';
 import { Api } from '@shared/services/api';
 import { PlaceFeature, FeatureCollection } from '@shared/types/place.model';
+import { RouteFeatureCollection } from '@shared/types/route.model';
 import { MapFilterService } from '@shared/services/map-filter.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GeolocationService, UserGeolocationPosition } from '@shared/services/geolocation.service';
 import { MapMarkerService } from '@shared/services/map-marker.service';
 import { UserMarkerService } from '@shared/services/user-marker.service';
 import { DeviceOrientationService } from '@shared/services/device-orientation.service';
+
+interface SelectedPlace {
+  id: number;
+  name: string;
+  type: 'building' | 'parking';
+  imageUrl: string;
+  images?: { id: number; img: string }[];
+  displayType: string;
+}
 
 @Component({
   selector: 'app-map-load',
@@ -28,12 +40,7 @@ import { DeviceOrientationService } from '@shared/services/device-orientation.se
 })
 export class MapLoad implements AfterViewInit, OnDestroy {
   //Output event when a place is selected
-  placeSelected = output<{
-    name: string;
-    type: string;
-    imageUrl: string;
-    images?: { id: number; img: string }[];
-  }>();
+  placeSelected = output<SelectedPlace>();
   //Output event when the map is clicked
   mapClicked = output<void>();
 
@@ -57,6 +64,9 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   //Map instances and controls
   private map!: maplibregl.Map;
+
+  private readonly routeSourceId = 'route-source';
+  private readonly routeLayerId = 'route-layer';
 
   //Reference to the map container in the template
   mapContainer = viewChild.required<ElementRef<HTMLDivElement>>('mapContainer');
@@ -93,7 +103,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
 
   private setupMapControls(): void {
     // Navigation control (only zoom, no compass or rotation)
-    this.map.addControl(new maplibregl.NavigationControl({ showZoom: false, showCompass: false }), 'top-right');
+    this.map.addControl(
+      new maplibregl.NavigationControl({ showZoom: false, showCompass: false }),
+      'top-right'
+    );
   }
 
   private setupMapEventHandlers(): void {
@@ -214,15 +227,20 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private handleMarkerClick(properties: PlaceFeature['properties']): void {
     const rawType = (properties.typeCode || properties.type || '').toString().toLowerCase().trim();
 
-    if (rawType === 'building' || rawType === 'parking') {
+    const isCafeteria =
+      rawType === 'cafeteria' || rawType === 'cafetienda' || rawType === 'cafeterias';
+    const isBuilding = rawType === 'building' || isCafeteria;
+    const isParking = rawType === 'parking';
+
+    if (isBuilding || isParking) {
+      const typeToEmit: 'building' | 'parking' = isParking ? 'parking' : 'building';
       this.placeSelected.emit({
+        id: properties.id,
         name: properties.name,
-        type: rawType,
+        type: typeToEmit,
         imageUrl: properties.imageUrl || '',
-        images: (properties.images || []).map(imgObj => ({
-          id: imgObj.id,
-          img: imgObj.img
-        }))
+        images: (properties.images || []).map(imgObj => ({ id: imgObj.id, img: imgObj.img })),
+        displayType: rawType
       });
     }
   }
@@ -249,7 +267,107 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     }
   }
 
+  clearRoute(): void {
+    if (!this.map) return;
+
+    if (this.map.getLayer(this.routeLayerId)) {
+      this.map.removeLayer(this.routeLayerId);
+    }
+    if (this.map.getSource(this.routeSourceId)) {
+      this.map.removeSource(this.routeSourceId);
+    }
+  }
+
+  async routeToPlace(placeId: number, mode: 1 | 2): Promise<void> {
+    try {
+      let position = this.geolocationService.currentPosition();
+
+      if (!position) {
+        const granted = await this.geolocationService.requestPermissionAndStartTracking();
+        if (!granted) {
+          console.error('Unable to obtain location for routing');
+          return;
+        }
+        position = await firstValueFrom(this.geolocationService.position$);
+      }
+
+      this.api
+        .getRouteToPlace(position.longitude, position.latitude, placeId, mode)
+        .pipe(take(1))
+        .subscribe({
+          next: route => {
+            this.renderRoute(route, mode);
+            const start = this.getFirstRouteCoordinate(route);
+            if (start) {
+              this.flyToLocation(start[0], start[1], 18);
+            }
+          },
+          error: error => {
+            console.error('Error loading route:', error);
+          }
+        });
+    } catch (error) {
+      console.error('Error preparing route:', error);
+    }
+  }
+
+  private renderRoute(route: RouteFeatureCollection, mode: 1 | 2): void {
+    if (!this.map) return;
+
+    this.clearRoute();
+
+    this.map.addSource(this.routeSourceId, {
+      type: 'geojson',
+      data: route as unknown as GeoJsonFeatureCollection
+    });
+
+    this.map.addLayer({
+      id: this.routeLayerId,
+      type: 'line',
+      source: this.routeSourceId,
+      paint: {
+        'line-color': this.getRouteColor(mode),
+        'line-width': 4,
+        'line-opacity': 0.9
+      }
+    });
+  }
+
+  private getRouteColor(mode: 1 | 2): string {
+    return mode === 1 ? '#16a34a' : '#2266ff';
+  }
+
+  private getFirstRouteCoordinate(route: RouteFeatureCollection): [number, number] | null {
+    const firstFeature = route.features[0];
+    const coords = firstFeature?.geometry?.coordinates;
+
+    if (Array.isArray(coords) && coords.length > 0) {
+      const first = coords[0];
+
+      if (Array.isArray(first) && first.length >= 2) {
+        // LineString case: [ [lng, lat], ... ]
+        if (typeof first[0] === 'number' && typeof first[1] === 'number') {
+          return [first[0], first[1]];
+        }
+
+        // MultiLineString case: [ [ [lng, lat], ... ], ... ]
+        const nested = (first as unknown[])[0];
+        if (
+          Array.isArray(nested) &&
+          nested.length >= 2 &&
+          typeof nested[0] === 'number' &&
+          typeof nested[1] === 'number'
+        ) {
+          return [nested[0], nested[1]];
+        }
+      }
+    }
+
+    return null;
+  }
+
   ngOnDestroy(): void {
+    this.clearRoute();
     this.geolocationService.stopTracking();
     this.deviceOrientationService.stopTracking();
     this.userMarkerService.remove();

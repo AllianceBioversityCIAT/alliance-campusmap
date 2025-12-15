@@ -34,6 +34,7 @@ export class GeolocationService {
   private readonly _currentPosition = signal<UserGeolocationPosition | null>(null);
   private readonly _error = signal<GeolocationError | null>(null);
   private readonly _isHighAccuracy = signal<boolean>(true);
+  private readonly _userConsented = signal<boolean>(false);
 
   // Public read-only signals
   readonly status = this._status.asReadonly();
@@ -44,9 +45,7 @@ export class GeolocationService {
   // Computed signals
   readonly isTracking = computed(() => this._status() === 'tracking');
   readonly hasPermission = computed(
-    () =>
-      this._status() === 'permission-granted' ||
-      this._status() === 'tracking'
+    () => this._status() === 'permission-granted' || this._status() === 'tracking'
   );
   readonly hasError = computed(() => this._status() === 'error');
 
@@ -85,8 +84,12 @@ export class GeolocationService {
    * Geolocation is only necessary when user has explicitly accepted via the permission popup.
    */
   private isLocationFeatureActive(): boolean {
-    // Geolocation is necessary only when tracking or permission was explicitly requested
-    return this.isTracking() || this._status() === 'requesting-permission';
+    return (
+      this._userConsented() &&
+      (this.isTracking() ||
+        this._status() === 'permission-granted' ||
+        this._status() === 'requesting-permission')
+    );
   }
 
   // Request permission and start tracking user location
@@ -103,6 +106,7 @@ export class GeolocationService {
     }
 
     this._status.set('requesting-permission');
+    this._userConsented.set(true);
     this._error.set(null);
 
     try {
@@ -210,40 +214,12 @@ export class GeolocationService {
   }
 
   /**
-   * Toggle between high and standard accuracy
-   */
-  toggleAccuracy(): void {
-    const newAccuracy = !this._isHighAccuracy();
-    this._isHighAccuracy.set(newAccuracy);
-
-    // Restart tracking with new accuracy if currently tracking
-    if (this.isTracking()) {
-      this.startTracking();
-    }
-
-    console.log(`Geolocation accuracy set to: ${newAccuracy ? 'HIGH' : 'STANDARD'}`);
-  }
-
-  /**
-   * Set accuracy mode
-   */
-  setHighAccuracy(enabled: boolean): void {
-    if (this._isHighAccuracy() === enabled) return;
-
-    this._isHighAccuracy.set(enabled);
-
-    // Restart tracking with new accuracy if currently tracking
-    if (this.isTracking()) {
-      this.startTracking();
-    }
-  }
-
-  /**
    * Reset the service state
    */
   reset(): void {
     this.stopTracking();
     this._status.set('idle');
+    this._userConsented.set(false);
     this._currentPosition.set(null);
     this._error.set(null);
   }
@@ -316,12 +292,7 @@ export class GeolocationService {
   /**
    * Calculate distance between two points in meters (Haversine formula)
    */
-  calculateDistance(
-    lat1: number,
-    lon1: number,
-    lat2: number,
-    lon2: number
-  ): number {
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
     const R = 6371e3; // Earth's radius in meters
     const φ1 = (lat1 * Math.PI) / 180;
     const φ2 = (lat2 * Math.PI) / 180;

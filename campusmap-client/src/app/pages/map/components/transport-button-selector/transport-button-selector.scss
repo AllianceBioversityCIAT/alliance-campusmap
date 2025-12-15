@@ -1,7 +1,7 @@
 :host ::ng-deep .p-button,
 .p-button:not(:disabled):hover,
 .p-togglebutton {
-  border-radius: 0.5rem;
+  border-radius: calc(infinity * 1px);
   font-size: 1.5rem;
   color: var(--color-primary-white);
 }

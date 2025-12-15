@@ -4,7 +4,8 @@ import {
   signal,
   ChangeDetectionStrategy,
   inject,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MapLoad } from './components/map-load/map-load';
@@ -18,16 +19,20 @@ import { NorthButtonComponent } from './components/north-button/north-button';
 import { PlaceFeature } from '@shared/types/place.model';
 import { GeolocationService } from '@shared/services/geolocation.service';
 interface PlacePopupData {
+  id: number | null;
   name: string;
   type: string;
+  displayType?: string;
   imageUrl: string;
   images: { id: number; img: string }[];
   isVisible: boolean;
 }
 
 interface PlaceInput {
+  id: number;
   name: string;
   type: string;
+  displayType?: string;
   imageUrl: string;
   images?: { id: number; img: string }[];
 }
@@ -49,13 +54,14 @@ interface PlaceInput {
   styleUrls: ['./map.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Map implements OnInit {
+export class Map implements OnInit, OnDestroy {
   mapLoad = viewChild.required<MapLoad>(MapLoad);
   informationPopUp = viewChild.required<InformationPopUp>(InformationPopUp);
 
   private readonly geolocationService = inject(GeolocationService);
 
   selectedPlace = signal<PlacePopupData>({
+    id: null,
     name: '',
     type: '',
     imageUrl: '',
@@ -64,14 +70,21 @@ export class Map implements OnInit {
   });
 
   isTransportSelectorVisible = signal(false);
+
   ngOnInit(): void {
-    // Automatically load location when entering /map
-    this.onCenterOnUserLocation();
+    // Automatically request permission and start GPS tracking when entering /map
+    this.geolocationService.requestPermissionAndStartTracking();
+  }
+
+  ngOnDestroy(): void {
+    // Clean up: stop GPS tracking when leaving /map
+    this.geolocationService.stopTracking();
   }
 
   onPlaceSelected(place: PlaceInput): void {
     this.selectedPlace.set({
       ...place,
+      displayType: place.displayType || place.type,
       images:
         place.images?.map((imgObj: { id: number; img: string }) => ({
           id: imgObj.id,
@@ -102,6 +115,7 @@ export class Map implements OnInit {
       isVisible: false
     }));
     this.isTransportSelectorVisible.set(false);
+    this.mapLoad()?.clearRoute();
   }
 
   onLocationSelected(place: PlaceFeature): void {
@@ -131,5 +145,17 @@ export class Map implements OnInit {
 
   onResetNorth(): void {
     this.mapLoad()?.resetBearing();
+  }
+
+  async onRouteSelected(event: { mode: 1 | 2 }): Promise<void> {
+    const placeId = this.selectedPlace().id;
+
+    if (!placeId) {
+      console.warn('No place selected to route to');
+      return;
+    }
+
+    await this.mapLoad()?.routeToPlace(placeId, event.mode);
+    this.isTransportSelectorVisible.set(false);
   }
 }

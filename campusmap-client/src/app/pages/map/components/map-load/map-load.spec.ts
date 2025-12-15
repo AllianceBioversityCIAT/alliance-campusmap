@@ -23,4 +23,33 @@ describe('MapLoad', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('emits building popup for cafeteria type', () => {
+    const spy = jest.spyOn(component.placeSelected, 'emit');
+    const props: any = {
+      id: 25,
+      name: 'Cafeteria Central',
+      type: 'cafeteria',
+      imageUrl: '',
+      images: []
+    };
+    (component as any).handleMarkerClick(props);
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 25, name: 'Cafeteria Central', type: 'building' })
+    );
+  });
+
+  it('emits parking popup for parking type', () => {
+    const spy = jest.spyOn(component.placeSelected, 'emit');
+    const props: any = {
+      id: 99,
+      name: 'Parking A',
+      type: 'parking',
+      imageUrl: ''
+    };
+    (component as any).handleMarkerClick(props);
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 99, name: 'Parking A', type: 'parking' })
+    );
+  });
 });

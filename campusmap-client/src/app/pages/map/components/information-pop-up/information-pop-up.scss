@@ -2,7 +2,7 @@
   background: var(--background-blue);
   font-size: 1.5rem;
   color: white;
-  border-radius: 0.5rem;
+  border-radius: calc(infinity * 1px);
 }
 
 :host ::ng-deep .p-button:not(:disabled):active,

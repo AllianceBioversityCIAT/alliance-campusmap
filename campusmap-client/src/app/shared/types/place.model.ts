@@ -14,7 +14,7 @@ export interface PlaceProperties {
   type?: string;
   imageUrl?: string;
   icon?: string;
-  color?: string | null;
+  color?: string;
   centroid: Geometry;
   images?: { id: number; img: string }[]; // Agregado para soportar imágenes
 }
