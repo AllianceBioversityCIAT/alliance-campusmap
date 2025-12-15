@@ -24,7 +24,7 @@
 <app-information-pop-up
   *ngIf="selectedPlace().type === 'building' && selectedPlace().isVisible"
   [placeName]="selectedPlace().name"
-  [placeType]="selectedPlace().type"
+  [placeType]="selectedPlace().displayType || selectedPlace().type"
   [imageUrl]="selectedPlace().imageUrl"
   [images]="selectedPlace().images"
   [isVisible]="selectedPlace().isVisible"

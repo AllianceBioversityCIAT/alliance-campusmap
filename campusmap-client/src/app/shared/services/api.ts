@@ -55,4 +55,18 @@ export class Api {
       }
     });
   }
+
+  //Gets a route from current position to the nearest assembly point (for emergency SOS)
+  // lon: longitude, lat: latitude
+  getRouteToNearestAssemblyPoint(lon: number, lat: number): Observable<RouteFeatureCollection> {
+    return this.http.get<RouteFeatureCollection>(
+      `${this.apiUrl}/api/v1/routing/nearest-assembly-point`,
+      {
+        params: {
+          lon: String(lon),
+          lat: String(lat)
+        }
+      }
+    );
+  }
 }

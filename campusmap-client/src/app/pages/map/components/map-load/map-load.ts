@@ -22,6 +22,15 @@ import { MapMarkerService } from '@shared/services/map-marker.service';
 import { UserMarkerService } from '@shared/services/user-marker.service';
 import { DeviceOrientationService } from '@shared/services/device-orientation.service';
 
+interface SelectedPlace {
+  id: number;
+  name: string;
+  type: 'building' | 'parking';
+  imageUrl: string;
+  images?: { id: number; img: string }[];
+  displayType: string;
+}
+
 @Component({
   selector: 'app-map-load',
   imports: [],
@@ -31,13 +40,7 @@ import { DeviceOrientationService } from '@shared/services/device-orientation.se
 })
 export class MapLoad implements AfterViewInit, OnDestroy {
   //Output event when a place is selected
-  placeSelected = output<{
-    id: number;
-    name: string;
-    type: string;
-    imageUrl: string;
-    images?: { id: number; img: string }[];
-  }>();
+  placeSelected = output<SelectedPlace>();
   //Output event when the map is clicked
   mapClicked = output<void>();
 
@@ -224,16 +227,20 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private handleMarkerClick(properties: PlaceFeature['properties']): void {
     const rawType = (properties.typeCode || properties.type || '').toString().toLowerCase().trim();
 
-    if (rawType === 'building' || rawType === 'parking') {
+    const isCafeteria =
+      rawType === 'cafeteria' || rawType === 'cafetienda' || rawType === 'cafeterias';
+    const isBuilding = rawType === 'building' || isCafeteria;
+    const isParking = rawType === 'parking';
+
+    if (isBuilding || isParking) {
+      const typeToEmit: 'building' | 'parking' = isParking ? 'parking' : 'building';
       this.placeSelected.emit({
         id: properties.id,
         name: properties.name,
-        type: rawType,
+        type: typeToEmit,
         imageUrl: properties.imageUrl || '',
-        images: (properties.images || []).map(imgObj => ({
-          id: imgObj.id,
-          img: imgObj.img
-        }))
+        images: (properties.images || []).map(imgObj => ({ id: imgObj.id, img: imgObj.img })),
+        displayType: rawType
       });
     }
   }

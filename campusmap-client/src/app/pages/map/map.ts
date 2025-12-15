@@ -22,6 +22,7 @@ interface PlacePopupData {
   id: number | null;
   name: string;
   type: string;
+  displayType?: string;
   imageUrl: string;
   images: { id: number; img: string }[];
   isVisible: boolean;
@@ -31,6 +32,7 @@ interface PlaceInput {
   id: number;
   name: string;
   type: string;
+  displayType?: string;
   imageUrl: string;
   images?: { id: number; img: string }[];
 }
@@ -82,6 +84,7 @@ export class Map implements OnInit, OnDestroy {
   onPlaceSelected(place: PlaceInput): void {
     this.selectedPlace.set({
       ...place,
+      displayType: place.displayType || place.type,
       images:
         place.images?.map((imgObj: { id: number; img: string }) => ({
           id: imgObj.id,
