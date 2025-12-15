@@ -46,24 +46,30 @@
     <button
       (click)="selectFilter('building')"
       type="button"
-      [class.bg-[#1689ca]]="isFilterActive('building')"
-      [class.text-white]="isFilterActive('building')"
+      [ngClass]="{
+        'bg-[#1689ca] text-white': isFilterActive('building'),
+        'bg-[#f1f2f5] text-gray-700': !isFilterActive('building')
+      }"
       class="flex px-4 py-2 bg-[#f1f2f5] text-gray-700 hover:bg-[#1689ca] hover:text-white rounded-full text-sm font-medium transition-colors">
       Edificios
     </button>
     <button
       (click)="selectFilter('cafeteria')"
       type="button"
-      [class.bg-[#1689ca]]="isFilterActive('cafeteria')"
-      [class.text-white]="isFilterActive('cafeteria')"
+      [ngClass]="{
+        'bg-[#1689ca] text-white': isFilterActive('cafeteria'),
+        'bg-[#f1f2f5] text-gray-700': !isFilterActive('cafeteria')
+      }"
       class="flex px-4 py-2 bg-[#f1f2f5] text-gray-700 hover:bg-[#1689ca] hover:text-white rounded-full text-sm font-medium transition-colors">
       Cafeterias
     </button>
     <button
       (click)="selectFilter('parking')"
       type="button"
-      [class.bg-[#1689ca]]="isFilterActive('parking')"
-      [class.text-white]="isFilterActive('parking')"
+      [ngClass]="{
+        'bg-[#1689ca] text-white': isFilterActive('parking'),
+        'bg-[#f1f2f5] text-gray-700': !isFilterActive('parking')
+      }"
       class="flex px-4 py-2 bg-[#f1f2f5] text-gray-700 hover:bg-[#1689ca] hover:text-white rounded-full text-sm font-medium transition-colors">
       Parqueaderos
     </button>
