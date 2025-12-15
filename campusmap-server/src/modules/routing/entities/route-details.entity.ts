@@ -13,7 +13,7 @@ export class RouteDetails {
     type: 'geometry',
     spatialFeatureType: 'Point',
     srid: 4326,
-    nullable: true
+    nullable: true,
   })
   start_point: Point;
 
@@ -21,7 +21,7 @@ export class RouteDetails {
     type: 'geometry',
     spatialFeatureType: 'Point',
     srid: 4326,
-    nullable: true
+    nullable: true,
   })
   end_point: Point;
 
@@ -29,7 +29,7 @@ export class RouteDetails {
     type: 'geometry',
     spatialFeatureType: 'LineString',
     srid: 4326,
-    nullable: true
+    nullable: true,
   })
   geom: LineString;
 
