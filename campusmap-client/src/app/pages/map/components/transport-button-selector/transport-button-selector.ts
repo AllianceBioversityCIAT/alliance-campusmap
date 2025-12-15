@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MessageModule } from 'primeng/message';
@@ -27,6 +27,8 @@ export class TransportButtonSelector {
   private readonly messageService: MessageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
 
+  routeSelected = output<{ mode: 1 | 2 }>();
+
   //Variable linked to SelectButton. Stores the selected option
   value = signal<string | null>(null);
 
@@ -49,9 +51,13 @@ export class TransportButtonSelector {
   //Manages the submission of the form. Validate and display a message using Toast
   onSubmit(form: NgForm) {
     if (form.valid) {
+      const selectedMode = this.value() === 'carro' ? 2 : 1;
+
+      this.routeSelected.emit({ mode: selectedMode });
+
       this.messageService.add({
-        detail: 'Prueba',
-        life: 1000
+        detail: this.translate.instant('Transport.start'),
+        life: 1200
       });
       form.resetForm();
     }

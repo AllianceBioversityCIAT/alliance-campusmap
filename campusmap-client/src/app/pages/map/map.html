@@ -41,5 +41,7 @@
   (showTransportSelector)="onShowTransportSelector()">
 </app-information-pop-up-parking>
 <!-- Transport button selector popup -->
-<app-transport-button-selector *ngIf="isTransportSelectorVisible()">
+<app-transport-button-selector
+  *ngIf="isTransportSelectorVisible()"
+  (routeSelected)="onRouteSelected($event)">
 </app-transport-button-selector>
