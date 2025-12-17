@@ -13,7 +13,7 @@
     "connectionStatus": "Estado de conexión",
     "ariaLabel": "Sección de inicio",
     "button": {
-      "ready": "¡Estoy listo!"
+      "ready": "Empezar"
     }
   },
   "Review": {
