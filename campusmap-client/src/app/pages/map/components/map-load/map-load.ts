@@ -5,6 +5,7 @@ import {
   ElementRef,
   viewChild,
   inject,
+  signal,
   output,
   ChangeDetectionStrategy,
   effect
@@ -79,6 +80,8 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   private readonly mapMarkerService = inject(MapMarkerService);
   private readonly userMarkerService = inject(UserMarkerService);
   private readonly deviceOrientationService = inject(DeviceOrientationService);
+
+  private readonly assemblyPoints = signal<PlaceFeature[]>([]);
 
   ngAfterViewInit(): void {
     this.initializeMap();
@@ -205,6 +208,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.api.getSitesByType('assembly-point').subscribe({
       next: (data: FeatureCollection) => {
         if (data?.features && Array.isArray(data.features)) {
+          this.assemblyPoints.set(data.features);
           this.addMarkersToMap(data.features);
         }
       },
@@ -279,8 +283,10 @@ export class MapLoad implements AfterViewInit, OnDestroy {
   }
 
   async routeToPlace(placeId: number, mode: 1 | 2): Promise<void> {
+    let position: UserGeolocationPosition | null = null;
+
     try {
-      let position = this.geolocationService.currentPosition();
+      position = this.geolocationService.currentPosition();
 
       if (!position) {
         const granted = await this.geolocationService.requestPermissionAndStartTracking();
@@ -362,8 +368,78 @@ export class MapLoad implements AfterViewInit, OnDestroy {
         }
       }
     }
+    return null;
+  }
+
+  private findNearestAssemblyPoint(lon: number, lat: number): PlaceFeature | null {
+    const points = this.assemblyPoints();
+    if (!points.length) {
+      return null;
+    }
+
+    let nearest: PlaceFeature | null = null;
+    let minDistance = Number.POSITIVE_INFINITY;
+
+    for (const point of points) {
+      const coords = this.getAssemblyPointCoordinates(point);
+      if (!coords) continue;
+      const distance = this.geolocationService.calculateDistance(lat, lon, coords[1], coords[0]);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearest = point;
+      }
+    }
+
+    return nearest;
+  }
+
+  private getAssemblyPointCoordinates(point: PlaceFeature): [number, number] | null {
+    const centroid = point.properties?.centroid?.coordinates;
+    if (Array.isArray(centroid) && centroid.length >= 2) {
+      const [lng, lat] = centroid as [number, number];
+      if (typeof lng === 'number' && typeof lat === 'number') {
+        return [lng, lat];
+      }
+    }
+
+    const geomCoords = (point.geometry as { coordinates?: unknown })?.coordinates;
+    if (Array.isArray(geomCoords) && geomCoords.length >= 2) {
+      const [lng, lat] = geomCoords as [number, number];
+      if (typeof lng === 'number' && typeof lat === 'number') {
+        return [lng, lat];
+      }
+    }
 
     return null;
+  }
+
+  async showNearestAssemblyPoint(): Promise<void> {
+    let position: UserGeolocationPosition | null = this.geolocationService.currentPosition();
+
+    if (!position) {
+      const granted = await this.geolocationService.requestPermissionAndStartTracking();
+      if (!granted) {
+        console.error('Unable to obtain location for SOS');
+        return;
+      }
+      position = await firstValueFrom(this.geolocationService.position$);
+    }
+
+    const nearest = this.findNearestAssemblyPoint(position.longitude, position.latitude);
+    if (!nearest) {
+      console.error('No assembly points available to display');
+      return;
+    }
+
+    const coords = this.getAssemblyPointCoordinates(nearest);
+    if (!coords) {
+      console.error('Nearest assembly point has no coordinates');
+      return;
+    }
+
+    this.clearRoute();
+    this.flyToLocation(coords[0], coords[1], 19);
   }
 
   ngOnDestroy(): void {

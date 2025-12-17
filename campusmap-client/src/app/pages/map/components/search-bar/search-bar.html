@@ -28,8 +28,16 @@
       (click)="selectPlace(place)"
       type="button"
       class="w-full px-4 py-2 hover:border-1 hover:border-black cursor-pointer flex items-center justify-between text-base md:text-lg lg:text-xl leading-normal">
-      <span>{{ place.properties.name }}</span>
-      <!-- Show icon for history items -->
+      <div class="flex items-center gap-3">
+        <!-- Show icon for history items -->
+        <img
+          *ngIf="searchQuery().length < 2"
+          [src]="getPlaceIcon(place)"
+          [alt]="place.properties.name"
+          title="type icon"
+          class="w-4 h-4" />
+        <span>{{ place.properties.name }}</span>
+      </div>
       <i *ngIf="searchQuery().length < 2" class="pi pi-history text-gray-400 text-sm"></i>
     </button>
   </div>
@@ -51,7 +59,7 @@
         'bg-[#f1f2f5] text-gray-700': !isFilterActive('building')
       }"
       class="flex px-4 py-2 bg-[#f1f2f5] text-gray-700 hover:bg-[#1689ca] hover:text-white rounded-full text-sm font-medium transition-colors">
-      Edificios
+      {{ 'Map.filters.buildings' | translate }}
     </button>
     <button
       (click)="selectFilter('cafeteria')"
@@ -61,7 +69,7 @@
         'bg-[#f1f2f5] text-gray-700': !isFilterActive('cafeteria')
       }"
       class="flex px-4 py-2 bg-[#f1f2f5] text-gray-700 hover:bg-[#1689ca] hover:text-white rounded-full text-sm font-medium transition-colors">
-      Cafeterias
+      {{ 'Map.filters.cafeterias' | translate }}
     </button>
     <button
       (click)="selectFilter('parking')"
@@ -71,7 +79,7 @@
         'bg-[#f1f2f5] text-gray-700': !isFilterActive('parking')
       }"
       class="flex px-4 py-2 bg-[#f1f2f5] text-gray-700 hover:bg-[#1689ca] hover:text-white rounded-full text-sm font-medium transition-colors">
-      Parqueaderos
+      {{ 'Map.filters.parking' | translate }}
     </button>
   </div>
 </div>

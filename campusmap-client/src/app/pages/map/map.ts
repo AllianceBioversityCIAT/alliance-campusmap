@@ -158,4 +158,10 @@ export class Map implements OnInit, OnDestroy {
     await this.mapLoad()?.routeToPlace(placeId, event.mode);
     this.isTransportSelectorVisible.set(false);
   }
+
+  async onSosClicked(): Promise<void> {
+    // Hide any open popups before centering on SOS destination
+    this.onMapClicked();
+    await this.mapLoad()?.showNearestAssemblyPoint();
+  }
 }
