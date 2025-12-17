@@ -61,6 +61,7 @@ export class UserMarkerService {
     container.style.position = 'absolute';
     container.style.width = '40px';
     container.style.height = '40px';
+    container.style.zIndex = '3';
     return container;
   }
 

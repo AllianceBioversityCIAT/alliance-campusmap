@@ -13,7 +13,7 @@
     "connectionStatus": "Connection status",
     "ariaLabel": "Home section",
     "button": {
-      "ready": "I'm ready!"
+      "ready": "Go"
     }
   },
   "Review": {

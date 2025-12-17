@@ -35,6 +35,7 @@ export class GeolocationService {
   private readonly _error = signal<GeolocationError | null>(null);
   private readonly _isHighAccuracy = signal<boolean>(true);
   private readonly _userConsented = signal<boolean>(false);
+  private fallbackAttempted = false;
 
   // Public read-only signals
   readonly status = this._status.asReadonly();
@@ -61,14 +62,14 @@ export class GeolocationService {
   // High accuracy options for campus navigation
   private readonly HIGH_ACCURACY_OPTIONS: PositionOptions = {
     enableHighAccuracy: true,
-    timeout: 10000,
+    timeout: 20000,
     maximumAge: 0 // Always get fresh position
   };
 
   // Standard accuracy options (fallback)
   private readonly STANDARD_ACCURACY_OPTIONS: PositionOptions = {
     enableHighAccuracy: false,
-    timeout: 10000,
+    timeout: 15000,
     maximumAge: 5000
   };
 
@@ -187,6 +188,7 @@ export class GeolocationService {
         this._currentPosition.set(geoPosition);
         this._status.set('tracking');
         this._error.set(null);
+        this.fallbackAttempted = false;
         this.positionSubject.next(geoPosition);
       },
       error => {
@@ -268,6 +270,12 @@ export class GeolocationService {
             message: 'The request to get user location timed out'
           };
           this._status.set('error');
+          if (!this.fallbackAttempted) {
+            // Retry once with standard accuracy and a slightly longer timeout
+            this.fallbackAttempted = true;
+            this._isHighAccuracy.set(false);
+            this.startTracking();
+          }
           break;
         default:
           geoError = {

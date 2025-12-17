@@ -172,4 +172,14 @@ export class SearchBar implements OnInit {
     // Otherwise, just show the history
     return this.searchHistory();
   }
+
+  getPlaceIcon(place: PlaceFeature): string {
+    const typeCode = (place.properties.typeCode || place.properties.type || '').toLowerCase();
+
+    if (typeCode === 'cafetienda' || typeCode === 'cafeterias' || typeCode === 'cafeteria') {
+      return 'assets/icons/cafeteria-icon.svg';
+    }
+
+    return 'assets/icons/building-icon.svg';
+  }
 }
