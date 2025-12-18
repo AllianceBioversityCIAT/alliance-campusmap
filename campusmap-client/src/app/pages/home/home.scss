@@ -1,1 +1,11 @@
-// Intentionally left blank
+:host {
+  .lang-spanish {
+    --bg-top-color: #133016;
+    --bg-color: #c2dbc2;
+  }
+
+  .lang-english {
+    --bg-top-color: #102b4d;
+    --bg-color: #98beeaff;
+  }
+}

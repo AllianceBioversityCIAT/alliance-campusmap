@@ -1,5 +1,9 @@
 <div class="flex justify-center">
-  <a routerLink="/map" pButton [attr.aria-label]="'Home.button.ready' | translate">
+  <a
+    routerLink="/map"
+    pButton
+    [attr.aria-label]="'Home.button.ready' | translate"
+    [ngStyle]="buttonStyleObj()">
     <span pButtonLabel>{{ 'Home.button.ready' | translate }}</span>
   </a>
 </div>
