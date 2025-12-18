@@ -9,12 +9,19 @@
     </p>
     <!-- Main image of the place -->
     <div class="flex flex-none w-full justify-center my-4 md:pb-4">
-      <img
-        src="assets/images/sostenibilidad.webp"
-        alt="'InformationPopUpParking.Alt' | translate"
-        title="placeName() || ('InformationPopUpParking.parking' | translate)"
-        class="rounded-lg object-cover w-full h-40 md:h-64 lg:h-72 ng-optimized-image"
-        priority />
+      @if (imageUrl()) {
+        <img
+          [src]="imageUrl()"
+          [alt]="placeName() || ('InformationPopUpParking.parking' | translate)"
+          title="{{ placeName() || ('InformationPopUpParking.parking' | translate) }}"
+          class="rounded-lg object-cover w-full h-40 md:h-64 lg:h-72" />
+      } @else {
+        <img
+          src="assets/images/sostenibilidad.webp"
+          [alt]="'InformationPopUpParking.Alt' | translate"
+          title="{{ placeName() || ('InformationPopUpParking.parking' | translate) }}"
+          class="rounded-lg object-cover w-full h-40 md:h-64 lg:h-72" />
+      }
     </div>
     <!-- Button to open the path to the point -->
     <div class="flex flex-auto justify-center items-center pb-4">

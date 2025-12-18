@@ -7,10 +7,8 @@
     "allianceLogoAlt": "Logo Alianza"
   },
   "Home": {
-    "title": "Para explorar",
-    "promptLine1": "las instalaciones del campus,",
-    "promptLine2": "conéctate a la red:",
-    "connectionStatus": "Estado de conexión",
+    "title": "Selecciona",
+    "promptLine1": "el idioma de tu preferencia",
     "ariaLabel": "Sección de inicio",
     "button": {
       "ready": "Empezar"

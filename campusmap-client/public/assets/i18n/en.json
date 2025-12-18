@@ -7,13 +7,11 @@
     "allianceLogoAlt": "Alliance Logo"
   },
   "Home": {
-    "title": "To explore",
-    "promptLine1": "campus facilities,",
-    "promptLine2": "Connect to the network:",
-    "connectionStatus": "Connection status",
+    "title": "Select",
+    "promptLine1": "your preferred language",
     "ariaLabel": "Home section",
     "button": {
-      "ready": "Go"
+      "ready": "Start"
     }
   },
   "Review": {
@@ -124,6 +122,7 @@
     "Monasterio 2": "Monastery 2",
     "Monasterio 3": "Monastery 3",
     "Monasterio 4": "Monastery 4",
+    "Motorpool": "Motorpool",
     "Museo Bio-Aprendiz": "Bio-Learning",
     "Operaciones de Campo": "Field Operations",
     "Parqueadero 1": "Parking 1",

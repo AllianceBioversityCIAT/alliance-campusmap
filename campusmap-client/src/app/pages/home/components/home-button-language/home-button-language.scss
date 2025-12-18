@@ -5,11 +5,11 @@
 :host ::ng-deep .p-selectbutton .p-togglebutton {
   font-weight: 500;
   box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
-  background: #e5e5e5;
-  color: #585858;
   width: 120px;
   height: 50px;
-  font-size: x-large;
+  font-size: 20px;
+  background: #bdbdbd;
+  color: #2e2e2e;
 }
 
 :host ::ng-deep .p-selectbutton {
@@ -17,8 +17,7 @@
 }
 
 :host ::ng-deep .p-togglebutton .p-togglebutton-checked {
-  background: #e5e5e5;
-  border: none;
+  background: var(--color-primary-white);
   color: var(--color-primary-black);
 }
 
@@ -33,12 +32,18 @@
 }
 
 :host ::ng-deep .p-togglebutton:not(:disabled):not(.p-togglebutton-checked):hover {
-  background: #e5e5e5;
-  color: #585858;
+  background: #bdbdbd;
+  color: #2e2e2e;
 }
 
 :host ::ng-deep .p-togglebutton.p-togglebutton-checked {
-  background: var(--background-blue);
+  background: var(--color-primary-blue);
+  color: var(--color-primary-white);
+}
+
+/* Spanish language selected: use green */
+:host ::ng-deep .lang-spanish .p-togglebutton.p-togglebutton-checked {
+  background: var(--color-primary-green) !important;
   color: var(--color-primary-white);
 }
 

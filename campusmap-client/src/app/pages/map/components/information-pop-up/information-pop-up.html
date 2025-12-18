@@ -19,31 +19,29 @@
         @if (imageUrl()) {
           <img
             [src]="imageUrl()"
-            alt="prueba"
-            [attr.alt]="placeName()"
-            class="w-full h-40 md:h-64 lg:h-72 rounded-lg object-cover ng-optimized-image"
-            priority />
+            [alt]="placeName()"
+            title="placeName()"
+            class="w-full h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
         }
         @if (!imageUrl() && images().length) {
           @for (img of images().slice(0, 2); track img.id) {
             <img
               [src]="img.img"
-              [attr.alt]="placeName() || ('InformationPopUp.alt' | translate)"
-              title="{{ placeName() || ('InformationPopUp.alt' | translate) }}"
-              class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover"
-              priority />
+              [alt]="placeName() || ('InformationPopUp.alt' | translate)"
+              title="placeName() || ('InformationPopUp.alt' | translate)"
+              class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
           }
         }
         @if (!imageUrl() && !images().length) {
           <img
             src="assets/images/rs.webp"
-            alt="prueba"
-            [attr.alt]="'InformationPopUp.Alt' | translate"
+            [alt]="'InformationPopUp.Alt' | translate"
+            title="'InformationPopUp.Alt' | translate"
             class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
           <img
             src="assets/images/sostenibilidad.webp"
-            alt="prueba"
-            [attr.alt]="'InformationPopUp.Alt' | translate"
+            [alt]="'InformationPopUp.Alt' | translate"
+            title="'InformationPopUp.Alt' | translate"
             class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
         }
       </div>

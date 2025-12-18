@@ -1,8 +1,8 @@
 :host ::ng-deep .p-button {
   width: 170px;
-  height: 55px;
-  font-size: 1.5rem;
-  background: var(--background-green);
+  height: 50px;
+  font-size: 20px;
+  background: var(--color-primary-blue);
   border: none;
   border-radius: 0.5rem;
   font-weight: 500;
@@ -11,13 +11,13 @@
 }
 
 :host ::ng-deep .p-button:not(:disabled):hover {
-  background: var(--background-green);
+  background: var(--color-primary-blue);
   border: none;
   color: var(--color-primary-white);
 }
 
 :host ::ng-deep .p-button:not(:disabled):active {
-  background: var(--background-green);
+  background: var(--color-primary-blue);
   border: none;
   color: var(--color-primary-white);
 }

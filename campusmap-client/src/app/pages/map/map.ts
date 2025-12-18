@@ -2,12 +2,14 @@ import {
   Component,
   viewChild,
   signal,
+  computed,
   ChangeDetectionStrategy,
   inject,
   OnInit,
   OnDestroy
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MapLoad } from './components/map-load/map-load';
 import { SearchBar } from './components/search-bar/search-bar';
 import { InformationPopUp } from './components/information-pop-up/information-pop-up';
@@ -18,6 +20,7 @@ import { LocationButton } from './components/location-button/location-button';
 import { NorthButtonComponent } from './components/north-button/north-button';
 import { PlaceFeature } from '@shared/types/place.model';
 import { GeolocationService } from '@shared/services/geolocation.service';
+import { LanguageService } from '@shared/services/language.service';
 interface PlacePopupData {
   id: number | null;
   name: string;
@@ -41,6 +44,7 @@ interface PlaceInput {
   selector: 'app-map',
   imports: [
     CommonModule,
+    NgOptimizedImage,
     MapLoad,
     SearchBar,
     InformationPopUp,
@@ -59,6 +63,7 @@ export class Map implements OnInit, OnDestroy {
   informationPopUp = viewChild.required<InformationPopUp>(InformationPopUp);
 
   private readonly geolocationService = inject(GeolocationService);
+  private readonly languageService = inject(LanguageService);
 
   selectedPlace = signal<PlacePopupData>({
     id: null,
@@ -70,6 +75,17 @@ export class Map implements OnInit, OnDestroy {
   });
 
   isTransportSelectorVisible = signal(false);
+  language = toSignal(this.languageService.currentLanguage$, {
+    initialValue: this.languageService.getCurrentLanguage()
+  });
+
+  logoPath = computed(() =>
+    this.language() === 'es'
+      ? 'assets/images/alianza_font_logo.svg'
+      : 'assets/images/alliance_font_logo.svg'
+  );
+
+  logoAlt = computed(() => (this.language() === 'es' ? 'Logo de Alianza' : 'Alliance logo'));
 
   ngOnInit(): void {
     // Automatically request permission and start GPS tracking when entering /map
@@ -82,17 +98,29 @@ export class Map implements OnInit, OnDestroy {
   }
 
   onPlaceSelected(place: PlaceInput): void {
+    const processImageUrl = (url: string): string => {
+      if (url.startsWith('http')) {
+        return url;
+      }
+      return 'https://campusmap-file-storage.s3.us-east-1.amazonaws.com/' + url.replace(/^\//, '');
+    };
+
+    const processedImageUrl = place.imageUrl ? processImageUrl(place.imageUrl) : '';
+    const processedImages =
+      place.images?.map((imgObj: { id: number; img: string }) => ({
+        id: imgObj.id,
+        img: processImageUrl(imgObj.img)
+      })) ?? [];
+
+    // For buildings, prefer showing the gallery (images array) when present; for parking, show the first image.
+    const imageUrlForPopup =
+      processedImageUrl || (place.type === 'parking' ? processedImages[0]?.img || '' : '');
+
     this.selectedPlace.set({
       ...place,
       displayType: place.displayType || place.type,
-      images:
-        place.images?.map((imgObj: { id: number; img: string }) => ({
-          id: imgObj.id,
-          img: imgObj.img.startsWith('http')
-            ? imgObj.img
-            : 'https://1hz14f3vx1.execute-api.us-east-1.amazonaws.com/' +
-              imgObj.img.replace(/^\//, '')
-        })) ?? [],
+      images: processedImages,
+      imageUrl: imageUrlForPopup,
       isVisible: true
     });
     this.isTransportSelectorVisible.set(false);
