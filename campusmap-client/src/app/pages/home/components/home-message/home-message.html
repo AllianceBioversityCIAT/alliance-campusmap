@@ -1,6 +1,8 @@
 <section class="flex flex-col h-1/2 justify-end text-center">
   <!-- Title: For explorer -->
-  <h3 class="font-black text-[#00b8ec] text-5xl md:text-5xl lg:text-7xl">
+  <h3
+    class="font-black text-5xl md:text-5xl lg:text-7xl"
+    [style.color]="isSpanish() ? '#51C961' : '#00b8ec'">
     {{ 'Home.title' | translate }}
   </h3>
   <div class="text-white text-3xl md:text-4xl lg:text-4xl">

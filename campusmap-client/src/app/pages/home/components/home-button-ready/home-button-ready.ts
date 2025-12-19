@@ -36,6 +36,7 @@ export class HomeButtonReady {
   }
 
   buttonStyleObj = computed(() => ({
-    background: this.language() === 'es' ? '#358540' : '#173f6f'
+    background:
+      this.language() === 'es' ? 'var(--color-primary-green)' : 'var(--color-primary-blue)'
   }));
 }
