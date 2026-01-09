@@ -37,6 +37,7 @@
     }
   },
   "Transport": {
+    "messageSelector": "Selecciona tu medio de transporte",
     "car": "Carro",
     "walk": "Caminar",
     "selectionRequired": "La selección es requerida.",
