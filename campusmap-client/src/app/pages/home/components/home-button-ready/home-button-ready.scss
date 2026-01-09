@@ -4,9 +4,8 @@
   font-size: 20px;
   background: var(--color-primary-blue);
   border: none;
-  border-radius: 0.5rem;
+  border-radius: calc(infinity * 1px);
   font-weight: 500;
-  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.3);
   color: var(--color-primary-white);
 }
 

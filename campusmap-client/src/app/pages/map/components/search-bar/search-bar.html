@@ -54,31 +54,37 @@
     <button
       (click)="selectFilter('building')"
       type="button"
+      [style.background-color]="isFilterActive('building') ? filterActiveColor() : '#f1f2f5'"
       [ngClass]="{
-        'bg-[#1689ca] text-white': isFilterActive('building'),
-        'bg-[#f1f2f5] text-gray-700': !isFilterActive('building')
+        'text-white': isFilterActive('building'),
+        'text-gray-700': !isFilterActive('building')
       }"
-      class="flex px-4 py-2 bg-[#f1f2f5] text-gray-700 hover:bg-[#1689ca] hover:text-white rounded-full text-sm font-medium transition-colors">
+      class="flex px-4 py-2 rounded-full text-sm font-medium transition-colors"
+      [style.--hover-color]="filterHoverColor()">
       {{ 'Map.filters.buildings' | translate }}
     </button>
     <button
       (click)="selectFilter('cafeteria')"
       type="button"
+      [style.background-color]="isFilterActive('cafeteria') ? filterActiveColor() : '#f1f2f5'"
       [ngClass]="{
-        'bg-[#1689ca] text-white': isFilterActive('cafeteria'),
-        'bg-[#f1f2f5] text-gray-700': !isFilterActive('cafeteria')
+        'text-white': isFilterActive('cafeteria'),
+        'text-gray-700': !isFilterActive('cafeteria')
       }"
-      class="flex px-4 py-2 bg-[#f1f2f5] text-gray-700 hover:bg-[#1689ca] hover:text-white rounded-full text-sm font-medium transition-colors">
+      class="flex px-4 py-2 rounded-full text-sm font-medium transition-colors"
+      [style.--hover-color]="filterHoverColor()">
       {{ 'Map.filters.cafeterias' | translate }}
     </button>
     <button
       (click)="selectFilter('parking')"
       type="button"
+      [style.background-color]="isFilterActive('parking') ? filterActiveColor() : '#f1f2f5'"
       [ngClass]="{
-        'bg-[#1689ca] text-white': isFilterActive('parking'),
-        'bg-[#f1f2f5] text-gray-700': !isFilterActive('parking')
+        'text-white': isFilterActive('parking'),
+        'text-gray-700': !isFilterActive('parking')
       }"
-      class="flex px-4 py-2 bg-[#f1f2f5] text-gray-700 hover:bg-[#1689ca] hover:text-white rounded-full text-sm font-medium transition-colors">
+      class="flex px-4 py-2 rounded-full text-sm font-medium transition-colors"
+      [style.--hover-color]="filterHoverColor()">
       {{ 'Map.filters.parking' | translate }}
     </button>
   </div>

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../../../shared/services/language.service';
@@ -7,7 +7,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home-message',
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, NgOptimizedImage],
   templateUrl: './home-message.html',
   styleUrls: ['./home-message.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
