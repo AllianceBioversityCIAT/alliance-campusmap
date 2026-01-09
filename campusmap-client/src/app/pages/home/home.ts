@@ -29,6 +29,13 @@ export class Home {
 
   languageClass = computed(() => (this.currentLang() === 'es' ? 'lang-spanish' : 'lang-english'));
 
+  backgroundSvg = computed(() => {
+    const currentLang = this.currentLang();
+    return currentLang === 'es'
+      ? "bg-[url('/assets/images/background_homepage.svg')]"
+      : "bg-[url('/assets/images/background_homepage_blue.svg')]";
+  });
+
   constructor() {
     // Listen to language changes
     this.languageService.currentLanguage$
