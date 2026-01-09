@@ -29,7 +29,7 @@ export class InformationPopUp {
         this.showFallback.set(false);
       }
     });
-    
+
     effect(() => {
       if (this.placeName()) {
         this.imageLoaded.set(true);
