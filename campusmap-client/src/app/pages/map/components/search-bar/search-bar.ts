@@ -1,10 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, output, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  output,
+  signal,
+  ChangeDetectionStrategy,
+  computed
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { Api } from '@shared/services/api';
 import { MapFilterService } from '@shared/services/map-filter.service';
 import { PlaceFeature } from '@shared/types/place.model';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { LanguageService } from '@shared/services/language.service';
 
 const HISTORY_KEY = 'searchHistory';
 const MAX_HISTORY_ITEMS = 5;
@@ -21,6 +31,7 @@ export class SearchBar implements OnInit {
 
   private readonly apiService = inject(Api);
   private readonly mapFilterService = inject(MapFilterService);
+  private readonly languageService = inject(LanguageService);
 
   isOpen = signal(false);
   searchQuery = signal('');
@@ -28,6 +39,20 @@ export class SearchBar implements OnInit {
   filteredPlaces = signal<PlaceFeature[]>([]);
   searchHistory = signal<PlaceFeature[]>([]);
   activeFilter = signal<string | null>(null);
+
+  private currentLanguage = toSignal(this.languageService.currentLanguage$, {
+    initialValue: this.languageService.getCurrentLanguage()
+  });
+
+  filterActiveColor = computed(() => {
+    const currentLang = this.currentLanguage();
+    return currentLang === 'es' ? '#358540' : '#1689ca';
+  });
+
+  filterHoverColor = computed(() => {
+    const currentLang = this.currentLanguage();
+    return currentLang === 'es' ? '#358540' : '#1689ca';
+  });
 
   ngOnInit() {
     // Here we get all places from the API when the component loads

@@ -1,4 +1,11 @@
-import { Component, inject, signal, ChangeDetectionStrategy, output } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+  output,
+  computed
+} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MessageModule } from 'primeng/message';
@@ -6,6 +13,8 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { LanguageService } from '../../../../shared/services/language.service';
 
 @Component({
   selector: 'app-transport-button-selector',
@@ -26,11 +35,26 @@ export class TransportButtonSelector {
   //Injection of the PrimeNG messaging service to display notifications
   private readonly messageService: MessageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
+  private readonly languageService = inject(LanguageService);
 
   routeSelected = output<{ mode: 1 | 2 }>();
 
   //Variable linked to SelectButton. Stores the selected option
   value = signal<string | null>(null);
+
+  private currentLanguage = toSignal(this.languageService.currentLanguage$, {
+    initialValue: this.languageService.getCurrentLanguage()
+  });
+
+  toggleButtonCheckedBackground = computed(() => {
+    const currentLang = this.currentLanguage();
+    return currentLang === 'es' ? 'var(--color-primary-green)' : 'var(--color-primary-blue)';
+  });
+
+  submitButtonBackground = computed(() => {
+    const currentLang = this.currentLanguage();
+    return currentLang === 'es' ? 'var(--background-green)' : 'var(--background-blue)';
+  });
 
   //Options available for the selector. Each one defines label, value and icon
   get stateOptions(): { label: string; value: string; icon?: string }[] {

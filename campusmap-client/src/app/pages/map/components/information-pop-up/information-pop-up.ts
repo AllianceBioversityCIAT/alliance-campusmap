@@ -1,7 +1,18 @@
-import { Component, input, output, signal, ChangeDetectionStrategy, effect } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  signal,
+  ChangeDetectionStrategy,
+  effect,
+  inject,
+  computed
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { LanguageService } from '../../../../shared/services/language.service';
 
 @Component({
   selector: 'app-information-pop-up',
@@ -11,6 +22,8 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InformationPopUp {
+  private languageService = inject(LanguageService);
+
   placeName = input('');
   placeType = input('');
   imageUrl = input('');
@@ -21,6 +34,15 @@ export class InformationPopUp {
 
   imageLoaded = signal(true);
   showFallback = signal(false);
+
+  private currentLanguage = toSignal(this.languageService.currentLanguage$, {
+    initialValue: this.languageService.getCurrentLanguage()
+  });
+
+  buttonBackground = computed(() => {
+    const currentLang = this.currentLanguage();
+    return currentLang === 'es' ? 'var(--background-green)' : 'var(--background-blue)';
+  });
 
   constructor() {
     effect(() => {

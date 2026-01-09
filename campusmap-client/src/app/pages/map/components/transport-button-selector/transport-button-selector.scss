@@ -1,55 +1,73 @@
-:host ::ng-deep .p-button,
-.p-button:not(:disabled):hover,
-.p-togglebutton {
-  border-radius: calc(infinity * 1px);
-  font-size: 1.5rem;
-  color: var(--color-primary-white);
+:host {
+  display: flex;
+  justify-content: center;
 }
-
-:host ::ng-deep .p-togglebutton-checked .p-togglebutton-content {
-  background: var(--background-blue);
-  color: var(--color-primary-white);
-  height: auto;
-  border-radius: calc(infinity * 1px);
-}
-
-:host ::ng-deep .p-togglebutton {
-  font-size: 1.5rem;
-  width: 100%;
-  color: var(--color-primary-white);
+:host ::ng-deep .p-selectbutton .p-togglebutton {
+  font-weight: 500;
+  width: 120px;
+  height: 50px;
+  font-size: 20px;
+  background: #bdbdbd;
+  color: #2e2e2e;
 }
 
 :host ::ng-deep .p-selectbutton {
-  background: var(--color-primary-blue);
   border-radius: calc(infinity * 1px);
 }
 
+:host ::ng-deep .p-togglebutton .p-togglebutton-checked {
+  background: var(--color-primary-white);
+  color: var(--color-primary-black);
+}
+
+:host ::ng-deep .p-selectbutton .p-togglebutton:last-child {
+  border-top-right-radius: calc(infinity * 1px);
+  border-bottom-right-radius: calc(infinity * 1px);
+}
+
+:host ::ng-deep .p-selectbutton .p-togglebutton:first-child {
+  border-top-left-radius: calc(infinity * 1px);
+  border-bottom-left-radius: calc(infinity * 1px);
+}
+
 :host ::ng-deep .p-togglebutton:not(:disabled):not(.p-togglebutton-checked):hover {
+  background: #bdbdbd;
+  color: #2e2e2e;
+}
+
+:host ::ng-deep .p-togglebutton.p-togglebutton-checked {
+  background: var(--toggle-checked-bg, var(--color-primary-green));
   color: var(--color-primary-white);
 }
 
-@media (width >= 48rem) {
-  :host ::ng-deep .p-togglebutton {
+@media screen and (min-width: 768px) {
+  :host ::ng-deep .p-selectbutton .p-togglebutton {
+    width: 200px;
+    height: 75px;
+    font-size: 3rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  :host ::ng-deep .p-selectbutton .p-togglebutton {
+    width: 140px;
+    height: 65px;
     font-size: 1.875rem;
   }
 }
 
-@media (width >= 64rem) {
-  :host ::ng-deep .p-togglebutton {
-    font-size: 1.5rem;
-  }
-}
-
+/* Botón de enviar ("cómo llegar") */
 :host ::ng-deep .p-button {
-  background: var(--background-blue);
+  background: var(--background-green);
   font-size: 1.5rem;
   color: var(--color-primary-white);
   border: none;
+  border-radius: calc(infinity * 1px);
 }
 
 :host ::ng-deep .p-button:not(:disabled):active,
-.p-button:not(:disabled):hover {
-  background: var(--background-blue);
+:host ::ng-deep .p-button:not(:disabled):hover {
+  background: var(--background-green);
   border: none;
   color: var(--color-primary-white);
 }
