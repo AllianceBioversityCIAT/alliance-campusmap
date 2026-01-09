@@ -59,10 +59,6 @@
             </ng-template>
           </p-selectbutton>
         </div>
-        <!-- Lower descriptive text -->
-        <p class="overflow-hidden text-clip font-medium py-4">
-          {{ 'Transport.description' | translate }}
-        </p>
 
         <!-- Error message. Only visible if there is interaction or sending -->
         @if (model.invalid && (model.touched || exampleForm.submitted)) {

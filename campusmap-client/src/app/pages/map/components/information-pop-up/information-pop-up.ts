@@ -1,4 +1,4 @@
-import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, output, signal, ChangeDetectionStrategy, effect } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
@@ -14,10 +14,22 @@ export class InformationPopUp {
   placeName = input('');
   placeType = input('');
   imageUrl = input('');
-  images = input<{ id: number; img: string }[]>([]); // Input para el array de imágenes con id y url
+  images = input<{ id: number; img: string }[]>([]);
   isVisible = input(false);
   visibleChange = output<boolean>();
   showTransportSelector = output<void>();
+
+  imageLoaded = signal(true);
+  showFallback = signal(false);
+
+  constructor() {
+    effect(() => {
+      if (this.imageUrl()) {
+        this.imageLoaded.set(true);
+        this.showFallback.set(false);
+      }
+    });
+  }
 
   close(): void {
     this.visibleChange.emit(false);

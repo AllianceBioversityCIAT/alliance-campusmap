@@ -39,7 +39,6 @@
   "Transport": {
     "car": "Carro",
     "walk": "Caminar",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id faucibus libero.",
     "selectionRequired": "La selección es requerida.",
     "start": "Iniciar",
     "arrowAlt": "Flecha de inicio"
