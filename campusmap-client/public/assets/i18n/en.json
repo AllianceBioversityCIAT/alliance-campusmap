@@ -37,9 +37,9 @@
     }
   },
   "Transport": {
+    "messageSelector": "Select your mode of transport",
     "car": "Car",
     "walk": "Walk",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id faucibus libero.",
     "selectionRequired": "Selection is required.",
     "start": "Start",
     "arrowAlt": "Start arrow"

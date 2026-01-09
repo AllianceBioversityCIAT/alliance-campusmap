@@ -5,43 +5,41 @@
     <div class="flex flex-col h-full">
       <!-- Point of interest titles -->
       <div class="flex flex-col">
-        <p
-          class="font-semibold text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
+        <p class="font-semibold text-black text-xl md:text-3xl lg:text-2xl">
           {{ 'Buildings.' + placeName() | translate: {} : placeName() }}
         </p>
-        <p
-          class="text-gray-600 text-xl md:text-3xl lg:text-2xl leading-normal md:leading-tight lg:leading-normal">
+        <p class="text-gray-600 text-xl md:text-3xl lg:text-2xl">
           {{ 'InformationPopUp.' + placeType() | translate }}
         </p>
       </div>
       <!-- Related images section -->
       <div class="flex w-full justify-center gap-4 md:gap-8 my-4 md:my-8 lg:my-4 px-2 md:px-4">
-        @if (imageUrl()) {
+        @if (imageUrl() && imageLoaded() && !showFallback()) {
           <img
             [src]="imageUrl()"
             [alt]="placeName()"
-            title="placeName()"
+            [title]="placeName()"
+            (error)="showFallback.set(true)"
             class="w-full h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
-        }
-        @if (!imageUrl() && images().length) {
+        } @else if (images().length && !showFallback()) {
           @for (img of images().slice(0, 2); track img.id) {
             <img
               [src]="img.img"
               [alt]="placeName() || ('InformationPopUp.alt' | translate)"
-              title="placeName() || ('InformationPopUp.alt' | translate)"
+              [title]="placeName() || ('InformationPopUp.alt' | translate)"
+              (error)="showFallback.set(true)"
               class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
           }
-        }
-        @if (!imageUrl() && !images().length) {
+        } @else {
           <img
             src="assets/images/rs.webp"
             [alt]="'InformationPopUp.Alt' | translate"
-            title="'InformationPopUp.Alt' | translate"
+            [title]="'InformationPopUp.Alt' | translate"
             class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
           <img
             src="assets/images/sostenibilidad.webp"
             [alt]="'InformationPopUp.Alt' | translate"
-            title="'InformationPopUp.Alt' | translate"
+            [title]="'InformationPopUp.Alt' | translate"
             class="w-1/2 h-40 md:h-64 lg:h-72 rounded-lg object-cover" />
         }
       </div>

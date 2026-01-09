@@ -11,10 +11,17 @@
       class="flex justify-center flex-col">
       <!-- Main group of the form -->
       <div class="flex flex-col">
+        <!-- Message Transport Selector -->
+        <div class="mb-4 text-2xl font-semibold text-center">
+          <p>
+            {{ 'Transport.messageSelector' | translate }}
+          </p>
+        </div>
+
         <!-- Transport mode selector. Use ngModel to bind the value -->
         <div class="flex w-full justify-center">
           <p-selectbutton
-            class="h-12 md:h-15 lg:h-12 w-full max-w-md rounded justify-center rounded-lg shadow-[4px_4px_5px_rgba(0,0,0,0.3)]"
+            class="h-12 md:h-15 lg:h-12 w-70 mb-8 justify-center"
             #model="ngModel"
             [ngModel]="value()"
             (ngModelChange)="value.set($event)"
@@ -59,10 +66,6 @@
             </ng-template>
           </p-selectbutton>
         </div>
-        <!-- Lower descriptive text -->
-        <p class="overflow-hidden text-clip font-medium py-4">
-          {{ 'Transport.description' | translate }}
-        </p>
 
         <!-- Error message. Only visible if there is interaction or sending -->
         @if (model.invalid && (model.touched || exampleForm.submitted)) {

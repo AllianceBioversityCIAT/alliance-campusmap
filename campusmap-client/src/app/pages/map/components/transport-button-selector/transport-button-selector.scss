@@ -10,7 +10,7 @@
   background: var(--background-blue);
   color: var(--color-primary-white);
   height: auto;
-  border-radius: 0.5rem;
+  border-radius: calc(infinity * 1px);
 }
 
 :host ::ng-deep .p-togglebutton {
@@ -21,7 +21,7 @@
 
 :host ::ng-deep .p-selectbutton {
   background: var(--color-primary-blue);
-  border-radius: 0.5rem;
+  border-radius: calc(infinity * 1px);
 }
 
 :host ::ng-deep .p-togglebutton:not(:disabled):not(.p-togglebutton-checked):hover {
