@@ -41,7 +41,7 @@ import { RoutingModule } from './modules/routing/routing.module';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.local', '.env'],
+      envFilePath: ['.env'],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => buildTypeOrmOptions(),
