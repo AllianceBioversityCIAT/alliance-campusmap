@@ -21,6 +21,7 @@ import { NorthButtonComponent } from './components/north-button/north-button';
 import { PlaceFeature } from '@shared/types/place.model';
 import { GeolocationService } from '@shared/services/geolocation.service';
 import { LanguageService } from '@shared/services/language.service';
+import { environment } from '../../../environments/environment';
 interface PlacePopupData {
   id: number | null;
   name: string;
@@ -102,7 +103,7 @@ export class Map implements OnInit, OnDestroy {
       if (url.startsWith('http')) {
         return url;
       }
-      return 'https://campusmap-file-storage.s3.us-east-1.amazonaws.com/' + url.replace(/^\//, '');
+      return `${environment.s3Url}/${url.replace(/^\//g, '')}`;
     };
 
     const processedImageUrl = place.imageUrl ? processImageUrl(place.imageUrl) : '';

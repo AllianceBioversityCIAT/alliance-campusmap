@@ -40,18 +40,18 @@ export class SearchBar implements OnInit {
   searchHistory = signal<PlaceFeature[]>([]);
   activeFilter = signal<string | null>(null);
 
-  private currentLanguage = toSignal(this.languageService.currentLanguage$, {
+  private readonly currentLanguage = toSignal(this.languageService.currentLanguage$, {
     initialValue: this.languageService.getCurrentLanguage()
   });
 
   filterActiveColor = computed(() => {
     const currentLang = this.currentLanguage();
-    return currentLang === 'es' ? '#358540' : '#1689ca';
+    return currentLang === 'es' ? '#358540' : '#173f6f';
   });
 
   filterHoverColor = computed(() => {
     const currentLang = this.currentLanguage();
-    return currentLang === 'es' ? '#358540' : '#1689ca';
+    return currentLang === 'es' ? '#358540' : '#173f6f';
   });
 
   ngOnInit() {

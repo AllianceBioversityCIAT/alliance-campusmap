@@ -41,7 +41,7 @@ export class InformationPopUp {
 
   buttonBackground = computed(() => {
     const currentLang = this.currentLanguage();
-    return currentLang === 'es' ? 'var(--background-green)' : 'var(--background-blue)';
+    return currentLang === 'es' ? 'var(--color-primary-green)' : 'var(--color-primary-blue)';
   });
 
   constructor() {
