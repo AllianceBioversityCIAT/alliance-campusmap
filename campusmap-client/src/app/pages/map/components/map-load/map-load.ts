@@ -22,6 +22,7 @@ import { GeolocationService, UserGeolocationPosition } from '@shared/services/ge
 import { MapMarkerService } from '@shared/services/map-marker.service';
 import { UserMarkerService } from '@shared/services/user-marker.service';
 import { DeviceOrientationService } from '@shared/services/device-orientation.service';
+import { environment } from '../../../../../environments/environment';
 
 interface SelectedPlace {
   id: number;
@@ -93,8 +94,7 @@ export class MapLoad implements AfterViewInit, OnDestroy {
     this.map = new maplibregl.Map({
       // Use the element reference instead of the global id to avoid "Container 'map' not found" errors
       container: this.mapContainer()?.nativeElement ?? 'map',
-      style:
-        'https://api.maptiler.com/maps/019a0d96-0c62-770e-82b8-be41643f8563/style.json?key=FZvbkS3DkmF7kMOIUmLZ', // map style
+      style: environment.mapStyleUrl, // map style
       center: [-76.35617, 3.50318], // [longitude, latitude]
       zoom: 17,
       minZoom: 15,
