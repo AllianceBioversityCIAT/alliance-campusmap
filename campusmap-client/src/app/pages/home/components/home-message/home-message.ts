@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../../../shared/services/language.service';
 
@@ -19,7 +19,4 @@ export class HomeMessage {
   private readonly currentLanguage = toSignal(this.languageService.currentLanguage$, {
     initialValue: this.languageService.getCurrentLanguage()
   });
-
-  // Derived signal: true when Spanish is selected
-  readonly isSpanish = computed(() => this.currentLanguage() === 'es');
 }

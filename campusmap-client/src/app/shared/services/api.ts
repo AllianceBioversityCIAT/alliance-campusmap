@@ -3,12 +3,13 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FeatureCollection } from '@shared/types/place.model';
 import { RouteFeatureCollection } from '@shared/types/route.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Api {
-  private readonly apiUrl = 'https://1hz14f3vx1.execute-api.us-east-1.amazonaws.com';
+  private readonly apiUrl = environment.apiUrl;
 
   private readonly http = inject(HttpClient);
 

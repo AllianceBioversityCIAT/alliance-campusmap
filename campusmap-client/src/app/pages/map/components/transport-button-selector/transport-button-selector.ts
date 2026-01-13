@@ -53,7 +53,7 @@ export class TransportButtonSelector {
 
   submitButtonBackground = computed(() => {
     const currentLang = this.currentLanguage();
-    return currentLang === 'es' ? 'var(--background-green)' : 'var(--background-blue)';
+    return currentLang === 'es' ? 'var(--color-primary-green)' : 'var(--color-primary-blue)';
   });
 
   //Options available for the selector. Each one defines label, value and icon

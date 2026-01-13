@@ -1,7 +1,7 @@
 <!-- Fixed lower container. Keeps the form visible at the bottom -->
 <div
-  class="fixed bottom-0 left-0 w-full max-w-full md:max-w-2xl lg:max-w-xl mx-auto px-4 md:px-8 lg:px-4 py-4 bg-white rounded-t-lg z-30 shadow-lg">
-  <p-toast class="w-screen md:max-w-2xl lg:max-w-xl mx-auto" />
+  class="fixed bottom-0 left-0 w-full lg:max-w-xl px-4 md:px-8 lg:px-4 py-4 bg-white rounded-t-lg z-30 shadow-lg">
+  <p-toast class="w-screen" />
 
   <!-- Center the form inside the container -->
   <div class="flex flex-auto justify-center">
@@ -23,7 +23,7 @@
           class="flex w-full justify-center"
           [style.--toggle-checked-bg]="toggleButtonCheckedBackground()">
           <p-selectbutton
-            class="w-80 md:w-100 lg:w-80 h-14 md:h-16 lg:h-12 my-8 justify-center"
+            class="my-8 justify-center"
             #model="ngModel"
             [ngModel]="value()"
             (ngModelChange)="value.set($event)"
@@ -90,11 +90,7 @@
             alt=""
             [attr.alt]="'Transport.arrowAlt' | translate"
             [attr.title]="'Transport.arrowAlt' | translate" />
-          <span
-            pButtonLabel
-            class="font-medium text-white text-center text-2xl md:text-3xl lg:text-2xl"
-            >{{ 'Transport.start' | translate }}</span
-          >
+          <span pButtonLabel>{{ 'Transport.start' | translate }}</span>
         </button>
       </div>
     </form>

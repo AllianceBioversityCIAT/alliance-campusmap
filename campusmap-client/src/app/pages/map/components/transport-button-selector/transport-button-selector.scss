@@ -3,10 +3,10 @@
   justify-content: center;
 }
 :host ::ng-deep .p-selectbutton .p-togglebutton {
-  font-weight: 500;
-  width: 120px;
+  font-weight: 200;
+  width: 140px;
   height: 50px;
-  font-size: 20px;
+  font-size: 1.5rem;
   background: #bdbdbd;
   color: #2e2e2e;
 }
@@ -44,19 +44,18 @@
   :host ::ng-deep .p-selectbutton .p-togglebutton {
     width: 200px;
     height: 75px;
-    font-size: 3rem;
+    font-size: 1.5rem;
   }
 }
 
 @media screen and (min-width: 1024px) {
   :host ::ng-deep .p-selectbutton .p-togglebutton {
-    width: 140px;
-    height: 65px;
-    font-size: 1.875rem;
+    width: 150px;
+    height: 50px;
+    font-size: 1.5rem;
   }
 }
 
-/* Botón de enviar ("cómo llegar") */
 :host ::ng-deep .p-button {
   background: var(--background-green);
   font-size: 1.5rem;
